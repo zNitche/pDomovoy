@@ -6,3 +6,5 @@ RUN mkdir /home/pico_sdk_worker
 
 ENV PICOTOOL_FETCH_FROM_GIT_PATH=/home/pico_sdk_worker/build
 ENV PICO_SDK_PATH=/home/SDKs/pico-sdk/2.2.0
+
+ENTRYPOINT [ "/bin/bash" ]
