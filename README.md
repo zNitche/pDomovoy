@@ -1,11 +1,11 @@
 ```
-mkdir -p ~/SDK/pico-sdk
-cd ~/SDK/pico-sdk
+mkdir -p ~/SDKs/pico-sdk
+cd ~/SDKs/pico-sdk
 git clone -b "2.2.0" --single-branch https://github.com/raspberrypi/pico-sdk.git 2.2.0
 ```
 
 ```
-cd ~/SDK/pico-sdk/2.2.0
+cd ~/SDKs/pico-sdk/2.2.0
 git submodule update --init
 ```
 

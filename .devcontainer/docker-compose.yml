@@ -4,5 +4,5 @@ services:
     build: .
     restart: "no"
     volumes:
-      - ~/SDK/pico-sdk/2.2.0:/home/SDK/pico-sdk/2.2.0
+      - ~/SDKs/pico-sdk/2.2.0:/home/SDKs/pico-sdk/2.2.0
       - ..:/workspace:cached
