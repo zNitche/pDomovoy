@@ -10,15 +10,5 @@ pico_sdk_init()
 
 # rest of your project
 
-add_executable(main src/main.c)
-
-target_link_libraries(main pico_stdlib)
-
-if (PICO_CYW43_SUPPORTED)
-    target_link_libraries(main pico_cyw43_arch_none)
-endif()
-
-pico_enable_stdio_usb(main 1)
-pico_enable_stdio_uart(main 0)
-
-pico_add_extra_outputs(main)
+include(cmake/server.cmake)
+include(cmake/client.cmake)
