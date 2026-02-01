@@ -6,6 +6,10 @@ project(pico_door_alarm VERSION 0.0.1)
 
 pico_sdk_init()
 
+# add libs
+add_subdirectory(libs/pico-c-adxl345/lib)
+
+# add sub cmakes
 include(cmake/jammer.cmake)
 include(cmake/station.cmake)
 
