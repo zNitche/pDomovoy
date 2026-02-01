@@ -1,6 +1,6 @@
 services:
-  pico_sdk_worker:
-    container_name: pico_sdk_worker
+  door_alarm_pico_sdk_worker:
+    container_name: door_alarm_pico_sdk_worker
     build: .
     restart: "no"
     volumes:
