@@ -7,9 +7,7 @@ if (PICO_CYW43_SUPPORTED)
 endif()
 
 if (DEBUG)
-    target_compile_definitions(example PUBLIC DEBUG=1)
-
-    target_link_libraries(example
+    target_link_libraries(station
         pico_bootsel_via_double_reset
         )
 endif()

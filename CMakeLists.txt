@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.27)
 
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
-project(picoDoorAlarm)
+project(pico_door_alarm VERSION 0.0.1)
 
 pico_sdk_init()
 
@@ -13,12 +13,15 @@ include(cmake/station.cmake)
 pico_enable_stdio_uart(jammer 0)
 pico_enable_stdio_uart(station 0)
 
-if (PROD)
-    pico_enable_stdio_usb(station 0)
-    pico_enable_stdio_usb(jammer 0)
-else()
+if (DEBUG)
     pico_enable_stdio_usb(station 1)
     pico_enable_stdio_usb(jammer 1)
+    
+    target_compile_definitions(jammer PUBLIC DEBUG=1)
+    target_compile_definitions(station PUBLIC DEBUG=1)
+else()
+    pico_enable_stdio_usb(station 0)
+    pico_enable_stdio_usb(jammer 0)
 endif()
 
 # generate output files
