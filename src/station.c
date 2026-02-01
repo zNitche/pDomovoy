@@ -10,7 +10,7 @@ int main()
 
     while (true)
     {
-        printf("Hello Server\n");
+        printf("station\n");
         sleep_ms(1000);
     }
 }

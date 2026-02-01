@@ -10,7 +10,7 @@ int main()
 
     while (true)
     {
-        printf("Hello Client\n");
+        printf("jammer\n");
         sleep_ms(1000);
     }
 }
