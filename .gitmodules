@@ -1,0 +1,3 @@
+[submodule "libs/pico-c-adxl345"]
+	path = libs/pico-c-adxl345
+	url = https://github.com/zNitche/pico-c-adxl345.git
