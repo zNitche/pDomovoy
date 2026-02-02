@@ -1,4 +1,4 @@
-add_executable(station src/station.c)
+add_executable(station src/station/main.c)
 
 target_link_libraries(station pico_stdlib)
 

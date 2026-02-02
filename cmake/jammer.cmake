@@ -1,9 +1,12 @@
-add_executable(jammer src/jammer.c)
+add_executable(jammer src/jammer/main.c)
 
 target_link_libraries(jammer pico_stdlib)
 
 if (PICO_CYW43_SUPPORTED)
-    target_link_libraries(jammer pico_cyw43_arch_none pico_adxl345)
+    target_link_libraries(jammer 
+                        pico_cyw43_arch_none 
+                        hardware_pwm
+                        pico_adxl345)
 endif()
 
 if (DEBUG)
