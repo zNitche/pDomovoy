@@ -1,10 +1,11 @@
 #include <stdio.h>
 
-#include "pico_adxl345/adxl345.h"
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
+#include "pico/time.h"
+#include "pico_adxl345/adxl345.h"
 
 const int STATUS_LED_PIN = 13;
 const int BUZZER_PIN = 14;
@@ -13,26 +14,9 @@ const int ACTION_BUTTON_PIN = 12;
 bool alarm_on = false;
 
 void buzzer_pwm_call_irq() {
-  static int fade = 0;
-  static bool going_up = true;
-
   pwm_clear_irq(pwm_gpio_to_slice_num(BUZZER_PIN));
 
-  if (going_up) {
-    ++fade;
-    if (fade > 255) {
-      fade = 255;
-      going_up = false;
-    }
-  } else {
-    --fade;
-    if (fade < 0) {
-      fade = 0;
-      going_up = true;
-    }
-  }
-
-  pwm_set_gpio_level(BUZZER_PIN, fade * fade);
+  pwm_set_gpio_level(BUZZER_PIN, 1000);
 }
 
 void init_buzzer_pwm() {
@@ -62,20 +46,41 @@ void disable_buzzer_pwm() {
   pwm_set_gpio_level(BUZZER_PIN, 0);
 }
 
-void button_callback(uint gpio, uint32_t events) {
-  if (gpio == ACTION_BUTTON_PIN) {
-    if (events == 8) {
-      printf("alarm trigger\n");
+void button_callback(uint gpio, uint32_t event) {
+  static bool is_pressed = false;
+  static uint32_t last_call = 0;
 
-      if (alarm_on) {
-        disable_buzzer_pwm();
-        alarm_on = false;
-      } else {
-        enable_buzzer_pwm();
-        alarm_on = true;
-      }
-    }
+  if (gpio != ACTION_BUTTON_PIN) {
+    return;
   }
+
+  const uint32_t current_time = to_ms_since_boot(get_absolute_time());
+
+  if (current_time - last_call < 300) {
+    return;
+  }
+
+  if (event == 4) {
+    is_pressed = false;
+    return;
+  }
+
+  if (event != 8 || is_pressed) {
+    return;
+  }
+
+  printf("alarm trigger\n");
+
+  if (alarm_on) {
+    disable_buzzer_pwm();
+    alarm_on = false;
+  } else {
+    enable_buzzer_pwm();
+    alarm_on = true;
+  }
+
+  is_pressed = true;
+  last_call = current_time;
 }
 
 int main() {
@@ -98,7 +103,8 @@ int main() {
   gpio_init(ACTION_BUTTON_PIN);
   gpio_set_dir(ACTION_BUTTON_PIN, GPIO_IN);
   gpio_pull_down(ACTION_BUTTON_PIN);
-  gpio_set_irq_enabled_with_callback(ACTION_BUTTON_PIN, GPIO_IRQ_EDGE_RISE,
+  gpio_set_irq_enabled_with_callback(ACTION_BUTTON_PIN,
+                                     GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL,
                                      true, &button_callback);
 
   // LED

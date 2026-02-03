@@ -9,9 +9,9 @@ pico_sdk_init()
 # add libs
 add_subdirectory(libs/pico-c-adxl345/lib)
 
-# add sub cmakes
-include(cmake/jammer.cmake)
-include(cmake/station.cmake)
+# add modules
+include(jammer/jammer.cmake)
+include(station/station.cmake)
 
 # disable uart stdio & usb stdio depending on -DPROD=1/0
 pico_enable_stdio_uart(jammer 0)
