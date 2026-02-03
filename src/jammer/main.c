@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "../../libs/pico-c-adxl345/lib/pico_adxl345.h"
+#include "pico_adxl345/adxl345.h"
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 #include "pico/cyw43_arch.h"
