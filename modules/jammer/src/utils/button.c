@@ -1,6 +1,5 @@
 #include "../../includes/button.h"
 
-#include <stdio.h>
 #include <stdbool.h>
 
 #include "pico/time.h"
@@ -17,12 +16,14 @@ bool debounce_push_button(uint32_t event) {
   static bool is_pressed = false;
   static uint32_t last_call = 0;
 
+  const uint32_t current_time = to_ms_since_boot(get_absolute_time());
+
   if (event == GPIO_IRQ_EDGE_FALL) {
     is_pressed = false;
+    last_call = current_time;
+
     return false;
   }
-
-  const uint32_t current_time = to_ms_since_boot(get_absolute_time());
 
   if (current_time - last_call < 300) {
     return false;
