@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.27)
 
+set(PICO_BOARD "pico_w")
+
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
 project(pico_door_alarm VERSION 0.0.1)

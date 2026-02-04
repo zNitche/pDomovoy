@@ -12,12 +12,7 @@ git submodule update --init
 Open devcontainer
 
 ```
-cd /home/pico_sdk_worker
-cmake -S . -B build
-
-or
-
-cmake -DPICO_BOARD=pico_w -S . -B build
+cmake -DDEBUG=1 -S . -B build
 
 cd build
 make -j 16
