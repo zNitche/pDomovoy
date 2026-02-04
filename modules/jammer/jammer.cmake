@@ -1,5 +1,8 @@
-
-add_executable(jammer ${CMAKE_CURRENT_LIST_DIR}/src/main.c)
+add_executable(jammer
+            ${CMAKE_CURRENT_LIST_DIR}/src/main.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/callbacks.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/utils/button.c
+)
 
 target_link_libraries(jammer 
                     pico_stdlib
@@ -12,4 +15,3 @@ if (DEBUG)
         pico_bootsel_via_double_reset
         )
 endif()
-
