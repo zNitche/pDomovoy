@@ -25,6 +25,14 @@ if (DEBUG)
     
     target_compile_definitions(jammer PUBLIC DEBUG=1)
     target_compile_definitions(station PUBLIC DEBUG=1)
+
+    target_link_libraries(jammer
+        pico_bootsel_via_double_reset
+    )
+
+    target_link_libraries(station
+        pico_bootsel_via_double_reset
+    )
 else()
     pico_enable_stdio_usb(station 0)
     pico_enable_stdio_usb(jammer 0)
