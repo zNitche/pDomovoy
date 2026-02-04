@@ -62,7 +62,7 @@ int main() {
   init_buzzer_pwm();
 
   // BUTTON
-  init_button_irq(ACTION_BUTTON_PIN, action_button_callback);
+  init_button_irq(ACTION_BUTTON_PIN, &action_button_callback);
 
   // LED
   gpio_init(STATUS_LED_PIN);
