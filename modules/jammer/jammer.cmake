@@ -1,7 +1,9 @@
-add_executable(jammer
-            ${CMAKE_CURRENT_LIST_DIR}/src/main.c
-            ${CMAKE_CURRENT_LIST_DIR}/src/callbacks.c
-            ${CMAKE_CURRENT_LIST_DIR}/src/utils/button.c
+file(GLOB JAMMER_CORE_EXECS ${CMAKE_CURRENT_LIST_DIR}/src/*.c)
+file(GLOB JAMMER_UTILS_EXECS ${CMAKE_CURRENT_LIST_DIR}/src/utils/*.c)
+
+add_executable(jammer 
+            ${JAMMER_CORE_EXECS}
+            ${JAMMER_UTILS_EXECS}
 )
 
 target_link_libraries(jammer 
