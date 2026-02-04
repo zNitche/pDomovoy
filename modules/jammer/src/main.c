@@ -1,49 +1,16 @@
+#include "../includes/button.h"
+#include "../includes/buzzer.h"
+#include "../includes/callbacks.h"
 #include "hardware/gpio.h"
-#include "hardware/pwm.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "pico_adxl345/adxl345.h"
-#include "../includes/button.h"
-#include "../includes/callbacks.h"
 
 const int STATUS_LED_PIN = 13;
 const int BUZZER_PIN = 14;
 const int ACTION_BUTTON_PIN = 12;
 
 bool alarm_on = false;
-
-void buzzer_pwm_call_irq() {
-  pwm_clear_irq(pwm_gpio_to_slice_num(BUZZER_PIN));
-
-  pwm_set_gpio_level(BUZZER_PIN, 1000);
-}
-
-void init_buzzer_pwm() {
-  gpio_set_function(BUZZER_PIN, GPIO_FUNC_PWM);
-  uint slice_num = pwm_gpio_to_slice_num(BUZZER_PIN);
-
-  pwm_clear_irq(slice_num);
-  irq_set_exclusive_handler(PWM_DEFAULT_IRQ_NUM(), buzzer_pwm_call_irq);
-
-  pwm_config config = pwm_get_default_config();
-  pwm_config_set_clkdiv(&config, 1);
-  pwm_init(slice_num, &config, true);
-}
-
-void enable_buzzer_pwm() {
-  uint slice_num = pwm_gpio_to_slice_num(BUZZER_PIN);
-
-  irq_set_enabled(PWM_DEFAULT_IRQ_NUM(), true);
-  pwm_set_irq_enabled(slice_num, true);
-}
-
-void disable_buzzer_pwm() {
-  uint slice_num = pwm_gpio_to_slice_num(BUZZER_PIN);
-
-  irq_set_enabled(PWM_DEFAULT_IRQ_NUM(), false);
-  pwm_set_irq_enabled(slice_num, false);
-  pwm_set_gpio_level(BUZZER_PIN, 0);
-}
 
 int main() {
   stdio_init_all();
@@ -59,7 +26,7 @@ int main() {
   printf("jammer...\n");
 
   // BUZZER
-  init_buzzer_pwm();
+  init_buzzer_pwm(BUZZER_PIN);
 
   // BUTTON
   init_button_irq(ACTION_BUTTON_PIN, &action_button_callback);
