@@ -1,11 +1,10 @@
-#include <stdio.h>
-
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
-#include "pico/time.h"
 #include "pico_adxl345/adxl345.h"
+#include "../includes/button.h"
+#include "../includes/callbacks.h"
 
 const int STATUS_LED_PIN = 13;
 const int BUZZER_PIN = 14;
@@ -46,43 +45,6 @@ void disable_buzzer_pwm() {
   pwm_set_gpio_level(BUZZER_PIN, 0);
 }
 
-void button_callback(uint gpio, uint32_t event) {
-  static bool is_pressed = false;
-  static uint32_t last_call = 0;
-
-  if (gpio != ACTION_BUTTON_PIN) {
-    return;
-  }
-
-  const uint32_t current_time = to_ms_since_boot(get_absolute_time());
-
-  if (current_time - last_call < 300) {
-    return;
-  }
-
-  if (event == 4) {
-    is_pressed = false;
-    return;
-  }
-
-  if (event != 8 || is_pressed) {
-    return;
-  }
-
-  printf("alarm trigger\n");
-
-  if (alarm_on) {
-    disable_buzzer_pwm();
-    alarm_on = false;
-  } else {
-    enable_buzzer_pwm();
-    alarm_on = true;
-  }
-
-  is_pressed = true;
-  last_call = current_time;
-}
-
 int main() {
   stdio_init_all();
 
@@ -100,12 +62,7 @@ int main() {
   init_buzzer_pwm();
 
   // BUTTON
-  gpio_init(ACTION_BUTTON_PIN);
-  gpio_set_dir(ACTION_BUTTON_PIN, GPIO_IN);
-  gpio_pull_down(ACTION_BUTTON_PIN);
-  gpio_set_irq_enabled_with_callback(ACTION_BUTTON_PIN,
-                                     GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL,
-                                     true, &button_callback);
+  init_button_irq(ACTION_BUTTON_PIN, toggle_button_callback);
 
   // LED
   gpio_init(STATUS_LED_PIN);
