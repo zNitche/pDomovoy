@@ -1,16 +1,11 @@
 #include "../includes/button.h"
 #include "../includes/buzzer.h"
 #include "../includes/callbacks.h"
-#include "hardware/gpio.h"
+#include "../includes/defines.h"
+#include "../includes/globals.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "pico_adxl345/adxl345.h"
-
-const int STATUS_LED_PIN = 13;
-const int BUZZER_PIN = 14;
-const int ACTION_BUTTON_PIN = 12;
-
-bool alarm_on = false;
 
 int main() {
   stdio_init_all();
@@ -26,14 +21,14 @@ int main() {
   printf("jammer...\n");
 
   // BUZZER
-  init_buzzer_pwm(BUZZER_PIN);
+  init_buzzer_pwm(PDA_BUZZER_PIN);
 
   // BUTTON
-  init_button_irq(ACTION_BUTTON_PIN, &action_button_callback);
+  init_button_irq(PDA_ACTION_BUTTON_PIN, &action_button_callback);
 
   // LED
-  gpio_init(STATUS_LED_PIN);
-  gpio_set_dir(STATUS_LED_PIN, true);
+  gpio_init(PDA_STATUS_LED_PIN);
+  gpio_set_dir(PDA_STATUS_LED_PIN, true);
 
   // ADXL345
   ADXL345I2C adxl345_i2c = {i2c0, 0x53, 0, 1};
@@ -51,10 +46,12 @@ int main() {
   adxl345_start_measurements(adxl345_i2c);
 
   while (true) {
-    gpio_put(STATUS_LED_PIN, true);
-    sleep_ms(250);
-    gpio_put(STATUS_LED_PIN, false);
-    sleep_ms(250);
+    if (alarm_on) {
+      gpio_put(PDA_STATUS_LED_PIN, true);
+      sleep_ms(250);
+      gpio_put(PDA_STATUS_LED_PIN, false);
+      sleep_ms(250);
+    }
 
     if (connected) {
       float accel[3] = {0.0};
