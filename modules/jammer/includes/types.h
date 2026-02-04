@@ -1,3 +1,5 @@
 #pragma once
 
-typedef void (*button_callback)(uint, uint32_t);
+#include "pico/stdlib.h"
+
+typedef void (*button_callback)(uint gpio, uint32_t events);

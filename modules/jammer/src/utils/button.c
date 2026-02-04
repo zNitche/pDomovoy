@@ -1,6 +1,7 @@
 #include "../../includes/button.h"
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "pico/time.h"
 
@@ -12,27 +13,27 @@ void init_button_irq(uint gpio, button_callback callback) {
       gpio, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, callback);
 }
 
-void toggle_button_callback(uint gpio, uint32_t event) {
+bool debounce_push_button(uint32_t event) {
   static bool is_pressed = false;
   static uint32_t last_call = 0;
+
+  if (event == GPIO_IRQ_EDGE_FALL) {
+    is_pressed = false;
+    return false;
+  }
 
   const uint32_t current_time = to_ms_since_boot(get_absolute_time());
 
   if (current_time - last_call < 300) {
-    return;
+    return false;
   }
 
-  if (event == GPIO_IRQ_EDGE_FALL) {
-    is_pressed = false;
-    return;
+  if (event == GPIO_IRQ_EDGE_RISE && is_pressed) {
+    return false;
   }
-
-  if (event != GPIO_IRQ_EDGE_RISE || is_pressed) {
-    return;
-  }
-
-  printf("callback\n");
 
   is_pressed = true;
   last_call = current_time;
+
+  return true;
 }
