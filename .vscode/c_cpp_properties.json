@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "devcontainer",
             "includePath": [
                 "${workspaceFolder}/**",
                 "${env:PICO_SDK_PATH}/**"
