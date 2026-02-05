@@ -24,7 +24,7 @@ int main() {
   init_buzzer_pwm(PDA_BUZZER_PIN);
 
   // BUTTON
-  init_button_irq(PDA_ACTION_BUTTON_PIN, &action_button_callback);
+  init_button_irq(PDA_ACTION_BUTTON_PIN, action_button_callback);
 
   // LED
   gpio_init(PDA_STATUS_LED_PIN);

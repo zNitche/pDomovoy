@@ -1,5 +1,4 @@
 #include "../includes/callbacks.h"
-#include <stdio.h>
 
 #include "../includes/button.h"
 #include "../includes/buzzer.h"
@@ -11,9 +10,14 @@ void action_button_callback(uint gpio, uint32_t event) {
     return;
   }
 
-  printf("alarm on -> %d\n", alarm_on);
-  alarm_on = !alarm_on;
+  if (alarm_on) {
+    disable_buzzer_pwm(PDA_BUZZER_PIN);
 
-  // FIXME
-  // enable_buzzer_pwm(PDA_BUZZER_PIN);
+  } else {
+    enable_buzzer_pwm(PDA_BUZZER_PIN);
+  }
+
+  alarm_on != alarm_on;
 }
+
+void alarm_buzzer_irq_callback() { buzzer_pwm_call_irq(PDA_BUZZER_PIN); }

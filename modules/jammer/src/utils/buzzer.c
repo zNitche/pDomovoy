@@ -1,11 +1,12 @@
 #include "../../includes/buzzer.h"
-#include "hardware/pwm.h"
 
+#include "../../includes/callbacks.h"
+#include "hardware/pwm.h"
 
 void buzzer_pwm_call_irq(uint gpio_pin) {
   pwm_clear_irq(pwm_gpio_to_slice_num(gpio_pin));
 
-  pwm_set_gpio_level(gpio_pin, 1000);
+  pwm_set_gpio_level(gpio_pin, 2000);
 }
 
 void init_buzzer_pwm(uint gpio_pin) {
@@ -13,7 +14,7 @@ void init_buzzer_pwm(uint gpio_pin) {
   uint slice_num = pwm_gpio_to_slice_num(gpio_pin);
 
   pwm_clear_irq(slice_num);
-  irq_set_exclusive_handler(PWM_DEFAULT_IRQ_NUM(), buzzer_pwm_call_irq);
+  irq_set_exclusive_handler(PWM_DEFAULT_IRQ_NUM(), alarm_buzzer_irq_callback);
 
   pwm_config config = pwm_get_default_config();
 
