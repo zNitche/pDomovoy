@@ -21,7 +21,7 @@ int main() {
   printf("jammer...\n");
 
   // BUZZER
-  init_buzzer_pwm(PDA_BUZZER_PIN);
+  init_buzzer_pwm(PDA_BUZZER_PIN, alarm_buzzer_irq_callback);
 
   // BUTTON
   init_button_irq(PDA_ACTION_BUTTON_PIN, action_button_callback);
