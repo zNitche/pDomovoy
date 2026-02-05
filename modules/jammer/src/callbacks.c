@@ -17,7 +17,7 @@ void action_button_callback(uint gpio, uint32_t event) {
     enable_buzzer_pwm(PDA_BUZZER_PIN);
   }
 
-  alarm_on != alarm_on;
+  alarm_on = !alarm_on;
 }
 
 void alarm_buzzer_irq_callback() { buzzer_pwm_call_irq(PDA_BUZZER_PIN); }
