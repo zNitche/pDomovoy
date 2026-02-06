@@ -1,5 +1,5 @@
 #include "../includes/button.h"
-#include "../includes/buzzer.h"
+#include "../includes/pwm.h"
 #include "../includes/callbacks.h"
 #include "../includes/defines.h"
 #include "../includes/globals.h"
@@ -21,7 +21,7 @@ int main() {
   printf("jammer...\n");
 
   // BUZZER
-  init_buzzer_pwm(PDA_BUZZER_PIN, alarm_buzzer_irq_callback);
+  set_pwm_irq_callback(PDA_BUZZER_PIN, alarm_buzzer_irq_callback);
 
   // BUTTON
   init_button_irq(PDA_ACTION_BUTTON_PIN, action_button_callback);
