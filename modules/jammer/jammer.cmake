@@ -10,4 +10,5 @@ target_link_libraries(jammer
                     pico_stdlib
                     pico_cyw43_arch_none
                     hardware_pwm
+                    pico_multicore
                     pico_adxl345)
