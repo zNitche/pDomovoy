@@ -1,0 +1,8 @@
+// https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+TabWidth: 4
+IndentWidth: 4
+UseTab: Never
+Language: C
+PointerAlignment: Left
+AlignAfterOpenBracket: true
