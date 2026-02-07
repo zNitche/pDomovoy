@@ -6,11 +6,11 @@
 #include "../includes/pwm.h"
 
 void action_button_callback(uint gpio, uint32_t event) {
-  if (!debounce_push_button(event)) {
-    return;
-  }
+    if (!debounce_push_button(event)) {
+        return;
+    }
 
-  alarm_on = !alarm_on;
+    alarm_on = !alarm_on;
 }
 
 void alarm_buzzer_irq_callback() { post_pwm_irq(PDA_BUZZER_PIN, 2000); }
