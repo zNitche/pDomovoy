@@ -1,5 +1,7 @@
 #include "../../includes/core_0.h"
 
+#include <stdio.h>
+
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
 #include "pico/multicore.h"
