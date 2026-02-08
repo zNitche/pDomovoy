@@ -1,34 +1,41 @@
 #include "../../includes/core_0.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
-#include "pico/multicore.h"
+#include "../../includes/types.h"
 #include "pico/stdlib.h"
+#include "pico/util/queue.h"
 
 void core_0() {
     bool is_alarm_triggered = false;
-    uint32_t mc_fifo_data = 0;
+    mc_event_item event_item;
 
     while (true) {
-        multicore_fifo_pop_timeout_us(100, &mc_fifo_data);
+        const bool got_event =
+            queue_try_remove(&core0_events_queue, &event_item);
 
-        switch (mc_fifo_data) {
-        case PDA_MCS_ADXL345_OK:
-            printf("adxl345 ok\n");
+        if (got_event) {
+            switch (event_item.status) {
+            case PDA_ADXL345_OK:
+                printf("adxl345 ok\n");
 
-            break;
-        case PDA_MCS_ADXL345_ERROR:
-            printf("adxl345 fail\n");
+                break;
+            case PDA_ADXL345_ERROR:
+                printf("adxl345 fail\n");
 
-            break;
-        case PDA_MCS_ALARM_TRIGGERED:
-            is_alarm_triggered = true;
+                break;
+            case PDA_ALARM_TRIGGERED:
+                is_alarm_triggered = true;
 
-            break;
-        default:
-            break;
+                break;
+            default:
+                break;
+            }
+
+            event_item.status = 0;
         }
 
         if (alarm_on & is_alarm_triggered) {
@@ -41,7 +48,6 @@ void core_0() {
             sleep_ms(100);
         }
 
-        mc_fifo_data = 0;
         sleep_ms(250);
     }
 
