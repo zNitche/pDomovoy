@@ -12,7 +12,7 @@ void init_button_irq(uint gpio, button_callback callback) {
         gpio, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, callback);
 }
 
-bool debounce_push_button(uint32_t event) {
+bool debounce_push_button(uint32_t event, int min_delay_between_clicks) {
     static bool is_pressed = false;
     static uint32_t last_call = 0;
 
@@ -25,7 +25,7 @@ bool debounce_push_button(uint32_t event) {
         return false;
     }
 
-    if (current_time - last_call < 300) {
+    if (current_time - last_call < min_delay_between_clicks) {
         return false;
     }
 

@@ -4,7 +4,6 @@
 #include "../includes/button.h"
 #include "../includes/callbacks.h"
 #include "../includes/core_0.h"
-#include "../includes/core_1.h"
 #include "../includes/defines.h"
 #include "../includes/globals.h"
 #include "../includes/pwm.h"
@@ -26,8 +25,8 @@ void init_peripherals() {
 }
 
 void init_mc_queues() {
-    queue_init(&core0_events_queue, sizeof(mc_event_item), 3);
-    queue_init(&core1_events_queue, sizeof(mc_event_item), 3);
+    queue_init(&core0_events_queue, sizeof(mc_event_item), 1);
+    queue_init(&core1_events_queue, sizeof(mc_event_item), 1);
 }
 
 int main() {
@@ -46,9 +45,6 @@ int main() {
     init_peripherals();
     init_mc_queues();
 
-    // CORES STARTUP
-    // core_1 for alarm handling
-    multicore_launch_core1(core_1);
     // core_0 for device handling
     core_0();
 

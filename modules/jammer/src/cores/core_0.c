@@ -10,7 +10,6 @@
 #include "pico/util/queue.h"
 
 void core_0() {
-    bool is_alarm_triggered = false;
     mc_event_item event_item;
 
     while (true) {
@@ -28,7 +27,7 @@ void core_0() {
 
                 break;
             case PDA_ALARM_TRIGGERED:
-                is_alarm_triggered = true;
+                alarm_triggered = true;
 
                 break;
             default:
@@ -38,8 +37,8 @@ void core_0() {
             event_item.status = 0;
         }
 
-        if (alarm_on & is_alarm_triggered) {
-            printf("[core_0] is_alarm_triggered: %d\n", is_alarm_triggered);
+        if (alarm_in_standby & alarm_triggered) {
+            printf("[core_0] is_alarm_triggered\n");
 
             // todo implement with timers
             gpio_put(PDA_STATUS_LED_PIN, true);

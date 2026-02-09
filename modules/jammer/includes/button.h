@@ -4,4 +4,4 @@
 #include "types.h"
 
 void init_button_irq(uint gpio, button_callback callback);
-bool debounce_push_button(uint32_t event);
+bool debounce_push_button(uint32_t event, int min_delay_between_clicks);
