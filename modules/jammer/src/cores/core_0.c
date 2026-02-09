@@ -16,7 +16,7 @@ void core_0() {
 
     while (true) {
         const bool got_event =
-            queue_try_remove(&core0_events_queue, &event_item);
+            queue_try_remove(&g_core0_events_queue, &event_item);
 
         if (got_event) {
             switch (event_item.status) {
@@ -29,7 +29,7 @@ void core_0() {
 
                 break;
             case PDA_ALARM_TRIGGERED:
-                alarm_triggered = true;
+                g_alarm_triggered = true;
 
                 break;
             default:
@@ -39,7 +39,7 @@ void core_0() {
             event_item.status = 0;
         }
 
-        if (alarm_in_standby & alarm_triggered) {
+        if (g_alarm_in_standby & g_alarm_triggered) {
             printf("[core_0] is_alarm_triggered\n");
 
             // todo implement with timers

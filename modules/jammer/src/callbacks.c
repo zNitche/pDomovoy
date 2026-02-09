@@ -6,7 +6,7 @@
 #include "../includes/globals.h"
 #include "../includes/pwm.h"
 
-void action_for_continous_clicks(int* clicks) {
+void _action_for_continous_clicks(int* clicks) {
     switch (*clicks) {
     case CONTINOUS_CLICKS_TO_DISABLE_ALARM:
         disable_triggered_alarm();
@@ -29,10 +29,10 @@ void action_button_callback(uint gpio, uint32_t event) {
     count_clicks_in_row(&last_click_time, &clicks_in_row,
                         MIN_TIME_BETWEEN_CLICKS_FOR_ACTION);
 
-    if (!alarm_triggered) {
+    if (!g_alarm_triggered) {
         toggle_alarm_standby();
     } else {
-        action_for_continous_clicks(&clicks_in_row);
+        _action_for_continous_clicks(&clicks_in_row);
     }
 }
 
