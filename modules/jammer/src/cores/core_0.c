@@ -12,6 +12,8 @@
 void core_0() {
     mc_event_item event_item;
 
+    printf("[core_0] started, waiting\n");
+
     while (true) {
         const bool got_event =
             queue_try_remove(&core0_events_queue, &event_item);

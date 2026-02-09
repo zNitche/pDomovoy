@@ -44,14 +44,16 @@ bool check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
     get_bunch_of_accel_readings(adxl345_i2c, readings_count, total_accel, 20);
     get_accel_readings_mean(total_accel, readings_count, accel_mean);
 
-    bool x_triggered = is_reading_above_initial_mean(
-        initial_accel_mean[0], accel_mean[0], trigger_factor);
-    bool y_triggered = is_reading_above_initial_mean(
-        initial_accel_mean[1], accel_mean[1], trigger_factor);
-    bool z_triggered = is_reading_above_initial_mean(
-        initial_accel_mean[2], accel_mean[2], trigger_factor);
+    for (int i = 0; i < 3; i++) {
+        const bool is_above_mean = is_reading_above_initial_mean(
+            initial_accel_mean[i], accel_mean[i], trigger_factor);
 
-    return x_triggered || y_triggered || z_triggered;
+        if (is_above_mean) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void core_1() {
