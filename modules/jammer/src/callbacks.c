@@ -26,16 +26,8 @@ void action_button_callback(uint gpio, uint32_t event) {
         return;
     }
 
-    const uint32_t current_click_time = to_ms_since_boot(get_absolute_time());
-
-    if (current_click_time - last_click_time <=
-        MIN_TIME_BETWEEN_CLICKS_FOR_ACTION) {
-        clicks_in_row += 1;
-    } else {
-        clicks_in_row = 0;
-    }
-
-    last_click_time = current_click_time;
+    count_clicks_in_row(&last_click_time, &clicks_in_row,
+                        MIN_TIME_BETWEEN_CLICKS_FOR_ACTION);
 
     if (!alarm_triggered) {
         toggle_alarm_standby();

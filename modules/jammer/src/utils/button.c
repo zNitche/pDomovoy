@@ -1,4 +1,5 @@
 #include "../../includes/button.h"
+#include "../../includes/defines.h"
 
 #include <stdbool.h>
 
@@ -37,4 +38,17 @@ bool debounce_push_button(uint32_t event, int min_delay_between_clicks) {
     last_call = current_time;
 
     return true;
+}
+
+void count_clicks_in_row(uint32_t* last_click_time, int* clicks_in_row,
+                         int min_time_between_clicks) {
+    const uint32_t current_click_time = to_ms_since_boot(get_absolute_time());
+
+    if (current_click_time - *last_click_time <= min_time_between_clicks) {
+        *clicks_in_row += 1;
+    } else {
+        *clicks_in_row = 0;
+    }
+
+    *last_click_time = current_click_time;
 }
