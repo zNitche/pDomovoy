@@ -70,8 +70,7 @@ void core_1() {
         return;
     }
 
-    enum ADXL345Ranges sensor_range = RANGE_4G;
-    adxl345_set_measurements_range(adxl345_i2c, sensor_range);
+    adxl345_set_measurements_range(adxl345_i2c, RANGE_4G);
     adxl345_start_measurements(adxl345_i2c);
 
     _get_initial_accel_mean(&adxl345_i2c, initial_accel_mean);
