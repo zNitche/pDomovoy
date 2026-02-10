@@ -70,7 +70,7 @@ void core_1() {
         return;
     }
 
-    adxl345_set_measurements_range(adxl345_i2c, RANGE_4G);
+    adxl345_set_measurements_range(adxl345_i2c, ADXL345_RANGE_4G);
     adxl345_start_measurements(adxl345_i2c);
 
     _get_initial_accel_mean(&adxl345_i2c, initial_accel_mean);
