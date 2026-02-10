@@ -7,6 +7,7 @@
 #include "../../includes/debug_print.h"
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
+#include "../../includes/led_blink.h"
 #include "../../includes/types.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
@@ -74,6 +75,8 @@ void core_1() {
     adxl345_start_measurements(adxl345_i2c);
 
     debug_print("[core_1] adxl345 has been started\n");
+
+    blink_blocking(PDA_STATUS_LED_PIN, 25, 200);
 
     _get_initial_accel_mean(&adxl345_i2c, initial_accel_mean);
     _send_event_to_core_0(PDA_ADXL345_OK);

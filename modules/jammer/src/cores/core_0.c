@@ -6,6 +6,7 @@
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
 #include "../../includes/types.h"
+#include "../../includes/led_blink.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
 
@@ -42,11 +43,7 @@ void core_0() {
         if (g_alarm_in_standby & g_alarm_triggered) {
             debug_print("[core_0] alarm triggered\n");
 
-            // todo implement with timers
-            gpio_put(PDA_STATUS_LED_PIN, true);
-            sleep_ms(100);
-            gpio_put(PDA_STATUS_LED_PIN, false);
-            sleep_ms(100);
+            blink_blocking(PDA_STATUS_LED_PIN, 5, 100);
         }
 
         sleep_ms(250);
