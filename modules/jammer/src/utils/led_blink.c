@@ -1,8 +1,8 @@
-#include "../includes/led_blink.h"
+#include "../../includes/led_blink.h"
 #include <stdbool.h>
 
-#include "../includes/globals.h"
-#include "../includes/types.h"
+#include "../../includes/globals.h"
+#include "../../includes/types.h"
 #include "pico/stdlib.h"
 
 void blink_blocking(int pin, int times, int time_between) {
