@@ -1,8 +1,8 @@
 #include "../../includes/core_0.h"
 
 #include <stdbool.h>
-#include <stdio.h>
 
+#include "../../includes/debug_print.h"
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
 #include "../../includes/types.h"
@@ -12,7 +12,7 @@
 void core_0() {
     mc_event_item event_item;
 
-    printf("[core_0] started, waiting\n");
+    debug_print("[core_0] started, waiting\n");
 
     while (true) {
         const bool got_event =
@@ -21,11 +21,11 @@ void core_0() {
         if (got_event) {
             switch (event_item.status) {
             case PDA_ADXL345_OK:
-                printf("adxl345 ok\n");
+                debug_print("[core_0] adxl345 ok\n");
 
                 break;
             case PDA_ADXL345_ERROR:
-                printf("adxl345 fail\n");
+                debug_print("[core_0] adxl345 fail\n");
 
                 break;
             case PDA_ACCELERATION_TRIGGER:
@@ -40,7 +40,7 @@ void core_0() {
         }
 
         if (g_alarm_in_standby & g_alarm_triggered) {
-            printf("[core_0] is_alarm_triggered\n");
+            debug_print("[core_0] alarm triggered\n");
 
             // todo implement with timers
             gpio_put(PDA_STATUS_LED_PIN, true);

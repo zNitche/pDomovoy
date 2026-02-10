@@ -2,9 +2,9 @@
 
 #include <math.h>
 #include <stdbool.h>
-#include <stdio.h>
 
 #include "../../includes/acceleration_readings.h"
+#include "../../includes/debug_print.h"
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
 #include "../../includes/types.h"
@@ -23,7 +23,7 @@ void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c, float output[3]) {
     const int readings_count = 20;
     float total_accel[readings_count][3] = {};
 
-    get_bunch_of_accel_readings(adxl345_i2c, readings_count, total_accel, 20);
+    get_bunch_of_accel_readings(adxl345_i2c, readings_count, total_accel, 100);
     get_accel_readings_mean(total_accel, readings_count, output);
 }
 
@@ -41,7 +41,7 @@ bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
     float tmp_accel[3] = {0.0};
     float accel_mean[3] = {0.0};
 
-    get_bunch_of_accel_readings(adxl345_i2c, readings_count, total_accel, 20);
+    get_bunch_of_accel_readings(adxl345_i2c, readings_count, total_accel, 50);
     get_accel_readings_mean(total_accel, readings_count, accel_mean);
 
     for (int i = 0; i < 3; i++) {
@@ -73,21 +73,24 @@ void core_1() {
     adxl345_set_measurements_range(adxl345_i2c, ADXL345_RANGE_4G);
     adxl345_start_measurements(adxl345_i2c);
 
-    _get_initial_accel_mean(&adxl345_i2c, initial_accel_mean);
+    debug_print("[core_1] adxl345 has been started\n");
 
+    _get_initial_accel_mean(&adxl345_i2c, initial_accel_mean);
     _send_event_to_core_0(PDA_ADXL345_OK);
+
+    debug_print("[core_1] got initial acceleration readings\n");
 
     while (true) {
         bool is_triggered =
             _check_for_alarm_trigger(&adxl345_i2c, initial_accel_mean);
-        // printf("[core_1] is_alarm_trigger %d \n", is_triggered);
 
         if (is_triggered) {
+            debug_print("[core_1] alarm trigger\n");
             _send_event_to_core_0(PDA_ACCELERATION_TRIGGER);
         }
-
-        sleep_ms(100);
     }
+
+    debug_print("[core_1] exiting...\n");
 
     adxl345_stop_measurements(adxl345_i2c);
 

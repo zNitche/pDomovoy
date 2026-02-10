@@ -30,7 +30,7 @@ void action_button_callback(uint gpio, uint32_t event) {
                         MIN_TIME_BETWEEN_CLICKS_FOR_ACTION);
 
     if (!g_alarm_triggered) {
-        toggle_alarm_standby();
+        enable_alarm_standby();
     } else {
         _action_for_continous_clicks(&clicks_in_row);
     }

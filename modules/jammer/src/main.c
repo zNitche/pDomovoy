@@ -4,6 +4,7 @@
 #include "../includes/button.h"
 #include "../includes/callbacks.h"
 #include "../includes/core_0.h"
+#include "../includes/debug_print.h"
 #include "../includes/defines.h"
 #include "../includes/globals.h"
 #include "../includes/pwm.h"
@@ -40,7 +41,7 @@ int main() {
     getchar();
 #endif
 
-    printf("jammer...\n");
+    debug_print("[JAMMER]\n");
 
     init_peripherals();
     init_mc_queues();

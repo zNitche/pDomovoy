@@ -17,9 +17,7 @@ void get_accel_readings_mean(float input[][3], int input_length,
         means[i] = tmp_combined / input_length;
     }
 
-    output[0] = means[0];
-    output[1] = means[1];
-    output[2] = means[2];
+    *output = *means;
 }
 
 void get_bunch_of_accel_readings(ADXL345I2C* adxl345_i2c, int readings_count,
