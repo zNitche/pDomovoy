@@ -28,7 +28,7 @@ void core_0() {
                 printf("adxl345 fail\n");
 
                 break;
-            case PDA_ALARM_TRIGGERED:
+            case PDA_ACCELERATION_TRIGGER:
                 g_alarm_triggered = true;
 
                 break;

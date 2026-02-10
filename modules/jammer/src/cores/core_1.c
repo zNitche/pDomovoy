@@ -80,10 +80,10 @@ void core_1() {
     while (true) {
         bool is_triggered =
             _check_for_alarm_trigger(&adxl345_i2c, initial_accel_mean);
-        printf("[core_1] is_alarm_trigger %d \n", is_triggered);
+        // printf("[core_1] is_alarm_trigger %d \n", is_triggered);
 
         if (is_triggered) {
-            _send_event_to_core_0(PDA_ALARM_TRIGGERED);
+            _send_event_to_core_0(PDA_ACCELERATION_TRIGGER);
         }
 
         sleep_ms(100);
