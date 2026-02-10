@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "../../includes/acceleration_readings.h"
+#include "../../includes/callbacks.h"
 #include "../../includes/debug_print.h"
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
@@ -76,12 +77,19 @@ void core_1() {
 
     debug_print("[core_1] adxl345 has been started\n");
 
-    blink_blocking(PDA_STATUS_LED_PIN, 25, 200);
+    // wait 30s for device setup
+    blink_blocking(PDA_STATUS_LED_PIN, 30, 1000);
+
+    blink_untill_start(PDA_STATUS_LED_PIN, 100,
+                       blink_status_led_for_standby_callback);
 
     _get_initial_accel_mean(&adxl345_i2c, initial_accel_mean);
-    _send_event_to_core_0(PDA_ADXL345_OK);
 
-    debug_print("[core_1] got initial acceleration readings\n");
+    _send_event_to_core_0(PDA_ADXL345_OK);
+    debug_print(
+        "[core_1] got initial acceleration readings, running mainloop\n");
+
+    blink_untill_stop(PDA_STATUS_LED_PIN);
 
     while (true) {
         if (_check_for_alarm_trigger(&adxl345_i2c, initial_accel_mean)) {

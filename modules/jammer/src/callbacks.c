@@ -37,3 +37,10 @@ void action_button_callback(uint gpio, uint32_t event) {
 }
 
 void alarm_buzzer_irq_callback() { post_pwm_irq(PDA_BUZZER_PIN, 2000); }
+
+bool blink_status_led_for_standby_callback(__unused struct repeating_timer* t) {
+    static bool state = false;
+
+    gpio_put(PDA_STATUS_LED_PIN, state);
+    state = !state;
+}
