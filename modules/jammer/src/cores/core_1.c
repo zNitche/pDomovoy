@@ -81,12 +81,11 @@ void core_1() {
     debug_print("[core_1] got initial acceleration readings\n");
 
     while (true) {
-        bool is_triggered =
-            _check_for_alarm_trigger(&adxl345_i2c, initial_accel_mean);
-
-        if (is_triggered) {
+        if (_check_for_alarm_trigger(&adxl345_i2c, initial_accel_mean)) {
             debug_print("[core_1] alarm trigger\n");
             _send_event_to_core_0(PDA_ACCELERATION_TRIGGER);
+
+            break;
         }
     }
 
