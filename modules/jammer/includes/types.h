@@ -8,7 +8,9 @@ typedef void (*buzzer_callback)();
 enum DeviceStatus {
     PDA_ADXL345_OK = 101,
     PDA_ADXL345_ERROR = 102,
-    PDA_ACCELERATION_TRIGGER = 105,
+    PDA_STANDBY_PREP = 203,
+    PDA_STANDBY_READY = 204,
+    PDA_ACCELERATION_TRIGGER = 205,
 };
 
 typedef struct {

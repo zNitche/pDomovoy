@@ -2,11 +2,12 @@
 
 #include <stdbool.h>
 
+#include "../../includes/callbacks.h"
 #include "../../includes/debug_print.h"
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
-#include "../../includes/types.h"
 #include "../../includes/led_blink.h"
+#include "../../includes/types.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
 
@@ -33,6 +34,15 @@ void core_0() {
                 g_alarm_triggered = true;
 
                 break;
+            case PDA_STANDBY_PREP:
+                blink_untill_start(PDA_STATUS_LED_PIN, 100,
+                                   blink_status_led_for_standby_callback);
+
+                break;
+            case PDA_STANDBY_READY:
+                blink_untill_stop(PDA_STATUS_LED_PIN);
+
+                break;
             default:
                 break;
             }
@@ -43,6 +53,7 @@ void core_0() {
         if (g_alarm_in_standby & g_alarm_triggered) {
             debug_print("[core_0] alarm triggered\n");
 
+            // TODO use buzzer instead of led
             blink_blocking(PDA_STATUS_LED_PIN, 5, 100);
         }
 

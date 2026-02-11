@@ -1,9 +1,9 @@
 #include "../includes/delegates.h"
 
 #include "../includes/core_1.h"
+#include "../includes/debug_print.h"
 #include "../includes/globals.h"
 #include "pico/multicore.h"
-#include "../includes/debug_print.h"
 
 void enable_alarm_standby() {
     if (!g_alarm_in_standby) {

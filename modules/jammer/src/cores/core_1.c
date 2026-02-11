@@ -4,11 +4,9 @@
 #include <stdbool.h>
 
 #include "../../includes/acceleration_readings.h"
-#include "../../includes/callbacks.h"
 #include "../../includes/debug_print.h"
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
-#include "../../includes/led_blink.h"
 #include "../../includes/types.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
@@ -70,26 +68,23 @@ void core_1() {
         _send_event_to_core_0(PDA_ADXL345_ERROR);
 
         return;
+    } else {
+        _send_event_to_core_0(PDA_ADXL345_OK);
     }
+
+    _send_event_to_core_0(PDA_STANDBY_PREP);
 
     adxl345_set_measurements_range(adxl345_i2c, ADXL345_RANGE_4G);
     adxl345_start_measurements(adxl345_i2c);
 
     debug_print("[core_1] adxl345 has been started\n");
 
-    // wait 30s for device setup
-    blink_blocking(PDA_STATUS_LED_PIN, 30, 1000);
-
-    blink_untill_start(PDA_STATUS_LED_PIN, 100,
-                       blink_status_led_for_standby_callback);
-
     _get_initial_accel_mean(&adxl345_i2c, initial_accel_mean);
-
-    _send_event_to_core_0(PDA_ADXL345_OK);
+    
     debug_print(
         "[core_1] got initial acceleration readings, running mainloop\n");
 
-    blink_untill_stop(PDA_STATUS_LED_PIN);
+    _send_event_to_core_0(PDA_STANDBY_READY);
 
     while (true) {
         if (_check_for_alarm_trigger(&adxl345_i2c, initial_accel_mean)) {
