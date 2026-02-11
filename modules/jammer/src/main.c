@@ -26,8 +26,8 @@ void init_peripherals() {
 }
 
 void init_mc_queues() {
-    queue_init(&g_core0_events_queue, sizeof(mc_event_item), 1);
-    queue_init(&g_core1_events_queue, sizeof(mc_event_item), 1);
+    queue_init(&g_core0_events_queue, sizeof(mc_event_item), 2);
+    queue_init(&g_core1_events_queue, sizeof(mc_event_item), 2);
 }
 
 int main() {

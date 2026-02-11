@@ -5,6 +5,14 @@
 #include "../includes/globals.h"
 #include "pico/multicore.h"
 
+void init_alarm_standby() {
+    if (!g_alarm_in_standby && !g_alarm_triggered && !g_alarm_standby_init) {
+        g_alarm_standby_init = true;
+
+        debug_print("alarm standby init \n");
+    }
+}
+
 void enable_alarm_standby() {
     if (!g_alarm_in_standby) {
         multicore_launch_core1(core_1);

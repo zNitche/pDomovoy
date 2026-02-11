@@ -5,6 +5,9 @@
 
 extern bool g_alarm_triggered;
 extern bool g_alarm_in_standby;
+extern bool g_alarm_standby_init;
+
+extern bool g_btn_blocked;
 
 extern queue_t g_core0_events_queue;
 extern queue_t g_core1_events_queue;
