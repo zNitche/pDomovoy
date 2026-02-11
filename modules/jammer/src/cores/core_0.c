@@ -8,6 +8,7 @@
 #include "../../includes/delegates.h"
 #include "../../includes/globals.h"
 #include "../../includes/led_blink.h"
+#include "../../includes/pwm.h"
 #include "../../includes/types.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
@@ -66,17 +67,24 @@ void core_0() {
 
         if (got_event) {
             _process_event(&event_item);
+            continue;
         }
 
         if (g_alarm_standby_init) {
             _wait_for_alarm_standby();
+            continue;
         }
 
         if (g_alarm_in_standby & g_alarm_triggered) {
             debug_print("[core_0] alarm triggered\n");
 
-            // TODO use buzzer instead of led
-            // blink_blocking(PDA_STATUS_LED_PIN, 5, 100);
+            enable_pwm_irq_on_pin(PDA_BUZZER_PIN);
+
+            while (g_alarm_triggered) {
+                sleep_ms(250);
+            }
+
+            disable_pwm_irq_on_pin(PDA_BUZZER_PIN);
         }
 
         sleep_ms(250);
