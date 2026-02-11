@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 // pins
 #define PDA_STATUS_LED_PIN 13
 #define PDA_BUZZER_PIN 14

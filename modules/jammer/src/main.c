@@ -36,10 +36,10 @@ int main() {
     int rc = cyw43_arch_init();
     hard_assert(rc == PICO_OK);
 
-#ifdef DEBUG
-    // DEBUG waiting for input
-    getchar();
-#endif
+    if (DEBUG) {
+        // DEBUG waiting for input
+        getchar();
+    }
 
     debug_print("[JAMMER]\n");
 
