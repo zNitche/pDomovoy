@@ -40,7 +40,32 @@ void action_button_callback(uint gpio, uint32_t event) {
     }
 }
 
-void alarm_buzzer_irq_callback() { post_pwm_irq(PDA_BUZZER_PIN, 2000); }
+void alarm_buzzer_irq_callback() {
+    static uint val = 0;
+    static bool going_up = true;
+
+    // keep it quiet for testing
+    if (DEBUG) {
+        post_pwm_irq(PDA_BUZZER_PIN, 2000);
+        return;
+    }
+
+    if (going_up) {
+        val += 1;
+    } else {
+        val -= 5;
+    }
+
+    post_pwm_irq(PDA_BUZZER_PIN, val * val);
+
+    if (val <= 0) {
+        going_up = true;
+    }
+
+    if (val >= 250) {
+        going_up = false;
+    }
+}
 
 bool blink_status_led_for_standby_callback(__unused struct repeating_timer* t) {
     static bool state = false;
