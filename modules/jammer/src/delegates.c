@@ -23,10 +23,11 @@ void enable_alarm_standby() {
 }
 
 void disable_triggered_alarm() {
-    multicore_reset_core1();
-
+    g_alarm_standby_init = false;
     g_alarm_in_standby = false;
     g_alarm_triggered = false;
+
+    multicore_reset_core1();
 
     debug_print("disabled triggered alarm\n");
 }
