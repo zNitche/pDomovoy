@@ -27,9 +27,7 @@ void get_bunch_of_accel_readings(ADXL345I2C* adxl345_i2c, int readings_count,
     for (int i = 0; i < readings_count; i++) {
         adxl345_get_readings(*adxl345_i2c, current_accel);
 
-        total_accel[i][0] = current_accel[0];
-        total_accel[i][1] = current_accel[1];
-        total_accel[i][2] = current_accel[2];
+        *total_accel[i] = *current_accel;
 
         sleep_ms(delay);
     }
