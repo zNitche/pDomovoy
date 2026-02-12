@@ -1,6 +1,7 @@
 #include "../../includes/core_0.h"
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "../../includes/callbacks.h"
 #include "../../includes/debug_print.h"
@@ -74,6 +75,8 @@ void core_0() {
             _wait_for_alarm_standby();
             continue;
         }
+
+        printf("voltage: %f\n", g_battery_voltage);
 
         if (g_alarm_in_standby & g_alarm_triggered) {
             debug_print("[core_0] alarm triggered\n");
