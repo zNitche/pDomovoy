@@ -3,7 +3,9 @@
 
 #include "../../includes/globals.h"
 #include "../../includes/types.h"
+#include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
+#include "pico/time.h"
 
 void blink_blocking(int pin, int times, int time_between) {
     bool state = true;
@@ -18,15 +20,47 @@ void blink_blocking(int pin, int times, int time_between) {
     gpio_put(pin, false);
 }
 
-void blink_untill_start(int pin, int32_t time_between,
-                        repeating_timer_callback_t cb) {
-    if (!g_status_led_blink_timer.alarm_id) {
-        add_repeating_timer_ms(time_between, cb, NULL,
-                               &g_status_led_blink_timer);
+void blink_untill_start(int32_t time_between, repeating_timer_callback_t cb,
+                        repeating_timer_t* timer) {
+    if (!timer->alarm_id) {
+        add_repeating_timer_ms(time_between, cb, NULL, timer);
     }
 }
 
-void blink_untill_stop(int pin) {
-    bool g = cancel_repeating_timer(&g_status_led_blink_timer);
+void blink_untill_stop(int pin, repeating_timer_t* timer) {
+    bool g = cancel_repeating_timer(timer);
     gpio_put(pin, false);
+}
+
+void cyw34_blink_untill_start(int32_t time_between, repeating_timer_t* timer) {
+    if (!timer->alarm_id) {
+        add_repeating_timer_ms(time_between, _blink_onboard_led_cb, NULL,
+                               timer);
+    }
+}
+
+void cyw34_blink_untill_stop(repeating_timer_t* timer) {
+    bool g = cancel_repeating_timer(timer);
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, false);
+}
+
+void blink_onboard_led_blocking(int times, int time_between) {
+    bool state = true;
+
+    for (int i = 0; i < times; i++) {
+        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, state);
+        state = !state;
+
+        sleep_ms(time_between);
+    }
+
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, false);
+}
+
+bool _blink_onboard_led_cb(__unused repeating_timer_t* t) {
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, true);
+    busy_wait_us(30000);
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, false);
+
+    return true;
 }

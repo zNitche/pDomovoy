@@ -1,6 +1,6 @@
 #include "../../includes/button.h"
-#include "../../includes/defines.h"
 
+#include "../../includes/types.h"
 #include <stdbool.h>
 
 #include "pico/time.h"

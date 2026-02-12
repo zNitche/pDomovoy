@@ -72,4 +72,6 @@ bool blink_status_led_for_standby_callback(__unused struct repeating_timer* t) {
 
     gpio_put(PDA_STATUS_LED_PIN, state);
     state = !state;
+
+    return true;
 }

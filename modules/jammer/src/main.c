@@ -7,6 +7,7 @@
 #include "../includes/debug_print.h"
 #include "../includes/defines.h"
 #include "../includes/globals.h"
+#include "../includes/led_blink.h"
 #include "../includes/pwm.h"
 #include "pico/cyw43_arch.h"
 #include "pico/multicore.h"
@@ -46,8 +47,12 @@ int main() {
     init_peripherals();
     init_mc_queues();
 
+    cyw34_blink_untill_start(10000, &g_onboard_led_blink_timer);
+
     // core_0 for device handling
     core_0();
+
+    cyw34_blink_untill_stop(&g_onboard_led_blink_timer);
 
     return 0;
 }

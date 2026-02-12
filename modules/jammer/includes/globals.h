@@ -12,4 +12,5 @@ extern bool g_btn_blocked;
 extern queue_t g_core0_events_queue;
 extern queue_t g_core1_events_queue;
 
-extern struct repeating_timer g_status_led_blink_timer;
+extern repeating_timer_t g_onboard_led_blink_timer;
+extern repeating_timer_t g_status_led_blink_timer;
