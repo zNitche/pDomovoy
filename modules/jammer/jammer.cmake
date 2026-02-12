@@ -10,7 +10,7 @@ add_executable(jammer
 
 target_link_libraries(jammer 
                     pico_stdlib
-                    pico_cyw43_arch_none
+                    pico_cyw43_arch_lwip_threadsafe_background
                     hardware_pwm
                     pico_multicore
                     pico_adxl345)

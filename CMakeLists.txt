@@ -15,6 +15,14 @@ add_subdirectory(libs/pico-c-adxl345/lib)
 include(modules/jammer/jammer.cmake)
 include(modules/station/station.cmake)
 
+target_include_directories(jammer PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/modules/common/includes
+)
+
+target_include_directories(station PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/modules/common/includes
+)
+
 # disable uart stdio & usb stdio depending on -DPROD=1/0
 pico_enable_stdio_uart(jammer 0)
 pico_enable_stdio_uart(station 0)
