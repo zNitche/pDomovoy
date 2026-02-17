@@ -30,10 +30,13 @@ void _wait_for_alarm_standby() {
 void _process_event(mc_event_item* event) {
     switch (event->status) {
     case PDA_ADXL345_OK:
+        blink_untill_stop(PDA_STATUS_LED_PIN, &g_status_led_blink_timer);
         debug_print("[core_0] adxl345 ok\n");
 
         break;
     case PDA_ADXL345_ERROR:
+        blink_untill_start(50, blink_status_led_for_standby_callback,
+                           &g_status_led_blink_timer, true);
         debug_print("[core_0] adxl345 fail\n");
 
         break;
