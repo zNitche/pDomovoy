@@ -48,6 +48,26 @@ int _is_battery_voltage_low() {
     return 0;
 }
 
+void _check_battery_level() {
+    const int battery_status = _is_battery_voltage_low();
+
+    if (battery_status == 2) {
+        debug_print("[core_0] low battery\n");
+
+        if (!_l_detected_low_battery_voltage) {
+            blink_untill_start(2000, blink_status_led_for_standby_callback,
+                               &g_status_led_blink_timer, true);
+
+            _l_detected_low_battery_voltage = true;
+        }
+    } else if (battery_status == 1) {
+        debug_print("[core_0] high battery\n");
+
+        blink_untill_stop(PDA_STATUS_LED_PIN, &g_status_led_blink_timer);
+        _l_detected_low_battery_voltage = false;
+    }
+}
+
 void _wait_for_alarm_standby() {
     g_btn_blocked = true;
 
@@ -116,25 +136,7 @@ void core_0() {
         }
 
         if (!_l_sensor_error) {
-            const int battery_status = _is_battery_voltage_low();
-
-            if (battery_status == 2) {
-                debug_print("[core_0] low battery\n");
-
-                if (!_l_detected_low_battery_voltage) {
-                    blink_untill_start(2000,
-                                       blink_status_led_for_standby_callback,
-                                       &g_status_led_blink_timer, true);
-
-                    _l_detected_low_battery_voltage = true;
-                }
-            } else if (battery_status == 1) {
-                debug_print("[core_0] high battery\n");
-
-                blink_untill_stop(PDA_STATUS_LED_PIN,
-                                  &g_status_led_blink_timer);
-                _l_detected_low_battery_voltage = false;
-            }
+            _check_battery_level();
         }
 
         if (g_alarm_in_standby & g_alarm_triggered) {
