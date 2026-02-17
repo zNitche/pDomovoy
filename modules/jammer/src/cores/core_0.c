@@ -99,6 +99,8 @@ void _process_event(mc_event_item* event) {
         break;
     case PDA_ACCELERATION_TRIGGER:
         g_alarm_triggered = true;
+        // reset battery status on trigger
+        _l_detected_low_battery_voltage = false;
 
         break;
     case PDA_STANDBY_PREP:
@@ -136,7 +138,7 @@ void core_0() {
             continue;
         }
 
-        if (!_l_sensor_error) {
+        if (!_l_sensor_error && !g_alarm_triggered && !g_alarm_in_standby) {
             _check_battery_level();
         }
 

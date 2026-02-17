@@ -1,5 +1,7 @@
 #include "../includes/globals.h"
 
+// should be accessed only from core_0
+
 bool g_alarm_triggered = false;
 bool g_alarm_standby_init = false;
 bool g_alarm_in_standby = false;
