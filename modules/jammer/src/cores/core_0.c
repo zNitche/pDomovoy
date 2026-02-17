@@ -14,6 +14,40 @@
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
 
+bool _l_detected_low_battery_voltage = false;
+bool _l_sensor_error = false;
+
+int _is_battery_voltage_low() {
+    // 0 - undefined
+    // 1 - false
+    // 2 - true
+
+    static float voltages[BATTER_VOLTAGE_READINGS] = {0.0};
+    static int readings_count = 0;
+
+    voltages[readings_count + 1] = g_battery_voltage;
+    readings_count += 1;
+
+    if (readings_count >= BATTER_VOLTAGE_READINGS) {
+        float readings_mean = 0.0;
+
+        for (int i = 0; i < BATTER_VOLTAGE_READINGS; i++) {
+            readings_mean += voltages[i];
+            voltages[i] = 0.0;
+        }
+
+        // reset array
+        // memset(voltages, 0.0, sizeof(voltages));
+
+        readings_mean = readings_mean / readings_count;
+        readings_count = 0;
+
+        return readings_mean <= MIN_BATTERY_VOLTAGE ? 2 : 1;
+    }
+
+    return 0;
+}
+
 void _wait_for_alarm_standby() {
     g_btn_blocked = true;
 
@@ -37,6 +71,8 @@ void _process_event(mc_event_item* event) {
     case PDA_ADXL345_ERROR:
         blink_untill_start(50, blink_status_led_for_standby_callback,
                            &g_status_led_blink_timer, true);
+
+        _l_sensor_error = false;
         debug_print("[core_0] adxl345 fail\n");
 
         break;
@@ -79,7 +115,27 @@ void core_0() {
             continue;
         }
 
-        printf("voltage: %f\n", g_battery_voltage);
+        if (!_l_sensor_error) {
+            const int battery_status = _is_battery_voltage_low();
+
+            if (battery_status == 2) {
+                debug_print("[core_0] low battery\n");
+
+                if (!_l_detected_low_battery_voltage) {
+                    blink_untill_start(2000,
+                                       blink_status_led_for_standby_callback,
+                                       &g_status_led_blink_timer, true);
+
+                    _l_detected_low_battery_voltage = true;
+                }
+            } else if (battery_status == 1) {
+                debug_print("[core_0] high battery\n");
+
+                blink_untill_stop(PDA_STATUS_LED_PIN,
+                                  &g_status_led_blink_timer);
+                _l_detected_low_battery_voltage = false;
+            }
+        }
 
         if (g_alarm_in_standby & g_alarm_triggered) {
             debug_print("[core_0] alarm triggered\n");
