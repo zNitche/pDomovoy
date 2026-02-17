@@ -43,7 +43,7 @@ void _process_event(mc_event_item* event) {
         break;
     case PDA_STANDBY_PREP:
         blink_untill_start(100, blink_status_led_for_standby_callback,
-                           &g_status_led_blink_timer);
+                           &g_status_led_blink_timer, true);
 
         break;
     case PDA_STANDBY_READY:

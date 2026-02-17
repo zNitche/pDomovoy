@@ -57,7 +57,7 @@ int main() {
 
     init_voltmeter();
 
-    cyw34_blink_untill_start(10000, &g_onboard_led_blink_timer);
+    cyw34_blink_untill_start(10000, &g_onboard_led_blink_timer, true);
 
     // core_0 for device handling
     core_0();

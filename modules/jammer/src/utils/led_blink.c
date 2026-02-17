@@ -21,8 +21,8 @@ void blink_blocking(int pin, int times, int time_between) {
 }
 
 void blink_untill_start(int32_t time_between, repeating_timer_callback_t cb,
-                        repeating_timer_t* timer) {
-    if (!timer->alarm_id) {
+                        repeating_timer_t* timer, bool reclaim_on_init) {
+    if (reclaim_on_init || !timer->alarm_id) {
         add_repeating_timer_ms(time_between, cb, NULL, timer);
     }
 }
@@ -32,8 +32,9 @@ void blink_untill_stop(int pin, repeating_timer_t* timer) {
     gpio_put(pin, false);
 }
 
-void cyw34_blink_untill_start(int32_t time_between, repeating_timer_t* timer) {
-    if (!timer->alarm_id) {
+void cyw34_blink_untill_start(int32_t time_between, repeating_timer_t* timer,
+                              bool reclaim_on_init) {
+    if (reclaim_on_init || !timer->alarm_id) {
         add_repeating_timer_ms(time_between, _blink_onboard_led_cb, NULL,
                                timer);
     }
