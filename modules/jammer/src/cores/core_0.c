@@ -14,9 +14,6 @@
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
 
-bool _l_detected_low_battery_voltage = false;
-bool _l_sensor_error = false;
-
 int _is_battery_voltage_low() {
     // 0 - undefined
     // 1 - false
@@ -54,18 +51,18 @@ void _check_battery_level() {
     if (battery_status == 2) {
         debug_print("[core_0] low battery\n");
 
-        if (!_l_detected_low_battery_voltage) {
+        if (!g_detected_low_battery_voltage) {
             blink_status_untill_start(2000,
                                       blink_status_led_for_standby_callback,
                                       &g_status_led_blink_timer, true);
 
-            _l_detected_low_battery_voltage = true;
+            g_detected_low_battery_voltage = true;
         }
     } else if (battery_status == 1) {
         debug_print("[core_0] high battery\n");
 
         blink_status_untill_stop(&g_status_led_blink_timer);
-        _l_detected_low_battery_voltage = false;
+        g_detected_low_battery_voltage = false;
     }
 }
 
@@ -93,14 +90,12 @@ void _process_event(mc_event_item* event) {
         blink_status_untill_start(50, blink_status_led_for_standby_callback,
                                   &g_status_led_blink_timer, true);
 
-        _l_sensor_error = false;
+        g_sensor_error = false;
         debug_print("[core_0] adxl345 fail\n");
 
         break;
     case PDA_ACCELERATION_TRIGGER:
         g_alarm_triggered = true;
-        // reset battery status on trigger
-        _l_detected_low_battery_voltage = false;
 
         break;
     case PDA_STANDBY_PREP:
@@ -138,7 +133,7 @@ void core_0() {
             continue;
         }
 
-        if (!_l_sensor_error && !g_alarm_triggered && !g_alarm_in_standby) {
+        if (!g_sensor_error && !g_alarm_triggered && !g_alarm_in_standby) {
             _check_battery_level();
         }
 

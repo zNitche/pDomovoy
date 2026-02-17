@@ -10,6 +10,9 @@ bool g_btn_blocked = false;
 
 float g_battery_voltage = 0.0;
 
+bool g_detected_low_battery_voltage = false;
+bool g_sensor_error = false;
+
 queue_t g_core0_events_queue;
 queue_t g_core1_events_queue;
 

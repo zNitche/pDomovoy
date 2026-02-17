@@ -27,6 +27,9 @@ void disable_triggered_alarm() {
     g_alarm_in_standby = false;
     g_alarm_triggered = false;
 
+    // reset on disarm
+    g_detected_low_battery_voltage = false;
+
     multicore_reset_core1();
 
     debug_print("disabled triggered alarm\n");

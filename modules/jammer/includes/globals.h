@@ -13,6 +13,9 @@ extern bool g_btn_blocked;
 
 extern float g_battery_voltage;
 
+extern bool g_detected_low_battery_voltage;
+extern bool g_sensor_error;
+
 extern queue_t g_core0_events_queue;
 extern queue_t g_core1_events_queue;
 
