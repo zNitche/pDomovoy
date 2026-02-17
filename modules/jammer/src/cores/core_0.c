@@ -55,15 +55,16 @@ void _check_battery_level() {
         debug_print("[core_0] low battery\n");
 
         if (!_l_detected_low_battery_voltage) {
-            blink_untill_start(2000, blink_status_led_for_standby_callback,
-                               &g_status_led_blink_timer, true);
+            blink_status_untill_start(2000,
+                                      blink_status_led_for_standby_callback,
+                                      &g_status_led_blink_timer, true);
 
             _l_detected_low_battery_voltage = true;
         }
     } else if (battery_status == 1) {
         debug_print("[core_0] high battery\n");
 
-        blink_untill_stop(PDA_STATUS_LED_PIN, &g_status_led_blink_timer);
+        blink_status_untill_stop(&g_status_led_blink_timer);
         _l_detected_low_battery_voltage = false;
     }
 }
@@ -84,13 +85,13 @@ void _wait_for_alarm_standby() {
 void _process_event(mc_event_item* event) {
     switch (event->status) {
     case PDA_ADXL345_OK:
-        blink_untill_stop(PDA_STATUS_LED_PIN, &g_status_led_blink_timer);
+        blink_status_untill_stop(&g_status_led_blink_timer);
         debug_print("[core_0] adxl345 ok\n");
 
         break;
     case PDA_ADXL345_ERROR:
-        blink_untill_start(50, blink_status_led_for_standby_callback,
-                           &g_status_led_blink_timer, true);
+        blink_status_untill_start(50, blink_status_led_for_standby_callback,
+                                  &g_status_led_blink_timer, true);
 
         _l_sensor_error = false;
         debug_print("[core_0] adxl345 fail\n");
@@ -101,12 +102,12 @@ void _process_event(mc_event_item* event) {
 
         break;
     case PDA_STANDBY_PREP:
-        blink_untill_start(100, blink_status_led_for_standby_callback,
-                           &g_status_led_blink_timer, true);
+        blink_status_untill_start(100, blink_status_led_for_standby_callback,
+                                  &g_status_led_blink_timer, true);
 
         break;
     case PDA_STANDBY_READY:
-        blink_untill_stop(PDA_STATUS_LED_PIN, &g_status_led_blink_timer);
+        blink_status_untill_stop(&g_status_led_blink_timer);
 
         break;
     default:
