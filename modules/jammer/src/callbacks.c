@@ -67,7 +67,7 @@ void alarm_buzzer_irq_callback() {
     }
 }
 
-bool blink_status_led_for_standby_callback(__unused struct repeating_timer* t) {
+bool blink_status_led_for_standby_callback(struct repeating_timer* t) {
     static bool state = false;
 
     gpio_put(PDA_STATUS_LED_PIN, state);
