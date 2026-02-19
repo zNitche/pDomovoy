@@ -1,15 +1,17 @@
 #include "../../includes/led_blink.h"
 #include <stdbool.h>
 
+#include "../../includes/defines.h"
 #include "../../includes/globals.h"
 #include "../../includes/types.h"
-#include "../../includes/defines.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "pico/time.h"
 
 void blink_blocking(int pin, int times, int time_between) {
     bool state = true;
+
+    cancel_repeating_timer(&g_status_led_blink_timer);
 
     for (int i = 0; i < times; i++) {
         gpio_put(pin, state);
@@ -57,6 +59,8 @@ void cyw34_blink_untill_stop(repeating_timer_t* timer) {
 
 void blink_onboard_led_blocking(int times, int time_between) {
     bool state = true;
+
+    cancel_repeating_timer(&g_onboard_led_blink_timer);
 
     for (int i = 0; i < times; i++) {
         cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, state);
