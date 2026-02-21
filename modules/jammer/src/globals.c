@@ -1,10 +1,9 @@
 #include "../includes/globals.h"
+#include "../includes/types.h"
 
 // should be accessed only from core_0
 
-bool g_alarm_triggered = false;
-bool g_alarm_standby_init = false;
-bool g_alarm_in_standby = false;
+enum AlarmState g_alarm_state = ALARM_STATE_NONE;
 
 bool g_btn_blocked = false;
 

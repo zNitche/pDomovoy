@@ -75,7 +75,6 @@ void _wait_for_alarm_standby() {
     blink_blocking(PDA_STATUS_LED_PIN, 30, 1000);
     enable_alarm_standby();
 
-    g_alarm_standby_init = false;
     g_btn_blocked = false;
 }
 
@@ -95,7 +94,7 @@ void _process_event(mc_event_item* event) {
 
         break;
     case PDA_ACCELERATION_TRIGGER:
-        g_alarm_triggered = true;
+        g_alarm_state = ALARM_STATE_TRIGGERED;
 
         break;
     case PDA_STANDBY_PREP:
@@ -128,21 +127,21 @@ void core_0() {
             continue;
         }
 
-        if (g_alarm_standby_init) {
+        if (g_alarm_state == ALARM_STATE_STANDBY_INIT) {
             _wait_for_alarm_standby();
             continue;
         }
 
-        if (!g_sensor_error && !g_alarm_triggered && !g_alarm_in_standby) {
+        if (!g_sensor_error && g_alarm_state == ALARM_STATE_NONE) {
             _check_battery_level();
         }
 
-        if (g_alarm_in_standby & g_alarm_triggered) {
+        if (g_alarm_state == ALARM_STATE_TRIGGERED) {
             debug_print("[core_0] alarm triggered\n");
 
             enable_pwm_irq_on_pin(PDA_BUZZER_PIN);
 
-            while (g_alarm_triggered) {
+            while (g_alarm_state == ALARM_STATE_TRIGGERED) {
                 sleep_ms(250);
             }
 

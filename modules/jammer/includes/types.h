@@ -16,3 +16,10 @@ enum DeviceStatus {
 typedef struct {
     enum DeviceStatus status;
 } mc_event_item;
+
+enum AlarmState {
+    ALARM_STATE_NONE,
+    ALARM_STATE_TRIGGERED,
+    ALARM_STATE_STANDBY,
+    ALARM_STATE_STANDBY_INIT,
+};

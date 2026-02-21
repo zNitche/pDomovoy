@@ -2,12 +2,11 @@
 
 #include "pico/util/queue.h"
 #include <stdbool.h>
+#include "types.h"
 
 // should be accessed only from core_0
 
-extern bool g_alarm_triggered;
-extern bool g_alarm_in_standby;
-extern bool g_alarm_standby_init;
+extern enum AlarmState g_alarm_state;
 
 extern bool g_btn_blocked;
 

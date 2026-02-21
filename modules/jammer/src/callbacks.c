@@ -3,6 +3,7 @@
 
 #include "../includes/button.h"
 #include "../includes/defines.h"
+#include "../includes/types.h"
 #include "../includes/globals.h"
 #include "../includes/pwm.h"
 
@@ -33,7 +34,7 @@ void action_button_callback(uint gpio, uint32_t event) {
     count_clicks_in_row(&last_click_time, &clicks_in_row,
                         MIN_TIME_BETWEEN_CLICKS_FOR_ACTION);
 
-    if (!g_alarm_triggered) {
+    if (g_alarm_state != ALARM_STATE_TRIGGERED) {
         init_alarm_standby();
     } else {
         _action_for_continous_clicks(&clicks_in_row);
