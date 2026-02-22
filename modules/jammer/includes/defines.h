@@ -5,6 +5,8 @@
 #endif
 
 // pins
+#define PDA_ADXL345_SDA_PIN 0
+#define PDA_ADXL345_SCL_PIN 1
 #define PDA_STATUS_LED_PIN 13
 #define PDA_BUZZER_PIN 14
 #define PDA_ACTION_BUTTON_PIN 12

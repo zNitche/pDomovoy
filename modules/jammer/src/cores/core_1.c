@@ -59,7 +59,8 @@ bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
 void core_1() {
     float initial_accel_mean[3] = {0.0};
 
-    ADXL345I2C adxl345_i2c = {i2c0, 0x53, 0, 1};
+    ADXL345I2C adxl345_i2c = {i2c0, 0x53, PDA_ADXL345_SDA_PIN,
+                              PDA_ADXL345_SCL_PIN};
 
     adxl345_setup_i2c(adxl345_i2c);
     bool connected = adxl345_check_connection(adxl345_i2c);
@@ -80,7 +81,7 @@ void core_1() {
     debug_print("[core_1] adxl345 has been started\n");
 
     _get_initial_accel_mean(&adxl345_i2c, initial_accel_mean);
-    
+
     debug_print(
         "[core_1] got initial acceleration readings, running mainloop\n");
 
