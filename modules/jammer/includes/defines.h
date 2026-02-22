@@ -10,6 +10,8 @@
 #define PDA_STATUS_LED_PIN 13
 #define PDA_BUZZER_PIN 14
 #define PDA_ACTION_BUTTON_PIN 12
+#define PDA_VOLTMETER_ADC_PIN 28
+#define PDA_VOLTMETER_ADC_ID 2
 
 // button actions
 #define CLICK_DEBOUNCE_TIME 300

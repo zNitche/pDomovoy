@@ -1,7 +1,6 @@
 #include <math.h>
 #include <stdbool.h>
 
-#include "../includes/voltmeter.h"
 #include "../includes/button.h"
 #include "../includes/callbacks.h"
 #include "../includes/core_0.h"
@@ -10,6 +9,7 @@
 #include "../includes/globals.h"
 #include "../includes/led_blink.h"
 #include "../includes/pwm.h"
+#include "../includes/voltmeter.h"
 #include "hardware/adc.h"
 #include "pico/cyw43_arch.h"
 #include "pico/multicore.h"
@@ -34,7 +34,7 @@ void init_mc_queues() {
 }
 
 void init_voltmeter() {
-    init_adc_voltmeter(28, 2);
+    init_adc_voltmeter(PDA_VOLTMETER_ADC_PIN, PDA_VOLTMETER_ADC_ID);
     start_voltmeter_bg();
 }
 
