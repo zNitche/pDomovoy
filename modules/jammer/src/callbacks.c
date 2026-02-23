@@ -1,9 +1,9 @@
 #include "../includes/callbacks.h"
 #include "../includes/delegates.h"
 
+#include "../includes/debug_print.h"
 #include "../includes/button.h"
 #include "../includes/defines.h"
-#include "../includes/types.h"
 #include "../includes/globals.h"
 #include "../includes/pwm.h"
 
@@ -27,6 +27,8 @@ void action_button_callback(uint gpio, uint32_t event) {
         return;
     }
 
+    debug_print("action button click\n");
+
     if (g_btn_blocked) {
         return;
     }
@@ -47,7 +49,7 @@ void alarm_buzzer_irq_callback() {
 
     // keep it quiet for testing
     if (DEBUG) {
-        post_pwm_irq(PDA_BUZZER_PIN, 2000);
+        post_pwm_irq(PDA_BUZZER_PIN, 1000);
         return;
     }
 
