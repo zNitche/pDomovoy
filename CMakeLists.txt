@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.27)
 
 set(PICO_BOARD "pico_w")
 
+if (DEBUG)
+    set(CMAKE_BUILD_TYPE "Debug")
+else()
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
+
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
 project(pico_door_alarm VERSION 0.0.1)
@@ -28,6 +34,8 @@ pico_enable_stdio_uart(jammer 0)
 pico_enable_stdio_uart(station 0)
 
 if (DEBUG)
+    message("[PDA] configuring for Debug...")
+
     pico_enable_stdio_usb(station 1)
     pico_enable_stdio_usb(jammer 1)
     
@@ -42,6 +50,8 @@ if (DEBUG)
         pico_bootsel_via_double_reset
     )
 else()
+    message("[PDA] configuring for Release...")
+
     pico_enable_stdio_usb(station 0)
     pico_enable_stdio_usb(jammer 0)
 endif()
