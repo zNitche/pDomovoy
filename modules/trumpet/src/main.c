@@ -8,7 +8,7 @@ int main() {
     hard_assert(rc == PICO_OK);
 
     while (true) {
-        printf("station\n");
+        printf("trumpet\n");
         sleep_ms(1000);
     }
 }
