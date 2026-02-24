@@ -1,7 +1,7 @@
 {
     "name": "pico_sdk_devcontainer",
     "dockerComposeFile": "docker-compose.yml",
-    "service": "door_alarm_pico_sdk_worker",
+    "service": "p_domovoy_pico_sdk_worker",
     "overrideCommand": true,
     "workspaceFolder": "/workspace",
     "customizations": {
