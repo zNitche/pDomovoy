@@ -18,10 +18,10 @@ pico_sdk_init()
 add_subdirectory(libs/pico-c-adxl345/lib)
 
 # add modules
-include(modules/jammer/jammer.cmake)
+include(modules/warden/warden.cmake)
 include(modules/station/station.cmake)
 
-target_include_directories(jammer PRIVATE
+target_include_directories(warden PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/modules/common/includes
 )
 
@@ -30,19 +30,19 @@ target_include_directories(station PRIVATE
 )
 
 # disable uart stdio & usb stdio depending on -DPROD=1/0
-pico_enable_stdio_uart(jammer 0)
+pico_enable_stdio_uart(warden 0)
 pico_enable_stdio_uart(station 0)
 
 if (DEBUG)
     message("[pD] configuring for Debug...")
 
     pico_enable_stdio_usb(station 1)
-    pico_enable_stdio_usb(jammer 1)
+    pico_enable_stdio_usb(warden 1)
     
-    target_compile_definitions(jammer PUBLIC DEBUG=1)
+    target_compile_definitions(warden PUBLIC DEBUG=1)
     target_compile_definitions(station PUBLIC DEBUG=1)
 
-    target_link_libraries(jammer
+    target_link_libraries(warden
         pico_bootsel_via_double_reset
     )
 
@@ -53,9 +53,9 @@ else()
     message("[pD] configuring for Release...")
 
     pico_enable_stdio_usb(station 0)
-    pico_enable_stdio_usb(jammer 0)
+    pico_enable_stdio_usb(warden 0)
 endif()
 
 # generate output files
-pico_add_extra_outputs(jammer)
+pico_add_extra_outputs(warden)
 pico_add_extra_outputs(station)

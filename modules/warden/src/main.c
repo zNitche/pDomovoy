@@ -51,7 +51,7 @@ int main() {
         getchar();
     }
 
-    debug_print("[JAMMER] %s\n", JAMMER_VERSION);
+    debug_print("[pD - WARDEN] %s\n", WARDEN_VERSION);
 
     init_peripherals();
     init_mc_queues();
