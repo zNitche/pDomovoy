@@ -59,21 +59,21 @@ bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
 void core_1() {
     float initial_accel_mean[3] = {0.0};
 
-    ADXL345I2C adxl345_i2c = {i2c0, 0x53, PDA_ADXL345_SDA_PIN,
-                              PDA_ADXL345_SCL_PIN};
+    ADXL345I2C adxl345_i2c = {i2c0, 0x53, PD_ADXL345_SDA_PIN,
+                              PD_ADXL345_SCL_PIN};
 
     adxl345_setup_i2c(adxl345_i2c);
     bool connected = adxl345_check_connection(adxl345_i2c);
 
     if (!connected) {
-        _send_event_to_core_0(PDA_ADXL345_ERROR);
+        _send_event_to_core_0(PD_ADXL345_ERROR);
 
         return;
     } else {
-        _send_event_to_core_0(PDA_ADXL345_OK);
+        _send_event_to_core_0(PD_ADXL345_OK);
     }
 
-    _send_event_to_core_0(PDA_STANDBY_PREP);
+    _send_event_to_core_0(PD_STANDBY_PREP);
 
     adxl345_set_measurements_range(adxl345_i2c, ADXL345_RANGE_4G);
     adxl345_start_measurements(adxl345_i2c);
@@ -85,12 +85,12 @@ void core_1() {
     debug_print(
         "[core_1] got initial acceleration readings, running mainloop\n");
 
-    _send_event_to_core_0(PDA_STANDBY_READY);
+    _send_event_to_core_0(PD_STANDBY_READY);
 
     while (true) {
         if (_check_for_alarm_trigger(&adxl345_i2c, initial_accel_mean)) {
             debug_print("[core_1] alarm trigger\n");
-            _send_event_to_core_0(PDA_ACCELERATION_TRIGGER);
+            _send_event_to_core_0(PD_ACCELERATION_TRIGGER);
 
             break;
         }

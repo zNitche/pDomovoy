@@ -49,7 +49,7 @@ void alarm_buzzer_irq_callback() {
 
     // keep it quiet for testing
     if (DEBUG) {
-        post_pwm_irq(PDA_BUZZER_PIN, 1000);
+        post_pwm_irq(PD_BUZZER_PIN, 1000);
         return;
     }
 
@@ -59,7 +59,7 @@ void alarm_buzzer_irq_callback() {
         val -= 5;
     }
 
-    post_pwm_irq(PDA_BUZZER_PIN, val * val);
+    post_pwm_irq(PD_BUZZER_PIN, val * val);
 
     if (val <= 0) {
         going_up = true;
@@ -73,7 +73,7 @@ void alarm_buzzer_irq_callback() {
 bool blink_status_led_for_standby_callback(struct repeating_timer* t) {
     static bool state = false;
 
-    gpio_put(PDA_STATUS_LED_PIN, state);
+    gpio_put(PD_STATUS_LED_PIN, state);
     state = !state;
 
     return true;

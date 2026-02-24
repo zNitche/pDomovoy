@@ -37,7 +37,7 @@ void blink_status_untill_start(int32_t time_between,
 
 void blink_status_untill_stop(repeating_timer_t* timer) {
     bool g = cancel_repeating_timer(timer);
-    gpio_put(PDA_STATUS_LED_PIN, false);
+    gpio_put(PD_STATUS_LED_PIN, false);
 }
 
 void cyw34_blink_untill_start(int32_t time_between, repeating_timer_t* timer,

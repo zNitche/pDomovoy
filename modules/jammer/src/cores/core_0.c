@@ -74,7 +74,7 @@ void _wait_for_alarm_standby() {
     debug_print("[core_0] alarm standby init...\n");
 
     // wait 30s
-    blink_blocking(PDA_STATUS_LED_PIN, 30, 1000);
+    blink_blocking(PD_STATUS_LED_PIN, 30, 1000);
     enable_alarm_standby();
 
     g_btn_blocked = false;
@@ -82,12 +82,12 @@ void _wait_for_alarm_standby() {
 
 void _process_event(mc_event_item* event) {
     switch (event->status) {
-    case PDA_ADXL345_OK:
+    case PD_ADXL345_OK:
         blink_status_untill_stop(&g_status_led_blink_timer);
         debug_print("[core_0] adxl345 ok\n");
 
         break;
-    case PDA_ADXL345_ERROR:
+    case PD_ADXL345_ERROR:
         blink_status_untill_start(50, blink_status_led_for_standby_callback,
                                   &g_status_led_blink_timer, true);
 
@@ -95,16 +95,16 @@ void _process_event(mc_event_item* event) {
         debug_print("[core_0] adxl345 fail\n");
 
         break;
-    case PDA_ACCELERATION_TRIGGER:
+    case PD_ACCELERATION_TRIGGER:
         g_alarm_state = ALARM_STATE_TRIGGERED;
 
         break;
-    case PDA_STANDBY_PREP:
+    case PD_STANDBY_PREP:
         blink_status_untill_start(100, blink_status_led_for_standby_callback,
                                   &g_status_led_blink_timer, true);
 
         break;
-    case PDA_STANDBY_READY:
+    case PD_STANDBY_READY:
         blink_status_untill_stop(&g_status_led_blink_timer);
 
         break;
@@ -141,13 +141,13 @@ void core_0() {
         if (g_alarm_state == ALARM_STATE_TRIGGERED) {
             debug_print("[core_0] alarm triggered\n");
 
-            enable_pwm_irq_on_pin(PDA_BUZZER_PIN);
+            enable_pwm_irq_on_pin(PD_BUZZER_PIN);
 
             while (g_alarm_state == ALARM_STATE_TRIGGERED) {
                 sleep_ms(250);
             }
 
-            disable_pwm_irq_on_pin(PDA_BUZZER_PIN);
+            disable_pwm_irq_on_pin(PD_BUZZER_PIN);
         }
 
         sleep_ms(250);

@@ -19,14 +19,14 @@
 
 void init_peripherals() {
     // BUZZER
-    set_pwm_irq_callback(PDA_BUZZER_PIN, alarm_buzzer_irq_callback);
+    set_pwm_irq_callback(PD_BUZZER_PIN, alarm_buzzer_irq_callback);
 
     // BUTTON
-    init_button_irq(PDA_ACTION_BUTTON_PIN, action_button_callback);
+    init_button_irq(PD_ACTION_BUTTON_PIN, action_button_callback);
 
     // LED
-    gpio_init(PDA_STATUS_LED_PIN);
-    gpio_set_dir(PDA_STATUS_LED_PIN, true);
+    gpio_init(PD_STATUS_LED_PIN);
+    gpio_set_dir(PD_STATUS_LED_PIN, true);
 }
 
 void init_mc_queues() {
@@ -35,7 +35,7 @@ void init_mc_queues() {
 }
 
 void init_voltmeter() {
-    init_adc_voltmeter(PDA_VOLTMETER_ADC_PIN, PDA_VOLTMETER_ADC_ID);
+    init_adc_voltmeter(PD_VOLTMETER_ADC_PIN, PD_VOLTMETER_ADC_ID);
     start_voltmeter_bg();
 }
 
