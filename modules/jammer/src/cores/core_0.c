@@ -48,7 +48,7 @@ int _is_battery_voltage_low() {
 void _check_battery_level() {
     const int battery_status = _is_battery_voltage_low();
 
-    debug_print("[core_0] battery status - %d\n", battery_status);
+    // debug_print("[core_0] battery status - %d\n", battery_status);
 
     if (battery_status == 2) {
         debug_print("[core_0] low battery\n");
