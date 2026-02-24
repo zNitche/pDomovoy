@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdbool.h>
 
+#include "../includes/version.h"
 #include "../includes/button.h"
 #include "../includes/callbacks.h"
 #include "../includes/core_0.h"
@@ -50,7 +51,7 @@ int main() {
         getchar();
     }
 
-    debug_print("[JAMMER]\n");
+    debug_print("[JAMMER] %s\n", JAMMER_VERSION);
 
     init_peripherals();
     init_mc_queues();
