@@ -73,9 +73,10 @@ void blink_onboard_led_blocking(int times, int time_between) {
 }
 
 bool _blink_onboard_led_cb(__unused repeating_timer_t* t) {
-    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, true);
-    busy_wait_us(30000);
-    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, false);
+    static bool led_state = true;
+
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, led_state);
+    led_state != led_state;
 
     return true;
 }
