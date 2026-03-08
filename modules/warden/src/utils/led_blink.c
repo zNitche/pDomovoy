@@ -76,7 +76,7 @@ bool _blink_onboard_led_cb(__unused repeating_timer_t* t) {
     static bool led_state = true;
 
     cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, led_state);
-    led_state != led_state;
+    led_state = !led_state;
 
     return true;
 }
