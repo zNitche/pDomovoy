@@ -23,8 +23,8 @@ void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c, float output[3]) {
     const int readings_count = 20;
     float total_accel[readings_count][3] = {};
 
-    get_bunch_of_accel_readings(adxl345_i2c, readings_count, total_accel, 100);
-    get_accel_readings_mean(total_accel, readings_count, output);
+    get_bunch_of_accel_readings(adxl345_i2c, total_accel, 200);
+    get_accel_readings_mean(total_accel, output);
 }
 
 bool _is_reading_above_initial_mean(float initial_mean, float mean,
@@ -41,8 +41,8 @@ bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
     float tmp_accel[3] = {0.0};
     float accel_mean[3] = {0.0};
 
-    get_bunch_of_accel_readings(adxl345_i2c, readings_count, total_accel, 50);
-    get_accel_readings_mean(total_accel, readings_count, accel_mean);
+    get_bunch_of_accel_readings(adxl345_i2c, total_accel, 100);
+    get_accel_readings_mean(total_accel, accel_mean);
 
     for (int i = 0; i < 3; i++) {
         const bool is_above_mean = _is_reading_above_initial_mean(
