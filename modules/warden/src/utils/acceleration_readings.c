@@ -1,6 +1,7 @@
 #include "../../includes/acceleration_readings.h"
 
 #include "pico_adxl345/adxl345.h"
+#include <string.h>
 
 void get_accel_readings_mean(float input[][3], float output[3]) {
     const int input_length = sizeof(*input) / sizeof(*input[0]);
@@ -18,7 +19,7 @@ void get_accel_readings_mean(float input[][3], float output[3]) {
         means[axis_id] = tmp_combined / input_length;
     }
 
-    *output = *means;
+    memcpy(output, means, sizeof(means));
 }
 
 void get_bunch_of_accel_readings(ADXL345I2C* adxl345_i2c,
@@ -30,7 +31,7 @@ void get_bunch_of_accel_readings(ADXL345I2C* adxl345_i2c,
     for (int i = 0; i < readings_count; i++) {
         adxl345_get_readings(*adxl345_i2c, current_accel);
 
-        *total_accel[i] = *current_accel;
+        memcpy(total_accel[i], current_accel, sizeof(current_accel));
 
         sleep_ms(delay);
     }
