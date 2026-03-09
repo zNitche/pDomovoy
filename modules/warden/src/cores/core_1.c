@@ -20,35 +20,41 @@ void _send_event_to_core_0(enum DeviceStatus status) {
 }
 
 void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c, float output[3]) {
-    const int readings_count = 20;
+    const int readings_count = 10;
     float total_accel[readings_count][3] = {};
 
     get_bunch_of_accel_readings(adxl345_i2c, total_accel, 200);
     get_accel_readings_mean(total_accel, output);
 }
 
-bool _is_reading_above_initial_mean(float initial_mean, float mean,
+bool _check_for_trigger_for_axis(float initial_mean, float mean,
                                     float trigger_factor) {
-    return fabs(initial_mean - mean) > trigger_factor;
+    const bool are_axis_different =
+        (initial_mean < 0 && mean > 0) || (initial_mean > 0 && mean < 0);
+
+    if (are_axis_different) {
+        return true;
+    }
+
+    return fabs(fabs(initial_mean) - fabs(mean)) > trigger_factor;
 }
 
 bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
                               float initial_accel_mean[3]) {
-    const int readings_count = 10;
+    const int readings_count = 5;
     const float trigger_factor = 0.2;
 
     float total_accel[readings_count][3] = {};
-    float tmp_accel[3] = {0.0};
     float accel_mean[3] = {0.0};
 
     get_bunch_of_accel_readings(adxl345_i2c, total_accel, 100);
     get_accel_readings_mean(total_accel, accel_mean);
 
     for (int i = 0; i < 3; i++) {
-        const bool is_above_mean = _is_reading_above_initial_mean(
+        const bool is_triggered = _check_for_trigger_for_axis(
             initial_accel_mean[i], accel_mean[i], trigger_factor);
 
-        if (is_above_mean) {
+        if (is_triggered) {
             return true;
         }
     }
