@@ -28,7 +28,7 @@ void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c, float output[3]) {
 }
 
 bool _check_for_trigger_for_axis(float initial_mean, float mean,
-                                    float trigger_factor) {
+                                 float trigger_factor) {
     const bool are_axis_different =
         (initial_mean < 0 && mean > 0) || (initial_mean > 0 && mean < 0);
 
@@ -55,6 +55,9 @@ bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
             initial_accel_mean[i], accel_mean[i], trigger_factor);
 
         if (is_triggered) {
+            debug_print("trigger accel mean = x:%f y:%f z:%f\n", accel_mean[0],
+                        accel_mean[1], accel_mean[2]);
+
             return true;
         }
     }
@@ -87,6 +90,9 @@ void core_1() {
     debug_print("[core_1] adxl345 has been started\n");
 
     _get_initial_accel_mean(&adxl345_i2c, initial_accel_mean);
+
+    debug_print("intial accel_mean = x:%f y:%f z:%f\n", initial_accel_mean[0],
+                initial_accel_mean[1], initial_accel_mean[2]);
 
     debug_print(
         "[core_1] got initial acceleration readings, running mainloop\n");
