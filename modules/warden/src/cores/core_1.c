@@ -41,7 +41,7 @@ bool _check_for_trigger_for_axis(float initial_mean, float mean,
 
 bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
                               float initial_accel_mean[3]) {
-    const int readings_count = 5;
+    const int readings_count = 10;
     const float trigger_factor = 0.2;
 
     float total_accel[readings_count][3] = {};
