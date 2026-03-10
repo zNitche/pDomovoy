@@ -21,7 +21,7 @@ void _send_event_to_core_0(enum DeviceStatus status) {
 
 void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c,
                              accelerometer_reading* output) {
-    const int readings_count = 10;
+    const size_t readings_count = 10;
     accelerometer_reading total_accel[readings_count] = {};
 
     get_bunch_of_accel_readings(adxl345_i2c, total_accel, readings_count, 200);
@@ -42,8 +42,8 @@ bool _check_for_trigger_for_axis(float initial_mean, float mean,
 }
 
 bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
-                              accelerometer_reading initial_accel_mean) {
-    const int readings_count = 10;
+                              accelerometer_reading* initial_accel_mean) {
+    const size_t readings_count = 10;
     const float trigger_factor = 0.2;
 
     accelerometer_reading total_accel[readings_count];
@@ -53,13 +53,13 @@ bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
         get_accel_readings_mean(total_accel, readings_count);
 
     const bool is_x_triggered = _check_for_trigger_for_axis(
-        initial_accel_mean.x, accel_mean.x, trigger_factor);
+        initial_accel_mean->x, accel_mean.x, trigger_factor);
 
     const bool is_y_triggered = _check_for_trigger_for_axis(
-        initial_accel_mean.y, accel_mean.y, trigger_factor);
+        initial_accel_mean->y, accel_mean.y, trigger_factor);
 
     const bool is_z_triggered = _check_for_trigger_for_axis(
-        initial_accel_mean.z, accel_mean.z, trigger_factor);
+        initial_accel_mean->z, accel_mean.z, trigger_factor);
 
     if (is_x_triggered || is_y_triggered || is_z_triggered) {
         debug_print("trigger accel mean = x:%f y:%f z:%f\n", accel_mean.x,
@@ -106,7 +106,7 @@ void core_1() {
     _send_event_to_core_0(PD_STANDBY_READY);
 
     while (true) {
-        if (_check_for_alarm_trigger(&adxl345_i2c, initial_accel_mean)) {
+        if (_check_for_alarm_trigger(&adxl345_i2c, &initial_accel_mean)) {
             debug_print("[core_1] alarm trigger\n");
             _send_event_to_core_0(PD_ACCELERATION_TRIGGER);
 
