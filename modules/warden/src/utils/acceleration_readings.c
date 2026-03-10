@@ -1,37 +1,37 @@
 #include "../../includes/acceleration_readings.h"
+#include "../../includes/types.h"
 
 #include "pico_adxl345/adxl345.h"
-#include <string.h>
 
-void get_accel_readings_mean(float input[][3], float output[3]) {
-    const int input_length = sizeof(*input) / sizeof(*input[0]);
+accelerometer_reading get_accel_readings_mean(accelerometer_reading input[],
+                                               int readings_count) {
+    accelerometer_reading means = {};
+    accelerometer_reading tmp_readings = {};
 
-    float means[3] = {0.0};
-    float tmp_combined = 0.0;
-
-    for (int axis_id = 0; axis_id < 3; axis_id++) {
-        tmp_combined = 0.0;
-
-        for (int reading_id = 0; reading_id < input_length; reading_id++) {
-            tmp_combined += input[reading_id][axis_id];
-        }
-
-        means[axis_id] = tmp_combined / input_length;
+    for (int reading_id = 0; reading_id < readings_count; reading_id++) {
+        tmp_readings.x += input[reading_id].x;
+        tmp_readings.y += input[reading_id].y;
+        tmp_readings.z += input[reading_id].z;
     }
 
-    memcpy(output, means, sizeof(means));
+    means.x = tmp_readings.x / readings_count;
+    means.y = tmp_readings.y / readings_count;
+    means.z = tmp_readings.z / readings_count;
+
+    return means;
 }
 
 void get_bunch_of_accel_readings(ADXL345I2C* adxl345_i2c,
-                                 float total_accel[][3], int delay) {
-    const int readings_count = sizeof(*total_accel) / sizeof(*total_accel[0]);
-
-    float current_accel[3] = {0.0};
+                                 accelerometer_reading total_accel[],
+                                 int readings_count, int delay) {
+    float current_accel_buff[3] = {0.0};
 
     for (int i = 0; i < readings_count; i++) {
-        adxl345_get_readings(*adxl345_i2c, current_accel);
+        adxl345_get_readings(*adxl345_i2c, current_accel_buff);
 
-        memcpy(total_accel[i], current_accel, sizeof(current_accel));
+        total_accel[i].x = current_accel_buff[0];
+        total_accel[i].y = current_accel_buff[1];
+        total_accel[i].z = current_accel_buff[2];
 
         sleep_ms(delay);
     }

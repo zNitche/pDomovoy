@@ -19,12 +19,14 @@ void _send_event_to_core_0(enum DeviceStatus status) {
     queue_add_blocking(&g_core0_events_queue, &event);
 }
 
-void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c, float output[3]) {
+void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c,
+                             accelerometer_reading* output) {
     const int readings_count = 10;
-    float total_accel[readings_count][3] = {};
+    accelerometer_reading total_accel[readings_count] = {};
 
-    get_bunch_of_accel_readings(adxl345_i2c, total_accel, 200);
-    get_accel_readings_mean(total_accel, output);
+    get_bunch_of_accel_readings(adxl345_i2c, total_accel, readings_count, 200);
+
+    *output = get_accel_readings_mean(total_accel, readings_count);
 }
 
 bool _check_for_trigger_for_axis(float initial_mean, float mean,
@@ -40,33 +42,37 @@ bool _check_for_trigger_for_axis(float initial_mean, float mean,
 }
 
 bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
-                              float initial_accel_mean[3]) {
+                              accelerometer_reading initial_accel_mean) {
     const int readings_count = 10;
     const float trigger_factor = 0.2;
 
-    float total_accel[readings_count][3] = {};
-    float accel_mean[3] = {0.0};
+    accelerometer_reading total_accel[readings_count];
 
-    get_bunch_of_accel_readings(adxl345_i2c, total_accel, 100);
-    get_accel_readings_mean(total_accel, accel_mean);
+    get_bunch_of_accel_readings(adxl345_i2c, total_accel, readings_count, 100);
+    accelerometer_reading accel_mean =
+        get_accel_readings_mean(total_accel, readings_count);
 
-    for (int i = 0; i < 3; i++) {
-        const bool is_triggered = _check_for_trigger_for_axis(
-            initial_accel_mean[i], accel_mean[i], trigger_factor);
+    const bool is_x_triggered = _check_for_trigger_for_axis(
+        initial_accel_mean.x, accel_mean.x, trigger_factor);
 
-        if (is_triggered) {
-            debug_print("trigger accel mean = x:%f y:%f z:%f\n", accel_mean[0],
-                        accel_mean[1], accel_mean[2]);
+    const bool is_y_triggered = _check_for_trigger_for_axis(
+        initial_accel_mean.y, accel_mean.y, trigger_factor);
 
-            return true;
-        }
+    const bool is_z_triggered = _check_for_trigger_for_axis(
+        initial_accel_mean.z, accel_mean.z, trigger_factor);
+
+    if (is_x_triggered || is_y_triggered || is_z_triggered) {
+        debug_print("trigger accel mean = x:%f y:%f z:%f\n", accel_mean.x,
+                    accel_mean.y, accel_mean.z);
+
+        return true;
     }
 
     return false;
 }
 
 void core_1() {
-    float initial_accel_mean[3] = {0.0};
+    accelerometer_reading initial_accel_mean = {};
 
     ADXL345I2C adxl345_i2c = {i2c0, 0x53, PD_ADXL345_SDA_PIN,
                               PD_ADXL345_SCL_PIN};
@@ -89,10 +95,10 @@ void core_1() {
 
     debug_print("[core_1] adxl345 has been started\n");
 
-    _get_initial_accel_mean(&adxl345_i2c, initial_accel_mean);
+    _get_initial_accel_mean(&adxl345_i2c, &initial_accel_mean);
 
-    debug_print("intial accel_mean = x:%f y:%f z:%f\n", initial_accel_mean[0],
-                initial_accel_mean[1], initial_accel_mean[2]);
+    debug_print("intial accel_mean = x:%f y:%f z:%f\n", initial_accel_mean.x,
+                initial_accel_mean.y, initial_accel_mean.z);
 
     debug_print(
         "[core_1] got initial acceleration readings, running mainloop\n");
