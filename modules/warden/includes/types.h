@@ -23,3 +23,9 @@ enum AlarmState {
     ALARM_STATE_STANDBY,
     ALARM_STATE_STANDBY_INIT,
 };
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+} accelerometer_reading;
