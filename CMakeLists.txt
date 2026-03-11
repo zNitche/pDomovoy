@@ -10,7 +10,7 @@ endif()
 
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
-project(pDomovoy VERSION 0.0.1)
+project(pDomovoy VERSION 0.5.0)
 
 pico_sdk_init()
 
