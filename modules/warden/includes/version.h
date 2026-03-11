@@ -1,1 +1,1 @@
-#define WARDEN_VERSION "0.0.1"
+#define WARDEN_VERSION "1.0.0"
