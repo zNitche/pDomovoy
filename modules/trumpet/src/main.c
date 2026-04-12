@@ -1,4 +1,6 @@
 #include "pico/cyw43_arch.h"
+#include "pico/stdlib.h"
+#include "pico_ssd1306/ssd1306.h"
 #include <stdio.h>
 
 int main() {
