@@ -3,4 +3,7 @@
 	url = https://github.com/zNitche/pico-c-adxl345.git
 [submodule "libs/pico-c-ssd1306"]
 	path = libs/pico-c-ssd1306
-	url = https://github.com/zNitche/pico-c-ssd1306
+	url = https://github.com/zNitche/pico-c-ssd1306.git
+[submodule "libs/pico-c-aht20"]
+	path = libs/pico-c-aht20
+	url = https://github.com/zNitche/pico-c-aht20.git

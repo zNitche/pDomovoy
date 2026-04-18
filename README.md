@@ -104,5 +104,7 @@ CTRL + A -> CTRL + \
 
 ### Dependencies
 - [pico-sdk](https://github.com/raspberrypi/pico-sdk)
+
 - [ADXL345](https://github.com/zNitche/pico-c-adxl345)
 - [SSD1306](https://github.com/zNitche/pico-c-ssd1306)
+- [AHT20](https://github.com/zNitche/pico-c-aht20)

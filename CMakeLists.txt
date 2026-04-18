@@ -17,6 +17,7 @@ pico_sdk_init()
 # add libs
 add_subdirectory(libs/pico-c-adxl345/lib)
 add_subdirectory(libs/pico-c-ssd1306/lib)
+add_subdirectory(libs/pico-c-aht20/lib)
 
 # add modules
 include(modules/warden/warden.cmake)

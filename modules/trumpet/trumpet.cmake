@@ -6,4 +6,5 @@ target_link_libraries(trumpet
                     hardware_pwm
                     hardware_adc
                     pico_multicore
-                    pico_ssd1306)
+                    pico_ssd1306
+                    pico_aht20)
