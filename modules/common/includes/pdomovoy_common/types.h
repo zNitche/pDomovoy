@@ -33,4 +33,4 @@ typedef struct {
     float x;
     float y;
     float z;
-} accelerometer_reading;
+} AccelerometerReading;
