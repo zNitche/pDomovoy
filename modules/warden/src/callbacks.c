@@ -22,7 +22,6 @@ void _action_for_continous_clicks(int* clicks) {
 void action_button_callback(uint gpio, uint32_t event) {
     static ButtonDebounceCtx button_debounce_ctx = {.is_pressed = false,
                                                     .last_call = 0};
-    static uint32_t last_click_time = 0;
     static int clicks_in_row = 0;
 
     if (!debounce_push_button(event, CLICK_DEBOUNCE_TIME,
@@ -36,7 +35,7 @@ void action_button_callback(uint gpio, uint32_t event) {
         return;
     }
 
-    count_clicks_in_row(&last_click_time, &clicks_in_row,
+    count_clicks_in_row(button_debounce_ctx.last_call, &clicks_in_row,
                         MIN_TIME_BETWEEN_CLICKS_FOR_ACTION);
 
     if (g_alarm_state != ALARM_STATE_TRIGGERED) {
