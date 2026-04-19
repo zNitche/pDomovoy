@@ -4,13 +4,13 @@
 #include <stdio.h>
 
 #include "../../includes/callbacks.h"
-#include "../../includes/debug_print.h"
 #include "../../includes/defines.h"
 #include "../../includes/delegates.h"
 #include "../../includes/globals.h"
 #include "../../includes/led_blink.h"
-#include "../../includes/pwm.h"
-#include "../../includes/types.h"
+#include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/pwm.h"
+#include "pdomovoy_common/types.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
 

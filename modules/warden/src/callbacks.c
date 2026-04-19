@@ -1,11 +1,11 @@
 #include "../includes/callbacks.h"
 #include "../includes/delegates.h"
 
-#include "../includes/debug_print.h"
-#include "../includes/button.h"
 #include "../includes/defines.h"
 #include "../includes/globals.h"
-#include "../includes/pwm.h"
+#include "pdomovoy_common/button.h"
+#include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/pwm.h"
 
 void _action_for_continous_clicks(int* clicks) {
     switch (*clicks) {

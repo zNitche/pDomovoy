@@ -10,6 +10,7 @@ add_executable(warden
 
 target_link_libraries(warden 
                     pico_stdlib
+                    pdomovoy_common
                     pico_cyw43_arch_lwip_threadsafe_background
                     hardware_pwm
                     hardware_adc

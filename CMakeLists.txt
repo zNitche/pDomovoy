@@ -19,6 +19,9 @@ add_subdirectory(libs/pico-c-adxl345/lib)
 add_subdirectory(libs/pico-c-ssd1306/lib)
 add_subdirectory(libs/pico-c-aht20/lib)
 
+# add commons
+add_subdirectory(modules/common)
+
 # add modules
 include(modules/warden/warden.cmake)
 include(modules/trumpet/trumpet.cmake)

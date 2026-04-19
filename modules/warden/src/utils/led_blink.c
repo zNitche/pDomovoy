@@ -3,7 +3,7 @@
 
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
-#include "../../includes/types.h"
+#include "pdomovoy_common/types.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "pico/time.h"

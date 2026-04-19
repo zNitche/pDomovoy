@@ -1,8 +1,8 @@
 #include "../includes/delegates.h"
 
 #include "../includes/core_1.h"
-#include "../includes/debug_print.h"
 #include "../includes/globals.h"
+#include "pdomovoy_common/debug_print.h"
 #include "pico/multicore.h"
 
 void init_alarm_standby() {

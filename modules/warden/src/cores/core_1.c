@@ -4,10 +4,10 @@
 #include <stdbool.h>
 
 #include "../../includes/acceleration_readings.h"
-#include "../../includes/debug_print.h"
 #include "../../includes/defines.h"
 #include "../../includes/globals.h"
-#include "../../includes/types.h"
+#include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/types.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
 #include "pico_adxl345/adxl345.h"

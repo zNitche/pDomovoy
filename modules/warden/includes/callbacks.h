@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include "pdomovoy_common/types.h"
 #include <stdbool.h>
 
 void _action_for_continous_clicks(int* clicks);

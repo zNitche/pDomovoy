@@ -2,7 +2,7 @@
 
 #include "pico/util/queue.h"
 #include <stdbool.h>
-#include "types.h"
+#include "pdomovoy_common/types.h"
 
 // should be accessed only from core_0
 

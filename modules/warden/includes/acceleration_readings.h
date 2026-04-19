@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../includes/types.h"
+#include "pdomovoy_common/types.h"
 #include "pico_adxl345/adxl345.h"
 
 accelerometer_reading get_accel_readings_mean(accelerometer_reading input[],

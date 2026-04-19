@@ -1,5 +1,5 @@
 #include "../includes/globals.h"
-#include "../includes/types.h"
+#include "pdomovoy_common/types.h"
 
 // should be accessed only from core_0
 

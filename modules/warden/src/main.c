@@ -1,17 +1,17 @@
 #include <math.h>
 #include <stdbool.h>
 
-#include "../includes/version.h"
-#include "../includes/button.h"
 #include "../includes/callbacks.h"
 #include "../includes/core_0.h"
-#include "../includes/debug_print.h"
 #include "../includes/defines.h"
 #include "../includes/globals.h"
 #include "../includes/led_blink.h"
-#include "../includes/pwm.h"
+#include "../includes/version.h"
 #include "../includes/voltmeter.h"
 #include "hardware/adc.h"
+#include "pdomovoy_common/button.h"
+#include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/pwm.h"
 #include "pico/cyw43_arch.h"
 #include "pico/multicore.h"
 #include "pico/stdlib.h"

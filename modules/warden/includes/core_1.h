@@ -2,7 +2,7 @@
 #include <stdbool.h>
 
 #include "pico_adxl345/adxl345.h"
-#include "types.h"
+#include "pdomovoy_common/types.h"
 
 void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c,
                              accelerometer_reading* output);

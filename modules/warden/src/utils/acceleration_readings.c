@@ -1,5 +1,5 @@
 #include "../../includes/acceleration_readings.h"
-#include "../../includes/types.h"
+#include "pdomovoy_common/types.h"
 
 #include "pico_adxl345/adxl345.h"
 
