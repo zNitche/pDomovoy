@@ -30,8 +30,8 @@ void init_peripherals() {
 }
 
 void init_mc_queues() {
-    queue_init(&g_core0_events_queue, sizeof(mc_event_item), 2);
-    queue_init(&g_core1_events_queue, sizeof(mc_event_item), 2);
+    queue_init(&g_core0_events_queue, sizeof(McEventItem), 2);
+    queue_init(&g_core1_events_queue, sizeof(McEventItem), 2);
 }
 
 void init_voltmeter() {

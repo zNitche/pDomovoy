@@ -13,7 +13,7 @@
 #include "pico_adxl345/adxl345.h"
 
 void _send_event_to_core_0(enum DeviceStatus status) {
-    mc_event_item event;
+    McEventItem event;
     event.status = status;
 
     queue_add_blocking(&g_core0_events_queue, &event);
