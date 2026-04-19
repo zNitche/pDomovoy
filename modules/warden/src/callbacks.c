@@ -20,10 +20,13 @@ void _action_for_continous_clicks(int* clicks) {
 }
 
 void action_button_callback(uint gpio, uint32_t event) {
+    static ButtonDebounceCtx button_debounce_ctx = {.is_pressed = false,
+                                                    .last_call = 0};
     static uint32_t last_click_time = 0;
     static int clicks_in_row = 0;
 
-    if (!debounce_push_button(event, CLICK_DEBOUNCE_TIME)) {
+    if (!debounce_push_button(event, CLICK_DEBOUNCE_TIME,
+                              &button_debounce_ctx)) {
         return;
     }
 

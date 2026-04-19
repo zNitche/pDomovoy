@@ -13,29 +13,27 @@ void init_button_irq(uint gpio, button_callback callback) {
         gpio, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, callback);
 }
 
-bool debounce_push_button(uint32_t event, int min_delay_between_clicks) {
-    static bool is_pressed = false;
-    static uint32_t last_call = 0;
-
+bool debounce_push_button(uint32_t event, int min_delay_between_clicks,
+                          ButtonDebounceCtx* debounce_ctx) {
     const uint32_t current_time = to_ms_since_boot(get_absolute_time());
 
     if (event == GPIO_IRQ_EDGE_FALL) {
-        is_pressed = false;
-        last_call = current_time;
+        debounce_ctx->is_pressed = false;
+        debounce_ctx->last_call = current_time;
 
         return false;
     }
 
-    if (current_time - last_call < min_delay_between_clicks) {
+    if (current_time - debounce_ctx->last_call < min_delay_between_clicks) {
         return false;
     }
 
-    if (event == GPIO_IRQ_EDGE_RISE && is_pressed) {
+    if (event == GPIO_IRQ_EDGE_RISE && debounce_ctx->is_pressed) {
         return false;
     }
 
-    is_pressed = true;
-    last_call = current_time;
+    debounce_ctx->is_pressed = true;
+    debounce_ctx->last_call = current_time;
 
     return true;
 }

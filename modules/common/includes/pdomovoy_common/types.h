@@ -5,6 +5,11 @@
 typedef void (*button_callback)(uint gpio, uint32_t events);
 typedef void (*buzzer_callback)();
 
+typedef struct {
+    uint32_t last_call;
+    bool is_pressed;
+} ButtonDebounceCtx;
+
 enum DeviceStatus {
     PD_ADXL345_OK = 101,
     PD_ADXL345_ERROR = 102,
