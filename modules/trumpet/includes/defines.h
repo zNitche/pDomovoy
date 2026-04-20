@@ -5,7 +5,9 @@
 #endif
 
 // pins
-#define PD_ACTION_BUTTON_PIN 17
+#define PD_PREVIOUS_BUTTON_PIN 15
+#define PD_APPLY_BUTTON_PIN 17
+#define PD_NEXT_BUTTON_PIN 14
 
 // button actions
 #define CLICK_DEBOUNCE_TIME 300
