@@ -5,10 +5,16 @@
 
 #include "pico/time.h"
 
-void init_button_irq(uint gpio, button_callback callback) {
+void init_button_irq(uint gpio, gpio_irq_callback_t callback, bool pull_down) {
     gpio_init(gpio);
     gpio_set_dir(gpio, GPIO_IN);
-    gpio_pull_down(gpio);
+
+    if (pull_down) {
+        gpio_pull_down(gpio);
+    } else {
+        gpio_pull_up(gpio);
+    }
+
     gpio_set_irq_enabled_with_callback(
         gpio, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, callback);
 }

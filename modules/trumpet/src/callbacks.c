@@ -9,7 +9,7 @@ void action_button_callback(uint gpio, uint32_t event) {
     static uint32_t last_click_time = 0;
     static int clicks_in_row = 0;
 
-    if (!debounce_push_button(event, CLICK_DEBOUNCE_TIME)) {
+    if (!debounce_push_button(event, CLICK_DEBOUNCE_TIME, true)) {
         return;
     }
 

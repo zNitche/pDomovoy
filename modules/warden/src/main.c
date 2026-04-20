@@ -22,7 +22,7 @@ void init_peripherals() {
     set_pwm_irq_callback(PD_BUZZER_PIN, alarm_buzzer_irq_callback);
 
     // BUTTON
-    init_button_irq(PD_ACTION_BUTTON_PIN, action_button_callback);
+    init_button_irq(PD_ACTION_BUTTON_PIN, action_button_callback, true);
 
     // LED
     gpio_init(PD_STATUS_LED_PIN);

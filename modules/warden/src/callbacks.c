@@ -35,7 +35,7 @@ void action_button_callback(uint gpio, uint32_t event) {
         return;
     }
 
-    count_clicks_in_row(button_debounce_ctx.last_call, &clicks_in_row,
+    count_clicks_in_row(&button_debounce_ctx.last_call, &clicks_in_row,
                         MIN_TIME_BETWEEN_CLICKS_FOR_ACTION);
 
     if (g_alarm_state != ALARM_STATE_TRIGGERED) {
