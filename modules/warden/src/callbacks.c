@@ -7,6 +7,17 @@
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/pwm.h"
 
+void gpio_irq_callback(uint gpio, uint32_t event) {
+    switch (gpio) {
+    case PD_ACTION_BUTTON_PIN:
+        action_button_callback(event);
+        break;
+
+    default:
+        break;
+    }
+}
+
 void _action_for_continous_clicks(int* clicks) {
     switch (*clicks) {
     case CONTINOUS_CLICKS_TO_DISABLE_ALARM:
@@ -19,7 +30,7 @@ void _action_for_continous_clicks(int* clicks) {
     }
 }
 
-void action_button_callback(uint gpio, uint32_t event) {
+void action_button_callback(uint32_t event) {
     static ButtonDebounceCtx button_debounce_ctx = {.is_pressed = false,
                                                     .last_call = 0};
     static int clicks_in_row = 0;
