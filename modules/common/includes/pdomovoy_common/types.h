@@ -19,7 +19,7 @@ enum DeviceStatus {
 
 typedef struct {
     enum DeviceStatus status;
-} McEventItem;
+} MulticoreEvent;
 
 enum AlarmState {
     ALARM_STATE_NONE,

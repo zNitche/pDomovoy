@@ -80,7 +80,7 @@ void _wait_for_alarm_standby() {
     g_btn_blocked = false;
 }
 
-void _process_event(McEventItem* event) {
+void _process_event(MulticoreEvent* event) {
     switch (event->status) {
     case PD_ADXL345_OK:
         blink_status_untill_stop(&g_status_led_blink_timer);
@@ -116,7 +116,7 @@ void _process_event(McEventItem* event) {
 }
 
 void core_0() {
-    McEventItem event_item;
+    MulticoreEvent event_item;
 
     debug_print("[core_0] started, waiting\n");
 
