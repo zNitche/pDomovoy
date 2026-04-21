@@ -33,3 +33,15 @@ typedef struct {
     float y;
     float z;
 } AccelerometerReading;
+
+typedef void (*page_handler)();
+
+typedef struct {
+    char* title;
+    page_handler handler;
+} PageData;
+
+enum PageSwitchDirection {
+    PAGE_SWITCH_NEXT,
+    PAGE_SWITCH_PREVIOUS,
+};

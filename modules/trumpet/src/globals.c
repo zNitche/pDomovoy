@@ -5,5 +5,7 @@
 
 bool g_btn_blocked = false;
 
+int current_page_id = 0;
+
 repeating_timer_t g_onboard_led_blink_timer;
 repeating_timer_t g_status_led_blink_timer;
