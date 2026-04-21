@@ -2,8 +2,10 @@
 
 #include "../includes/defines.h"
 #include "../includes/globals.h"
+#include "../includes/pages.h"
 #include "pdomovoy_common/button.h"
 #include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/types.h"
 
 void gpio_irq_callback(uint gpio, uint32_t event) {
     switch (gpio) {
@@ -37,6 +39,7 @@ void previous_button_callback(uint32_t event) {
         return;
     }
 
+    switch_page(PAGE_SWITCH_PREVIOUS);
     debug_print("previous button click\n");
 }
 
@@ -69,5 +72,6 @@ void next_button_callback(uint32_t event) {
         return;
     }
 
+    switch_page(PAGE_SWITCH_NEXT);
     debug_print("next button click\n");
 }
