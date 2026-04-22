@@ -9,9 +9,11 @@
 #include <stdio.h>
 
 void process_current_page(SSD1306_Frame* frame) {
-    const PageData* current_page = get_current_page();
+    PageData* current_page = get_current_page();
 
-    ssd1306_render_string(frame, 0, 22, current_page->title, 2, true);
+    ssd1306_render_string(frame, 0, 0, "*", 0, false);
+    ssd1306_render_string(frame, 16, 0, current_page->title, 2, true);
+    ssd1306_render_string(frame, 119, 0, "*", 0, false);
 
     if (current_page->handler != NULL) {
         current_page->handler(frame);
