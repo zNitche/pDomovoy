@@ -1,15 +1,18 @@
 #include "../includes/pages.h"
 
 #include "../includes/globals.h"
-#include "pdomovoy_common/types.h"
+#include "../includes/types.h"
 
-const PageData env_sensors_page = {.title = "Env Sensors"};
-const PageData test_1_page = {.title = "Test1"};
-const PageData test_2_page = {.title = "Test2"};
+#include "../includes/page_handlers/page_env_sensors.h"
 
-const PageData pages[] = {env_sensors_page, test_1_page, test_2_page};
+const PageData env_sensors_page = {.title = "env sensors",
+                                   .handler = handle_env_sensors_page};
+const PageData alarm_page = {.title = "alarm", .handler = NULL};
+const PageData power_page = {.title = "power", .handler = NULL};
 
-PageData* get_current_page() { return &pages[current_page_id]; };
+const PageData pages[] = {env_sensors_page, alarm_page, power_page};
+
+PageData* get_current_page() { return &pages[g_current_page_id]; };
 
 // PageSwitchDirection
 void switch_page(int direction) {

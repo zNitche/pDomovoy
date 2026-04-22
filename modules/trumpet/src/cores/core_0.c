@@ -4,15 +4,18 @@
 #include "../../includes/globals.h"
 #include "../../includes/i2c_devices.h"
 #include "../../includes/pages.h"
+#include "../../includes/types.h"
 #include "pdomovoy_common/debug_print.h"
-#include "pico_aht20/aht20.h"
-#include "pico_ssd1306/ssd1306.h"
 #include <stdio.h>
 
 void process_current_page(SSD1306_Frame* frame) {
-    const PageData* current_page = get_current_page(); 
+    const PageData* current_page = get_current_page();
 
     ssd1306_render_string(frame, 0, 22, current_page->title, 2, true);
+
+    if (current_page->handler != NULL) {
+        current_page->handler(frame);
+    }
 }
 
 void core_0() {
@@ -23,23 +26,11 @@ void core_0() {
 
     while (true) {
         SSD1306_Frame frame;
-        // float readings[2] = {0.0};
-
-        // aht20_get_measurements(aht20_i2c, readings);
 
         ssd1306_prepare_frame(&frame);
 
-        // char temp_str[9];
-        // char humidity_str[9];
-
-        // snprintf(temp_str, sizeof(temp_str), "temp= %d", (int)readings[0]);
-        // ssd1306_render_string(&frame, 0, 13, temp_str, 2, true);
-
-        // snprintf(temp_str, sizeof(temp_str), "humi= %d", (int)readings[1]);
-        // ssd1306_render_string(&frame, 0, 22, temp_str, 2, true);
-        
         process_current_page(&frame);
-        ssd1306_render(ssd1306_i2c, &frame);
+        ssd1306_render(g_ssd1306_i2c, &frame);
 
         sleep_ms(250);
     }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pdomovoy_common/types.h"
+#include "types.h"
 
 extern const PageData pages[];
 
