@@ -10,6 +10,8 @@
 // should be accessed only from core_0
 
 extern bool g_btn_blocked;
+extern bool g_alarm_in_standby;
+
 extern int g_current_page_id;
 
 extern repeating_timer_t g_onboard_led_blink_timer;

@@ -67,5 +67,7 @@ void handle_home_page(SSD1306_Frame* frame) {
     ssd1306_insert_bitmap(frame, 0, 46, &battery_icon);
     ssd1306_render_string(frame, 10, 46, "@W 3.3V", 1, false);
 
-    ssd1306_insert_bitmap(frame, 88, 20, &bell_icon);
+    if (g_alarm_in_standby) {
+        ssd1306_insert_bitmap(frame, 88, 20, &bell_icon);
+    }
 }

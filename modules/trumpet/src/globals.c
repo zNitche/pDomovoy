@@ -6,6 +6,7 @@
 
 // should be accessed only from core_0
 
+bool g_alarm_in_standby = false;
 bool g_btn_blocked = false;
 
 int g_current_page_id = 0;

@@ -56,6 +56,9 @@ void apply_button_callback(uint32_t event) {
         return;
     }
 
+    // temporary
+    g_alarm_in_standby = !g_alarm_in_standby;
+
     debug_print("apply button click\n");
 }
 
