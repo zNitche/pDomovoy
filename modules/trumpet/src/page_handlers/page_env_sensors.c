@@ -1,21 +1,42 @@
 #include "../../includes/page_handlers/page_env_sensors.h"
 
-#include <stdio.h>
+#include "../../includes/bitmaps/celcius_degree_icon.h"
+#include "../../includes/bitmaps/humidity_icon.h"
+#include "../../includes/bitmaps/thermometer_icon.h"
 #include "../../includes/globals.h"
 #include "../../includes/types.h"
 #include "pico/stdlib.h"
+#include "pico_ssd1306/ssd1306.h"
+#include <stdio.h>
 
 void handle_env_sensors_page(SSD1306_Frame* frame) {
     static float readings[2] = {0.0};
 
+    static SSD1306_Bitmap thermometer_icon = {
+        .width = 8, .height = 8, .data = NULL};
+
+    static SSD1306_Bitmap humidity_icon = {
+        .width = 8, .height = 8, .data = NULL};
+
+    if (thermometer_icon.data == NULL) {
+        ssd1306_load_bitmap(thermometer_icon_bitmap, &thermometer_icon);
+    }
+
+    if (humidity_icon.data == NULL) {
+        ssd1306_load_bitmap(humidity_icon_bitmap, &humidity_icon);
+    }
+
+    ssd1306_insert_bitmap(frame, 0, 12, &thermometer_icon);
+    ssd1306_insert_bitmap(frame, 0, 22, &humidity_icon);
+
     aht20_get_measurements(g_aht20_i2c, readings);
 
-    char temp_str[9];
-    char humidity_str[9];
+    char temp_str[4];
+    char humidity_str[4];
 
-    snprintf(temp_str, sizeof(temp_str), "temp= %d", (int)readings[0]);
-    ssd1306_render_string(frame, 0, 13, temp_str, 2, true);
+    snprintf(temp_str, sizeof(temp_str), "%d", (int)readings[0]);
+    snprintf(humidity_str, sizeof(humidity_str), "%d", (int)readings[1]);
 
-    snprintf(temp_str, sizeof(temp_str), "humi= %d", (int)readings[1]);
-    ssd1306_render_string(frame, 0, 22, temp_str, 2, true);
+    ssd1306_render_string(frame, 10, 12, temp_str, 2, true);
+    ssd1306_render_string(frame, 10, 22, humidity_str, 2, true);
 }

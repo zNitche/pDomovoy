@@ -5,7 +5,7 @@
 
 #include "../includes/page_handlers/page_env_sensors.h"
 
-const PageData env_sensors_page = {.title = "env sensors",
+const PageData env_sensors_page = {.title = "sensors",
                                    .handler = handle_env_sensors_page};
 const PageData alarm_page = {.title = "alarm", .handler = NULL};
 const PageData power_page = {.title = "power", .handler = NULL};
