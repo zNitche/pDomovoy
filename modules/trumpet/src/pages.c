@@ -3,14 +3,12 @@
 #include "../includes/globals.h"
 #include "../includes/types.h"
 
-#include "../includes/page_handlers/page_env_sensors.h"
+#include "../includes/page_handlers/handle_home_page.h"
 
-const PageData env_sensors_page = {.title = "sensors",
-                                   .handler = handle_env_sensors_page};
-const PageData alarm_page = {.title = "alarm", .handler = NULL};
-const PageData power_page = {.title = "power", .handler = NULL};
+const PageData env_sensors_page = {.title = "pDomovoy",
+                                   .handler = handle_home_page};
 
-const PageData pages[] = {env_sensors_page, alarm_page, power_page};
+const PageData pages[] = {env_sensors_page};
 
 PageData* get_current_page() { return &pages[g_current_page_id]; };
 

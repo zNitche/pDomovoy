@@ -1,4 +1,4 @@
-#include "../../includes/page_handlers/page_env_sensors.h"
+#include "../../includes/page_handlers/handle_home_page.h"
 
 #include "../../includes/bitmaps/celcius_degree_icon.h"
 #include "../../includes/bitmaps/humidity_icon.h"
@@ -9,7 +9,7 @@
 #include "pico_ssd1306/ssd1306.h"
 #include <stdio.h>
 
-void handle_env_sensors_page(SSD1306_Frame* frame) {
+void handle_home_page(SSD1306_Frame* frame) {
     static float readings[2] = {0.0};
 
     static SSD1306_Bitmap thermometer_icon = {
