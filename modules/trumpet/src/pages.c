@@ -18,19 +18,19 @@ void switch_page(int direction) {
 
     switch (direction) {
     case PAGE_SWITCH_NEXT:
-        if (current_page_id >= max_page_id) {
-            current_page_id = 0;
+        if (g_current_page_id >= max_page_id) {
+            g_current_page_id = 0;
         } else {
-            current_page_id++;
+            g_current_page_id++;
         }
 
         break;
 
     case PAGE_SWITCH_PREVIOUS:
-        if (current_page_id == 0) {
-            current_page_id = max_page_id;
+        if (g_current_page_id == 0) {
+            g_current_page_id = max_page_id;
         } else {
-            current_page_id--;
+            g_current_page_id--;
         }
 
         break;

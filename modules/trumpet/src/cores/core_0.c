@@ -18,8 +18,8 @@ void process_current_page(SSD1306_Frame* frame) {
 void core_0() {
     debug_print("[core_0] started, waiting\n");
 
-    const AHT20_I2C aht20_i2c = init_aht20();
-    const SSD1306_I2C ssd1306_i2c = init_ssd1306();
+    g_aht20_i2c = init_aht20();
+    g_ssd1306_i2c = init_ssd1306();
 
     while (true) {
         SSD1306_Frame frame;
