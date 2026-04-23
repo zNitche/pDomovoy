@@ -15,7 +15,7 @@ extern bool g_alarm_in_standby;
 extern int g_current_page_id;
 
 extern repeating_timer_t g_onboard_led_blink_timer;
-extern repeating_timer_t g_status_led_blink_timer;
+extern repeating_timer_t g_screen_saver_timer;
 
 extern AHT20_I2C g_aht20_i2c;
 extern SSD1306_I2C g_ssd1306_i2c;

@@ -4,6 +4,9 @@
 #define DEBUG 0
 #endif
 
+// display
+#define PD_SCREEN_SAVER_AFTER 10000
+
 // pins
 #define PD_PREVIOUS_BUTTON_PIN 15
 #define PD_APPLY_BUTTON_PIN 17
