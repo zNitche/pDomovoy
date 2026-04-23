@@ -7,8 +7,10 @@
 // should be accessed only from core_0
 
 bool g_alarm_in_standby = false;
-bool g_btn_blocked = false;
+bool g_navigation_blocked = false;
+bool g_display_off = false;
 
+uint32_t g_screen_enabled_time = 0;
 int g_current_page_id = 0;
 
 repeating_timer_t g_onboard_led_blink_timer;

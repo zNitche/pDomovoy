@@ -1,6 +1,7 @@
 #include "../includes/callbacks.h"
 
 #include "../includes/defines.h"
+#include "../includes/display.h"
 #include "../includes/globals.h"
 #include "../includes/pages.h"
 #include "pdomovoy_common/button.h"
@@ -35,9 +36,11 @@ void previous_button_callback(uint32_t event) {
         return;
     }
 
-    if (g_btn_blocked) {
+    if (g_navigation_blocked) {
         return;
     }
+
+    extend_screen_display_time();
 
     switch_page(PAGE_SWITCH_PREVIOUS);
     debug_print("previous button click\n");
@@ -52,9 +55,12 @@ void apply_button_callback(uint32_t event) {
         return;
     }
 
-    if (g_btn_blocked) {
+    if (g_display_off) {
+        toggle_screen(true);
         return;
     }
+
+    extend_screen_display_time();
 
     // temporary
     g_alarm_in_standby = !g_alarm_in_standby;
@@ -71,9 +77,11 @@ void next_button_callback(uint32_t event) {
         return;
     }
 
-    if (g_btn_blocked) {
+    if (g_navigation_blocked) {
         return;
     }
+
+    extend_screen_display_time();
 
     switch_page(PAGE_SWITCH_NEXT);
     debug_print("next button click\n");

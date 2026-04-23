@@ -1,6 +1,7 @@
 #include "../../includes/core_0.h"
 
 #include "../../includes/defines.h"
+#include "../../includes/display.h"
 #include "../../includes/globals.h"
 #include "../../includes/i2c_devices.h"
 #include "../../includes/pages.h"
@@ -26,13 +27,17 @@ void core_0() {
     g_aht20_i2c = init_aht20();
     g_ssd1306_i2c = init_ssd1306();
 
+    start_screen_save_timer();
+
+    SSD1306_Frame frame;
+
     while (true) {
-        SSD1306_Frame frame;
+        if (!g_display_off) {
+            ssd1306_prepare_frame(&frame);
 
-        ssd1306_prepare_frame(&frame);
-
-        process_current_page(&frame);
-        ssd1306_render(g_ssd1306_i2c, &frame);
+            process_current_page(&frame);
+            ssd1306_render(g_ssd1306_i2c, &frame);
+        }
 
         sleep_ms(250);
     }
