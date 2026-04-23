@@ -1,6 +1,6 @@
-#include "../includes/i2c_devices.h"
+#include "../../includes/i2c_devices.h"
 
-#include "../includes/defines.h"
+#include "../../includes/defines.h"
 #include "pico_aht20/aht20.h"
 #include "pico_aht20/defines.h"
 #include "pico_ssd1306/ssd1306.h"

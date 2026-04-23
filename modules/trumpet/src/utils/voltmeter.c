@@ -1,7 +1,7 @@
-#include "../includes/voltmeter.h"
+#include "../../includes/voltmeter.h"
 
-#include "../includes/globals.h"
-#include "../includes/defines.h"
+#include "../../includes/globals.h"
+#include "../../includes/defines.h"
 #include "pdomovoy_common/voltmeter.h"
 #include "hardware/adc.h"
 #include "hardware/gpio.h"

@@ -1,9 +1,9 @@
-#include "../includes/display.h"
+#include "../../includes/display.h"
 
 #include "pico/stdlib.h"
 
-#include "../includes/defines.h"
-#include "../includes/globals.h"
+#include "../../includes/defines.h"
+#include "../../includes/globals.h"
 #include "pico_ssd1306/ssd1306.h"
 
 void extend_screen_display_time() {
