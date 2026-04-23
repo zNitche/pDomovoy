@@ -39,28 +39,25 @@ void __load_bitmaps() {
     }
 }
 
-void handle_home_page(SSD1306_Frame* frame) {
-    static float readings[2] = {0.0};
-
-    __load_bitmaps();
-
+void __handle_env_sensors(SSD1306_Frame* frame, float aht20_readings[2]) {
     ssd1306_insert_bitmap(frame, 0, 12, &thermometer_icon);
     ssd1306_insert_bitmap(frame, 0, 22, &humidity_icon);
-
-    aht20_get_measurements(g_aht20_i2c, readings);
 
     char temp_str[4];
     char humidity_str[5];
 
-    snprintf(temp_str, sizeof(temp_str), "%d", (int)readings[0]);
-    snprintf(humidity_str, sizeof(humidity_str), "%d%%", (int)readings[1]);
+    snprintf(temp_str, sizeof(temp_str), "%d", (int)aht20_readings[0]);
+    snprintf(humidity_str, sizeof(humidity_str), "%d%%",
+             (int)aht20_readings[1]);
 
     ssd1306_render_string(frame, 10, 12, temp_str, 2, false);
     ssd1306_insert_bitmap(frame, 31, 12, &celcius_degree_icon);
 
     ssd1306_insert_bitmap(frame, 0, 22, &humidity_icon);
     ssd1306_render_string(frame, 10, 22, humidity_str, 2, false);
+}
 
+void __handle_batteries(SSD1306_Frame* frame) {
     char trumpet_battery_voltage_str[8];
 
     snprintf(trumpet_battery_voltage_str, sizeof(trumpet_battery_voltage_str),
@@ -71,6 +68,17 @@ void handle_home_page(SSD1306_Frame* frame) {
 
     ssd1306_insert_bitmap(frame, 0, 46, &battery_icon);
     ssd1306_render_string(frame, 10, 46, "@W 0.0V", 1, false);
+}
+
+void handle_home_page(SSD1306_Frame* frame) {
+    static float aht20_readings[2] = {0.0};
+
+    aht20_get_measurements(g_aht20_i2c, aht20_readings);
+
+    __load_bitmaps();
+
+    __handle_env_sensors(frame, aht20_readings);
+    __handle_batteries(frame);
 
     if (g_alarm_in_standby) {
         ssd1306_insert_bitmap(frame, 88, 20, &bell_icon);
