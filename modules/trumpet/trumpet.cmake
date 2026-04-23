@@ -12,12 +12,12 @@ add_executable(trumpet
 
 target_link_libraries(trumpet 
                     pico_stdlib
-                    pdomovoy_common
-                    # pico_btstack_ble
-                    # pico_btstack_cyw43
-                    pico_cyw43_arch_lwip_threadsafe_background
+                    pico_multicore
                     hardware_pwm
                     hardware_adc
-                    pico_multicore
+                    pdomovoy_common
+                    pico_btstack_ble
+                    pico_btstack_cyw43
+                    pico_cyw43_arch_lwip_threadsafe_background
                     pico_ssd1306
                     pico_aht20)
