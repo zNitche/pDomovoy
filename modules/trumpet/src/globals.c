@@ -18,3 +18,6 @@ repeating_timer_t g_screen_saver_timer;
 
 AHT20_I2C g_aht20_i2c;
 SSD1306_I2C g_ssd1306_i2c;
+
+float g_battery_voltage = 0.0;
+repeating_timer_t g_adc_voltmeter_timer;

@@ -4,10 +4,13 @@
 #include "../includes/core_0.h"
 #include "../includes/defines.h"
 #include "../includes/globals.h"
+#include "../includes/voltmeter.h"
+#include "hardware/adc.h"
 #include "pdomovoy_common/button.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/pwm.h"
 #include "pdomovoy_common/version.h"
+#include "pdomovoy_common/voltmeter.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
@@ -20,11 +23,18 @@ void init_gpio_peripherals() {
     gpio_set_irq_callback(&gpio_irq_callback);
 }
 
+void init_voltmeter() {
+    init_adc_voltmeter(PD_VOLTMETER_ADC_PIN);
+    start_voltmeter_bg();
+}
+
 int main() {
     stdio_init_all();
 
-    int rc = cyw43_arch_init();
-    hard_assert(rc == PICO_OK);
+    if (cyw43_arch_init()) {
+        printf("failed to initialise cyw43\n");
+        return 1;
+    }
 
     if (DEBUG) {
         // DEBUG waiting for input
@@ -33,7 +43,10 @@ int main() {
 
     debug_print("[pD - TRUMPET] %s\n", TRUMPET_VERSION);
 
+    adc_init();
+
     init_gpio_peripherals();
+    init_voltmeter();
 
     // core_0 for device handling
     core_0();

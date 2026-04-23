@@ -61,11 +61,16 @@ void handle_home_page(SSD1306_Frame* frame) {
     ssd1306_insert_bitmap(frame, 0, 22, &humidity_icon);
     ssd1306_render_string(frame, 10, 22, humidity_str, 2, false);
 
+    char trumpet_battery_voltage_str[8];
+
+    snprintf(trumpet_battery_voltage_str, sizeof(trumpet_battery_voltage_str),
+             "@T %.1fV", g_battery_voltage);
+
     ssd1306_insert_bitmap(frame, 0, 34, &battery_icon);
-    ssd1306_render_string(frame, 10, 34, "@T 3.3V", 1, false);
+    ssd1306_render_string(frame, 10, 34, trumpet_battery_voltage_str, 1, false);
 
     ssd1306_insert_bitmap(frame, 0, 46, &battery_icon);
-    ssd1306_render_string(frame, 10, 46, "@W 3.3V", 1, false);
+    ssd1306_render_string(frame, 10, 46, "@W 0.0V", 1, false);
 
     if (g_alarm_in_standby) {
         ssd1306_insert_bitmap(frame, 88, 20, &bell_icon);
