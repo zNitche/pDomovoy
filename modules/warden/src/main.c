@@ -44,17 +44,20 @@ void init_voltmeter() {
 
 int main() {
     stdio_init_all();
-    adc_init();
-
-    int rc = cyw43_arch_init();
-    hard_assert(rc == PICO_OK);
 
     if (DEBUG) {
         // DEBUG waiting for input
         getchar();
     }
 
+    if (cyw43_arch_init()) {
+        printf("failed to initialise cyw43\n");
+        return 1;
+    }
+
     debug_print("[pD - WARDEN] %s\n", WARDEN_VERSION);
+
+    adc_init();
 
     init_peripherals();
     init_mc_queues();

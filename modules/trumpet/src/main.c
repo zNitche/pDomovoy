@@ -31,14 +31,14 @@ void init_voltmeter() {
 int main() {
     stdio_init_all();
 
-    if (cyw43_arch_init()) {
-        printf("failed to initialise cyw43\n");
-        return 1;
-    }
-
     if (DEBUG) {
         // DEBUG waiting for input
         getchar();
+    }
+
+    if (cyw43_arch_init()) {
+        printf("failed to initialise cyw43\n");
+        return 1;
     }
 
     debug_print("[pD - TRUMPET] %s\n", TRUMPET_VERSION);
