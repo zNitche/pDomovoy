@@ -24,7 +24,7 @@ void toggle_screen(bool state) {
     g_navigation_blocked = !state;
 }
 
-bool _screen_saver_cb(__unused repeating_timer_t* t) {
+bool _screen_saver_cb(repeating_timer_t* t) {
     const uint32_t current_time = to_ms_since_boot(get_absolute_time());
 
     if (!g_screen_enabled_time) {
