@@ -12,6 +12,7 @@
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/pwm.h"
 #include "pdomovoy_common/version.h"
+#include "pdomovoy_common/voltmeter.h"
 #include "pico/cyw43_arch.h"
 #include "pico/multicore.h"
 #include "pico/stdlib.h"
