@@ -38,7 +38,7 @@ void init_mc_queues() {
 }
 
 void init_voltmeter() {
-    init_adc_voltmeter(PD_VOLTMETER_ADC_PIN, PD_VOLTMETER_ADC_ID);
+    init_adc_voltmeter(PD_VOLTMETER_ADC_PIN);
     start_voltmeter_bg();
 }
 

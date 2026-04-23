@@ -1,13 +1,14 @@
 #include "../../includes/voltmeter.h"
 
 #include "../../includes/globals.h"
+#include "../../includes/defines.h"
 #include "pdomovoy_common/voltmeter.h"
 #include "hardware/adc.h"
 #include "hardware/gpio.h"
 
 
 bool _voltmeter_cb(repeating_timer_t* t) {
-    float v = read_adc_voltage(2);
+    float v = read_adc_voltage(2, PD_VOLTMETER_ADC_ID);
 
     g_battery_voltage = v;
 
