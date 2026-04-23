@@ -7,7 +7,7 @@
 
 
 bool _voltmeter_cb(__unused repeating_timer_t* t) {
-    float v = read_adc_voltage();
+    float v = read_adc_voltage(2);
 
     g_battery_voltage = v;
 

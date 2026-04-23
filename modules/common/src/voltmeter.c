@@ -9,9 +9,9 @@ void init_adc_voltmeter(int gpio, int adc) {
     adc_select_input(adc);
 }
 
-float read_adc_voltage() {
+float read_adc_voltage(float voltage_divider_ratio) {
     const float conversion_factor = 3.3f / (1 << 12);
     uint16_t result = adc_read();
 
-    return result * conversion_factor * 2;
+    return result * conversion_factor * voltage_divider_ratio;
 };
