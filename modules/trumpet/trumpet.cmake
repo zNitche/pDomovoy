@@ -10,14 +10,18 @@ add_executable(trumpet
             ${TRUMPET_PAGE_HANDLERS_EXECS}
 )
 
+target_compile_definitions(trumpet PRIVATE
+    PICO_FLASH_ASSUME_CORE1_SAFE=1
+)
+
 target_link_libraries(trumpet 
                     pico_stdlib
                     pico_multicore
+                    pico_cyw43_arch_lwip_threadsafe_background
                     hardware_pwm
                     hardware_adc
                     pdomovoy_common
                     pico_btstack_ble
                     pico_btstack_cyw43
-                    pico_cyw43_arch_lwip_threadsafe_background
                     pico_ssd1306
                     pico_aht20)
