@@ -14,6 +14,10 @@ target_compile_definitions(trumpet PRIVATE
     PICO_FLASH_ASSUME_CORE1_SAFE=1
 )
 
+pico_btstack_make_gatt_header(trumpet PRIVATE
+ "${CMAKE_CURRENT_LIST_DIR}/gatt/test_gatt.gatt")
+
+
 target_link_libraries(trumpet 
                     pico_stdlib
                     pico_multicore
