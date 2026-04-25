@@ -7,6 +7,7 @@
 #include "../includes/globals.h"
 #include "../includes/led_blink.h"
 #include "../includes/voltmeter.h"
+#include "../includes/bluetooth.h"
 #include "hardware/adc.h"
 #include "pdomovoy_common/button.h"
 #include "pdomovoy_common/debug_print.h"
@@ -63,6 +64,9 @@ int main() {
     init_mc_queues();
 
     init_voltmeter();
+
+    init_ble();
+    turn_ble_on();
 
     cyw34_blink_untill_start(10000, &g_onboard_led_blink_timer, true);
 
