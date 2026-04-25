@@ -24,3 +24,5 @@ extern SSD1306_I2C g_ssd1306_i2c;
 
 extern float g_battery_voltage;
 extern repeating_timer_t g_adc_voltmeter_timer;
+
+extern uint8_t g_btstack_profile_data[1024];

@@ -5,6 +5,7 @@
 #include "../includes/defines.h"
 #include "../includes/globals.h"
 #include "../includes/voltmeter.h"
+#include "../includes/bluetooth.h"
 #include "hardware/adc.h"
 #include "pdomovoy_common/button.h"
 #include "pdomovoy_common/debug_print.h"
@@ -47,6 +48,9 @@ int main() {
 
     init_gpio_peripherals();
     init_voltmeter();
+
+    init_ble();
+    turn_ble_on();
 
     // core_0 for device handling
     core_0();
