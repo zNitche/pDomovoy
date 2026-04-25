@@ -17,7 +17,7 @@ target_compile_definitions(trumpet PRIVATE
 target_link_libraries(trumpet 
                     pico_stdlib
                     pico_multicore
-                    pico_cyw43_arch_lwip_threadsafe_background
+                    pico_cyw43_arch_none
                     hardware_pwm
                     hardware_adc
                     pdomovoy_common
