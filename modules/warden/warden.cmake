@@ -8,11 +8,19 @@ add_executable(warden
             ${WARDEN_UTILS_EXECS}
 )
 
+target_compile_definitions(warden PRIVATE
+    RUNNING_AS_CLIENT=1
+    PICO_FLASH_ASSUME_CORE0_SAFE=1
+    PICO_FLASH_ASSUME_CORE1_SAFE=1
+)
+
 target_link_libraries(warden 
                     pico_stdlib
                     pdomovoy_common
-                    pico_cyw43_arch_lwip_threadsafe_background
+                    pico_multicore
+                    pico_cyw43_arch_none
+                    pico_btstack_ble
+                    pico_btstack_cyw43
                     hardware_pwm
                     hardware_adc
-                    pico_multicore
                     pico_adxl345)
