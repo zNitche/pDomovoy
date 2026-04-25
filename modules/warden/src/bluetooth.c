@@ -9,6 +9,8 @@
 
 static btstack_packet_callback_registration_t hci_event_callback_registration;
 
+const bd_addr_t server_remote_mac = {};
+
 static void hci_event_handler(uint8_t packet_type, uint16_t channel,
                               uint8_t* packet, uint16_t size) {
     UNUSED(size);
@@ -35,27 +37,43 @@ static void hci_event_handler(uint8_t packet_type, uint16_t channel,
     case GAP_EVENT_ADVERTISING_REPORT: {
         bd_addr_t address;
         gap_event_advertising_report_get_address(packet, address);
-        uint8_t event_type =
-            gap_event_advertising_report_get_advertising_event_type(packet);
-        int8_t rssi = gap_event_advertising_report_get_rssi(packet);
-        uint8_t length = gap_event_advertising_report_get_data_length(packet);
 
-        debug_print("Device Found: %s | RSSI: %d | Type: %d\n",
-                    bd_addr_to_str(address), rssi, event_type);
+        if (memcmp(address, server_remote_mac, 6) == 0) {
+            debug_print("Target found! Connecting...\n");
+
+            gap_stop_scan();
+            bd_addr_type_t server_addr_type =
+                gap_event_advertising_report_get_address_type(packet);
+
+            gap_connect(server_remote_mac, server_addr_type);
+        }
         break;
     }
     case HCI_EVENT_LE_META:
-        // wait for connection complete
         switch (hci_event_le_meta_get_subevent_code(packet)) {
+
         case HCI_SUBEVENT_LE_CONNECTION_COMPLETE:
-            printf("Connected\n");
+            // Check the status byte (usually at index 3 for Meta events)
+            uint8_t status = packet[3];
+            if (status == 0) {
+                debug_print("Connected!\n");
+            } else {
+                debug_print("Connection failed with status: 0x%02x\n", status);
+            }
+
             break;
+
         default:
             break;
         }
+
+        break;
+    case HCI_EVENT_COMMAND_COMPLETE:
         break;
     case HCI_EVENT_DISCONNECTION_COMPLETE:
-        printf("Disconnected\n");
+        debug_print("Disconnected. Status: 0x%02x\n", packet[2]);
+
+        gap_start_scan();
         break;
     default:
         break;
@@ -68,8 +86,6 @@ void init_ble() {
     sm_init();
     sm_set_io_capabilities(IO_CAPABILITY_NO_INPUT_NO_OUTPUT);
 
-    // setup empty ATT server - only needed if LE Peripheral does ATT queries on
-    // its own, e.g. Android and iOS
     att_server_init(NULL, NULL, NULL);
 
     gatt_client_init();
@@ -79,12 +95,3 @@ void init_ble() {
 }
 
 void turn_ble_on() { hci_power_control(HCI_POWER_ON); }
-
-void ble_connect_to_server() {
-    bd_addr_t remote_addr = {};
-    bd_addr_type_t remote_type = BD_ADDR_TYPE_LE_RANDOM;
-
-    const uint8_t status = gap_connect(remote_addr, remote_type);
-
-    debug_print("ble connection status: %d\n", status);
-}
