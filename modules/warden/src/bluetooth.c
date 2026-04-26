@@ -2,6 +2,7 @@
 
 #include "../includes/globals.h"
 #include "btstack.h"
+#include "pd_common_config.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pico/btstack_cyw43.h"
 #include "pico/cyw43_arch.h"
@@ -9,7 +10,11 @@
 
 static btstack_packet_callback_registration_t hci_event_callback_registration;
 
-const bd_addr_t server_remote_mac = {};
+void get_target_mac_address(bd_addr_t addr) {
+    for (int i = 0; i < 6; i++) {
+        addr[i] = PD_SERVER_BT_MAC[i];
+    }
+}
 
 static void hci_event_handler(uint8_t packet_type, uint16_t channel,
                               uint8_t* packet, uint16_t size) {
@@ -38,14 +43,17 @@ static void hci_event_handler(uint8_t packet_type, uint16_t channel,
         bd_addr_t address;
         gap_event_advertising_report_get_address(packet, address);
 
-        if (memcmp(address, server_remote_mac, 6) == 0) {
+        bd_addr_t server_address;
+        get_target_mac_address(server_address);
+
+        if (memcmp(address, server_address, 6) == 0) {
             debug_print("Target found! Connecting...\n");
 
             gap_stop_scan();
             bd_addr_type_t server_addr_type =
                 gap_event_advertising_report_get_address_type(packet);
 
-            gap_connect(server_remote_mac, server_addr_type);
+            gap_connect(server_address, server_addr_type);
         }
         break;
     }
