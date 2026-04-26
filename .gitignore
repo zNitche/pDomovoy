@@ -9,3 +9,4 @@ picotool
 Makefile
 CmakeCache.txt
 cmake_install.cmake
+config.cmake
