@@ -10,6 +10,7 @@
 #include "../includes/bluetooth.h"
 #include "hardware/adc.h"
 #include "pdomovoy_common/button.h"
+#include "pdomovoy_common/bluetooth.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/pwm.h"
 #include "pdomovoy_common/version.h"
@@ -66,7 +67,7 @@ int main() {
     init_voltmeter();
 
     init_ble();
-    turn_ble_on();
+    turn_bluetooth_on();
 
     cyw34_blink_untill_start(10000, &g_onboard_led_blink_timer, true);
 

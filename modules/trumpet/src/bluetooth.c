@@ -95,5 +95,3 @@ void init_ble() {
 
     att_server_register_packet_handler(__packet_handler);
 }
-
-void turn_ble_on() { hci_power_control(HCI_POWER_ON); }

@@ -8,6 +8,7 @@
 #include "../includes/bluetooth.h"
 #include "hardware/adc.h"
 #include "pdomovoy_common/button.h"
+#include "pdomovoy_common/bluetooth.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/pwm.h"
 #include "pdomovoy_common/version.h"
@@ -50,7 +51,7 @@ int main() {
     init_voltmeter();
 
     init_ble();
-    turn_ble_on();
+    turn_bluetooth_on();
 
     // core_0 for device handling
     core_0();

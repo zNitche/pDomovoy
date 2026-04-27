@@ -4,17 +4,12 @@
 #include "btstack.h"
 #include "pd_common_config.h"
 #include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/bluetooth.h"
 #include "pico/btstack_cyw43.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
 static btstack_packet_callback_registration_t hci_event_callback_registration;
-
-void get_target_mac_address(bd_addr_t addr) {
-    for (int i = 0; i < 6; i++) {
-        addr[i] = PD_SERVER_BT_MAC[i];
-    }
-}
 
 static void hci_event_handler(uint8_t packet_type, uint16_t channel,
                               uint8_t* packet, uint16_t size) {
@@ -34,7 +29,6 @@ static void hci_event_handler(uint8_t packet_type, uint16_t channel,
             debug_print("[BTstack] up and running on %s.\n",
                         bd_addr_to_str(local_addr));
 
-            // ble_connect_to_server();
             gap_set_scan_params(1, 0x0030, 0x0030, 0);
             gap_start_scan();
         }
@@ -44,7 +38,7 @@ static void hci_event_handler(uint8_t packet_type, uint16_t channel,
         gap_event_advertising_report_get_address(packet, address);
 
         bd_addr_t server_address;
-        get_target_mac_address(server_address);
+        parse_mac_address(server_address, PD_SERVER_BT_MAC);
 
         if (memcmp(address, server_address, 6) == 0) {
             debug_print("Target found! Connecting...\n");
@@ -101,5 +95,3 @@ void init_ble() {
     hci_event_callback_registration.callback = &hci_event_handler;
     hci_add_event_handler(&hci_event_callback_registration);
 }
-
-void turn_ble_on() { hci_power_control(HCI_POWER_ON); }
