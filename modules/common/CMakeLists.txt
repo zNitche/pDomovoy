@@ -7,6 +7,9 @@ add_library(pdomovoy_common INTERFACE)
 target_link_libraries(pdomovoy_common INTERFACE
   pico_stdlib
   hardware_adc
+  pico_cyw43_arch_none
+  pico_btstack_ble
+  pico_btstack_cyw43
 )
 
 target_include_directories(pdomovoy_common INTERFACE "${CMAKE_CURRENT_LIST_DIR}/include")
