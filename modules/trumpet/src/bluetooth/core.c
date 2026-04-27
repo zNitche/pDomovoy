@@ -1,7 +1,7 @@
-#include "../includes/bluetooth.h"
+#include "../../includes/bluetooth/core.h"
 
-#include "test_gatt.h"
-#include "../includes/globals.h"
+#include "trumpet_core_gatt.h"
+#include "../../includes/globals.h"
 #include "btstack.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pico/btstack_cyw43.h"

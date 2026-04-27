@@ -5,7 +5,7 @@
 #include "../includes/defines.h"
 #include "../includes/globals.h"
 #include "../includes/voltmeter.h"
-#include "../includes/bluetooth.h"
+#include "../includes/bluetooth/core.h"
 #include "hardware/adc.h"
 #include "pdomovoy_common/button.h"
 #include "pdomovoy_common/bluetooth.h"

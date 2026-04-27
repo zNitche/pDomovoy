@@ -2,12 +2,14 @@ file(GLOB TRUMPET_CORE_EXECS ${CMAKE_CURRENT_LIST_DIR}/src/*.c)
 file(GLOB TRUMPET_UTILS_EXECS ${CMAKE_CURRENT_LIST_DIR}/src/utils/*.c)
 file(GLOB TRUMPET_MP_CORES_EXECS ${CMAKE_CURRENT_LIST_DIR}/src/cores/*.c)
 file(GLOB TRUMPET_PAGE_HANDLERS_EXECS ${CMAKE_CURRENT_LIST_DIR}/src/page_handlers/*.c)
+file(GLOB TRUMPET_BLE_EXECS ${CMAKE_CURRENT_LIST_DIR}/src/bluetooth/*.c)
 
 add_executable(trumpet 
             ${TRUMPET_CORE_EXECS}
             ${TRUMPET_UTILS_EXECS}
             ${TRUMPET_MP_CORES_EXECS}
             ${TRUMPET_PAGE_HANDLERS_EXECS}
+            ${TRUMPET_BLE_EXECS}
 )
 
 target_compile_definitions(trumpet PRIVATE
@@ -15,8 +17,7 @@ target_compile_definitions(trumpet PRIVATE
 )
 
 pico_btstack_make_gatt_header(trumpet PRIVATE
- "${CMAKE_CURRENT_LIST_DIR}/gatt/test_gatt.gatt")
-
+ "${CMAKE_CURRENT_LIST_DIR}/gatt/trumpet_core_gatt.gatt")
 
 target_link_libraries(trumpet 
                     pico_stdlib
