@@ -34,6 +34,7 @@ void __handle_gap_event_advertising_report(uint8_t* packet) {
         debug_print("Target found! Connecting...\n");
 
         gap_stop_scan();
+
         bd_addr_type_t server_addr_type =
             gap_event_advertising_report_get_address_type(packet);
 
@@ -45,6 +46,7 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
     switch (hci_event_le_meta_get_subevent_code(packet)) {
 
     case HCI_SUBEVENT_LE_CONNECTION_COMPLETE:
+        ble_service_context.is_connected = true;
         ble_service_context.connection_handle =
             gap_subevent_le_connection_complete_get_connection_handle(packet);
 
@@ -61,6 +63,7 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
 }
 
 void __handle_hci_event_disconnection_complete(uint8_t* packet) {
+    ble_service_context.is_connected = false;
     ble_service_context.connection_handle = HCI_CON_HANDLE_INVALID;
     update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_UNSET);
 

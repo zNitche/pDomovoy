@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 #include "btstack.h"
 #include "pico/stdlib.h"
 
@@ -7,6 +9,7 @@ typedef struct {
     hci_con_handle_t connection_handle;
     gatt_client_service_t service;
     gatt_client_characteristic_t characteristic;
+    bool is_connected;
 } BleServiceContext;
 
 enum GattClientStateEnum {
