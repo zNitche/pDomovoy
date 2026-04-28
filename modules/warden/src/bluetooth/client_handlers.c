@@ -20,6 +20,8 @@ void __handle_gatt_event_service_query_result(uint8_t* packet) {
         return;
     }
 
+    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
+
     debug_print("storing service: uuid16 %d, start: %d, end: %d\n",
                 ble_service_context.service.uuid16,
                 ble_service_context.service.start_group_handle,
@@ -27,25 +29,28 @@ void __handle_gatt_event_service_query_result(uint8_t* packet) {
 }
 
 void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
-    gatt_event_characteristic_query_result_get_characteristic(
-        packet, &ble_service_context.characteristic);
+    switch (pd_gatt_client_state) {
+    case PD_GATT_CLIENT_STATE_GET_WARDEN_VERSION_CHAR:
+        update_pd_gatt_client_state(
+            PD_GATT_CLIENT_STATE_READY_TO_WRITE_WARDEN_VERSION_CHAR);
 
-    debug_print("storing characteristic: uuid16 %d\n",
-                ble_service_context.characteristic.uuid16);
+        gatt_event_characteristic_query_result_get_characteristic(
+            packet, &ble_service_context.characteristic);
 
-    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_CONFIGURED);
+        debug_print("storing characteristic: uuid16 %d\n",
+                    ble_service_context.characteristic.uuid16);
+
+        break;
+    default:
+        break;
+    }
 }
 
 void __handle_gatt_event_query_complete(uint8_t* packet) {
     switch (pd_gatt_client_state) {
-    case PD_GATT_CLIENT_STATE_UNSET:
-        gatt_client_discover_characteristics_for_service_by_uuid16(
-            handle_gatt_client_event, ble_service_context.connection_handle,
-            &ble_service_context.service, PD_WARDEN_VERSION_GATT_VALUE_HANDLE);
+    case PD_GATT_CLIENT_STATE_READY_TO_WRITE_WARDEN_VERSION_CHAR:
+        update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
 
-        break;
-
-    case PD_GATT_CLIENT_STATE_CONFIGURED:
         const uint8_t res =
             gatt_client_write_value_of_characteristic_without_response(
                 ble_service_context.connection_handle,
