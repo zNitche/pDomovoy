@@ -6,5 +6,5 @@
 
 void update_pd_gatt_client_state(enum GattClientStateEnum state) {
     pd_gatt_client_state = state;
-    debug_print("set pd_gatt_client_state to %d\n", state);
+    debug_print("[PD_BLE] set pd_gatt_client_state to %d\n", state);
 }

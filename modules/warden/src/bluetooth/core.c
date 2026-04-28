@@ -3,17 +3,19 @@
 #include "../../includes/bluetooth/client_handlers.h"
 #include "../../includes/bluetooth/globals.h"
 #include "../../includes/bluetooth/hci_handlers.h"
+#include "../../includes/bluetooth/helpers.h"
 #include "../../includes/globals.h"
 #include "btstack.h"
 #include "pd_common_config.h"
 #include "pdomovoy_common/bluetooth.h"
 #include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/defines.h"
 #include "pico/btstack_cyw43.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
-void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
-                              uint8_t* packet, uint16_t size) {
+void __handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
+                                uint8_t* packet, uint16_t size) {
     UNUSED(packet_type);
     UNUSED(channel);
     UNUSED(size);
@@ -39,8 +41,8 @@ void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
     }
 }
 
-void handle_hci_event(uint8_t packet_type, uint16_t channel, uint8_t* packet,
-                      uint16_t size) {
+void __handle_hci_event(uint8_t packet_type, uint16_t channel, uint8_t* packet,
+                        uint16_t size) {
     UNUSED(size);
     UNUSED(channel);
 
@@ -74,6 +76,14 @@ void handle_hci_event(uint8_t packet_type, uint16_t channel, uint8_t* packet,
     }
 }
 
+void pd_bt_send_version_code() {
+    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_GET_WARDEN_VERSION_CHAR);
+
+    gatt_client_discover_characteristics_for_service_by_uuid16(
+        __handle_gatt_client_event, ble_service_context.connection_handle,
+        &ble_service_context.service, PD_WARDEN_VERSION_GATT_VALUE_HANDLE);
+}
+
 void init_ble() {
     l2cap_init();
 
@@ -84,6 +94,6 @@ void init_ble() {
 
     gatt_client_init();
 
-    hci_event_callback_registration.callback = &handle_hci_event;
+    hci_event_callback_registration.callback = &__handle_hci_event;
     hci_add_event_handler(&hci_event_callback_registration);
 }
