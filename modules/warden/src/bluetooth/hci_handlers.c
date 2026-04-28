@@ -2,6 +2,7 @@
 
 #include "../../includes/bluetooth/core.h"
 #include "../../includes/bluetooth/globals.h"
+#include "../../includes/bluetooth/helpers.h"
 #include "btstack.h"
 #include "pd_common_config.h"
 #include "pdomovoy_common/debug_print.h"
@@ -60,8 +61,10 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
 }
 
 void __handle_hci_event_disconnection_complete(uint8_t* packet) {
-    debug_print("Disconnected\n");
-
     ble_service_context.connection_handle = HCI_CON_HANDLE_INVALID;
+    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_UNSET);
+
     gap_start_scan();
+
+    debug_print("Disconnected\n");
 }

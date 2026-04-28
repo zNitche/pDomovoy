@@ -1,7 +1,8 @@
 #include "../../includes/bluetooth/client_handlers.h"
 
-#include "../../includes/bluetooth/globals.h"
 #include "../../includes/bluetooth/core.h"
+#include "../../includes/bluetooth/globals.h"
+#include "../../includes/bluetooth/helpers.h"
 #include "btstack.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/defines.h"
@@ -32,7 +33,7 @@ void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
     debug_print("storing characteristic: uuid16 %d\n",
                 ble_service_context.characteristic.uuid16);
 
-    pd_gatt_client_state = PD_GATT_CLIENT_STATE_CONFIGURED;
+    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_CONFIGURED);
 }
 
 void __handle_gatt_event_query_complete(uint8_t* packet) {
