@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "../../includes/bluetooth/core.h"
 #include "../../includes/callbacks.h"
 #include "../../includes/defines.h"
 #include "../../includes/delegates.h"
@@ -48,7 +49,9 @@ int _is_battery_voltage_low() {
 void _check_battery_level() {
     const int battery_status = _is_battery_voltage_low();
 
-    // debug_print("[core_0] battery status - %d\n", battery_status);
+    if (battery_status != 0) {
+        pd_bt_send_version_code();
+    }
 
     if (battery_status == 2) {
         debug_print("[core_0] low battery\n");
