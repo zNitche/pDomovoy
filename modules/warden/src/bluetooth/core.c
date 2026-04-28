@@ -30,7 +30,6 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
     switch (event_type) {
     case GATT_EVENT_SERVICE_QUERY_RESULT:
         gatt_event_service_query_result_get_service(packet, &server_service);
-        // debug_print("storing service: uuid16 %04X\n", server_service.uuid16);
 
         debug_print("found service with uuid16: %d\n", server_service.uuid16);
 
@@ -42,17 +41,10 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
                     server_service.uuid16, server_service.start_group_handle,
                     server_service.end_group_handle);
 
-        // gatt_client_discover_characteristics_for_service_by_uuid16(
-        //     handle_gatt_client_event, connection_handle, &server_service,
-        //     0xFF10);
-
         break;
     case GATT_EVENT_CHARACTERISTIC_QUERY_RESULT:
         gatt_event_characteristic_query_result_get_characteristic(
             packet, &server_version_characteristic);
-
-        // debug_print("storing characteristic: uuid16 0x%04X\n",
-        //             server_version_characteristic.uuid16);
 
         debug_print("storing characteristic: uuid16 %d\n",
                     server_version_characteristic.uuid16);
@@ -66,6 +58,14 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
                 gatt_client_discover_characteristics_for_service_by_uuid16(
                     handle_gatt_client_event, connection_handle,
                     &server_service, 0x1101);
+        } else {
+            const uint8_t res =
+                gatt_client_write_value_of_characteristic_without_response(
+                    connection_handle,
+                    server_version_characteristic.value_handle,
+                    sizeof(WARDEN_VERSION), WARDEN_VERSION);
+
+            debug_print("sent warden version with res: %d\n", res);
         }
 
         debug_print("query complete\n");
@@ -96,6 +96,7 @@ static void hci_event_handler(uint8_t packet_type, uint16_t channel,
             gap_set_scan_params(1, 0x0030, 0x0030, 0);
             gap_start_scan();
         }
+
         break;
     case GAP_EVENT_ADVERTISING_REPORT: {
         bd_addr_t address;
@@ -127,9 +128,6 @@ static void hci_event_handler(uint8_t packet_type, uint16_t channel,
 
             gatt_client_discover_primary_services(handle_gatt_client_event,
                                                   connection_handle);
-
-            // gatt_client_discover_primary_services_by_uuid16(
-            //     handle_gatt_client_event, connection_handle, 4353);
 
             // const uint8_t res =
             //     gatt_client_write_value_of_characteristic_without_response(

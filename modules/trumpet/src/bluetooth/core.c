@@ -1,12 +1,12 @@
 #include "../../includes/bluetooth/core.h"
 
-#include "trumpet_core_gatt.h"
 #include "../../includes/globals.h"
 #include "btstack.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pico/btstack_cyw43.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
+#include "trumpet_core_gatt.h"
 
 static btstack_packet_callback_registration_t hci_event_callback_registration;
 
@@ -42,6 +42,7 @@ static void __packet_handler(uint8_t packet_type, uint16_t channel,
     UNUSED(size);
     UNUSED(channel);
     bd_addr_t local_addr;
+
     if (packet_type != HCI_EVENT_PACKET)
         return;
 
@@ -62,6 +63,7 @@ static void __packet_handler(uint8_t packet_type, uint16_t channel,
     case HCI_EVENT_LE_META:
         switch (hci_event_le_meta_get_subevent_code(packet)) {
         case HCI_SUBEVENT_LE_CONNECTION_COMPLETE:
+            gap_advertisements_enable(0);
             debug_print("client connected \n");
             break;
         }
@@ -73,22 +75,47 @@ static void __packet_handler(uint8_t packet_type, uint16_t channel,
         debug_print("connected\n");
         break;
     case HCI_EVENT_DISCONNECTION_COMPLETE:
+        gap_advertisements_enable(1);
         debug_print("disconnected\n");
         break;
     default:
+        // debug_print("event type: %d\n", event_type);
+
         break;
     }
+}
+
+static uint16_t __att_read_callback(hci_con_handle_t connection_handle,
+                                    uint16_t att_handle, uint16_t offset,
+                                    uint8_t* buffer, uint16_t buffer_size) {
+    UNUSED(connection_handle);
+
+    return 0;
+}
+
+static int __att_write_callback(hci_con_handle_t connection_handle,
+                                uint16_t att_handle, uint16_t transaction_mode,
+                                uint16_t offset, uint8_t* buffer,
+                                uint16_t buffer_size) {
+    UNUSED(transaction_mode);
+    UNUSED(offset);
+    UNUSED(buffer_size);
+
+    debug_print("att write - handle - %d\n", att_handle);
+    debug_print("buff: %s\n", buffer);
+
+    return 0;
 }
 
 void init_ble() {
     l2cap_init();
     sm_init();
 
-    att_server_init(profile_data, NULL, NULL);
-
     gatt_client_set_required_security_level(LEVEL_2);
     sm_set_authentication_requirements(SM_AUTHREQ_BONDING |
                                        SM_AUTHREQ_SECURE_CONNECTION);
+
+    att_server_init(profile_data, __att_read_callback, __att_write_callback);
 
     hci_event_callback_registration.callback = &__packet_handler;
     hci_add_event_handler(&hci_event_callback_registration);
