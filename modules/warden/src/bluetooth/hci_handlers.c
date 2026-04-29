@@ -53,7 +53,7 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
         debug_print("Connected!\n");
 
         gatt_client_discover_primary_services(
-            __handle_gatt_client_event, ble_service_context.connection_handle);
+            __pd_handle_gatt_client_event, ble_service_context.connection_handle);
 
         break;
 

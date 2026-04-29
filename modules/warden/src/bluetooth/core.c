@@ -14,7 +14,7 @@
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
-void __handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
+void __pd_handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
                                 uint8_t* packet, uint16_t size) {
     UNUSED(packet_type);
     UNUSED(channel);
@@ -41,8 +41,8 @@ void __handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
     }
 }
 
-void __handle_hci_event(uint8_t packet_type, uint16_t channel, uint8_t* packet,
-                        uint16_t size) {
+void __pd_handle_hci_event(uint8_t packet_type, uint16_t channel,
+                           uint8_t* packet, uint16_t size) {
     UNUSED(size);
     UNUSED(channel);
 
@@ -77,10 +77,10 @@ void __handle_hci_event(uint8_t packet_type, uint16_t channel, uint8_t* packet,
 }
 
 void pd_bt_send_version_code() {
-    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_GET_WARDEN_VERSION_CHAR);
+    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_GET_CHAR);
 
     gatt_client_discover_characteristics_for_service_by_uuid16(
-        __handle_gatt_client_event, ble_service_context.connection_handle,
+        __pd_handle_gatt_client_event, ble_service_context.connection_handle,
         &ble_service_context.service, PD_WARDEN_VERSION_GATT_VALUE_HANDLE);
 }
 
@@ -94,6 +94,6 @@ void init_ble() {
 
     gatt_client_init();
 
-    hci_event_callback_registration.callback = &__handle_hci_event;
+    hci_event_callback_registration.callback = &__pd_handle_hci_event;
     hci_add_event_handler(&hci_event_callback_registration);
 }
