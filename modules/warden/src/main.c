@@ -1,16 +1,17 @@
 #include <math.h>
 #include <stdbool.h>
 
+#include "../includes/bluetooth/core.h"
 #include "../includes/callbacks.h"
 #include "../includes/core_0.h"
 #include "../includes/defines.h"
 #include "../includes/globals.h"
 #include "../includes/led_blink.h"
+#include "../includes/queue.h"
 #include "../includes/voltmeter.h"
-#include "../includes/bluetooth/core.h"
 #include "hardware/adc.h"
-#include "pdomovoy_common/button.h"
 #include "pdomovoy_common/bluetooth.h"
+#include "pdomovoy_common/button.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/pwm.h"
 #include "pdomovoy_common/version.h"
@@ -65,6 +66,10 @@ int main() {
     init_mc_queues();
 
     init_voltmeter();
+
+    pd_init_queue(&g_bt_functions_queue, 5);
+    pd_start_queue_timer(-5000, pd_bt_queue_timer_cb,
+                         &g_bt_functions_queue_timer);
 
     init_ble();
     turn_bluetooth_on();

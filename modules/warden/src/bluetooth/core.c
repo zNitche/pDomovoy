@@ -13,9 +13,10 @@
 #include "pico/btstack_cyw43.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
+#include "pico/time.h"
 
 void __pd_handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
-                                uint8_t* packet, uint16_t size) {
+                                   uint8_t* packet, uint16_t size) {
     UNUSED(packet_type);
     UNUSED(channel);
     UNUSED(size);
@@ -97,3 +98,15 @@ void init_ble() {
     hci_event_callback_registration.callback = &__pd_handle_hci_event;
     hci_add_event_handler(&hci_event_callback_registration);
 }
+
+bool pd_bt_queue_timer_cb(struct repeating_timer* t) {
+    debug_print("pd_bt_queue_timer_cb fired\n");
+
+    if (pd_gatt_client_state == PD_GATT_CLIENT_STATE_READY) {
+        update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_PROCESSING);
+
+        pd_move_queue(&g_bt_functions_queue);
+    }
+
+    return true;
+};

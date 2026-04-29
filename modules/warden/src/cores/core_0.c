@@ -50,7 +50,7 @@ void _check_battery_level() {
     const int battery_status = _is_battery_voltage_low();
 
     if (battery_status != 0) {
-        pd_bt_send_version_code();
+        pd_enqueue(&g_bt_functions_queue, pd_bt_send_version_code);
     }
 
     if (battery_status == 2) {
