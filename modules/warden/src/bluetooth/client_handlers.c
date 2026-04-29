@@ -30,9 +30,9 @@ void __handle_gatt_event_service_query_result(uint8_t* packet) {
 
 void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
     switch (pd_gatt_client_state) {
-    case PD_GATT_CLIENT_STATE_GET_WARDEN_VERSION_CHAR:
+    case PD_GATT_CLIENT_STATE_GET_CHAR:
         update_pd_gatt_client_state(
-            PD_GATT_CLIENT_STATE_READY_TO_WRITE_WARDEN_VERSION_CHAR);
+            PD_GATT_CLIENT_STATE_READY_TO_WRITE_TO_CHAR);
 
         gatt_event_characteristic_query_result_get_characteristic(
             packet, &ble_service_context.characteristic);
@@ -48,7 +48,7 @@ void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
 
 void __handle_gatt_event_query_complete(uint8_t* packet) {
     switch (pd_gatt_client_state) {
-    case PD_GATT_CLIENT_STATE_READY_TO_WRITE_WARDEN_VERSION_CHAR:
+    case PD_GATT_CLIENT_STATE_READY_TO_WRITE_TO_CHAR:
         update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
 
         const uint8_t res =
