@@ -1,6 +1,6 @@
 #include "../../includes/bluetooth/hci_handlers.h"
 
-#include "../../includes/bluetooth/core.h"
+#include "../../includes/bluetooth/handlers.h"
 #include "../../includes/bluetooth/globals.h"
 #include "../../includes/bluetooth/helpers.h"
 #include "btstack.h"
