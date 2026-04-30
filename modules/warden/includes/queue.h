@@ -3,7 +3,7 @@
 #include "pico/stdlib.h"
 #include <stdbool.h>
 
-typedef void (*QueueFunction)();
+typedef int (*QueueFunction)();
 
 typedef struct {
     QueueFunction* items;

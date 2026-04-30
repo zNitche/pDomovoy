@@ -17,12 +17,12 @@ void pd_stop_queue_timer(repeating_timer_t* timer) {
 
 void pd_init_queue(FunctionsQueue* queue, int max_items) {
     queue->max_items = max_items;
+    queue->count = 0;
 
     queue->items = malloc(sizeof(QueueFunction) * max_items);
 
     queue->head = 0;
-    queue->tail = 0;
-    queue->count = 0;
+    queue->tail = -1;
 };
 
 void pd_deinit_queue(FunctionsQueue* queue) { free(queue->items); }
@@ -38,10 +38,10 @@ bool pd_enqueue(FunctionsQueue* queue, QueueFunction function) {
         return false;
     }
 
-    queue->items[queue->tail] = function;
-    queue->count += 1;
-
     queue->tail = (queue->tail + 1) % queue->max_items;
+
+    queue->items[queue->tail] = function;
+    queue->count++;
 
     debug_print("[PD_QUEUE] added to queue\n");
 
@@ -49,23 +49,19 @@ bool pd_enqueue(FunctionsQueue* queue, QueueFunction function) {
 };
 
 void pd_move_queue(FunctionsQueue* queue) {
-    debug_print("[PD_QUEUE] moving queue\n");
-
     if (pd_is_queue_empty(queue)) {
         return;
     }
 
+    debug_print("[PD_QUEUE] moving queue | head:%d, tail:%d, count:%d\n",
+                queue->head, queue->tail, queue->count);
+
     QueueFunction func = queue->items[queue->head];
 
     queue->head = (queue->head + 1) % queue->max_items;
-    queue->max_items -= 1;
+    queue->count--;
 
-    if (queue->head == queue->tail) {
-        queue->head = 0;
-        queue->tail = 0;
-    }
+    const int return_value = func();
 
-    func();
-
-    debug_print("[PD_QUEUE] moved queue\n");
+    debug_print("[PD_QUEUE] moved queue with status: %d\n", return_value);
 };
