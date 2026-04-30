@@ -53,6 +53,11 @@ void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
         debug_print("[GATT_CLIENT] sent '%s' to char '%d' with res: %u\n",
                     pd_gatt_action_context.value, char_uuid16, res);
 
+        // handle error
+        if (res != 0) {
+            update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
+        }
+
         break;
     default:
         break;
