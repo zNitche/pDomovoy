@@ -13,10 +13,6 @@ typedef struct {
     int count;
 } FunctionsQueue;
 
-void pd_start_queue_timer(int32_t time_between, repeating_timer_callback_t cb,
-                          repeating_timer_t* timer);
-void pd_stop_queue_timer(repeating_timer_t* timer);
-
 void pd_init_queue(FunctionsQueue* queue, int max_items);
 void pd_deinit_queue(FunctionsQueue* queue);
 

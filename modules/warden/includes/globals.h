@@ -1,9 +1,9 @@
 #pragma once
 
-#include "pico/util/queue.h"
-#include <stdbool.h>
 #include "../includes/queue.h"
 #include "pdomovoy_common/types.h"
+#include "pico/util/queue.h"
+#include <stdbool.h>
 
 // should be accessed only from core_0
 
@@ -16,9 +16,6 @@ extern float g_battery_voltage;
 extern bool g_detected_low_battery_voltage;
 extern bool g_sensor_error;
 
-extern FunctionsQueue g_bt_functions_queue;
-extern repeating_timer_t g_bt_functions_queue_timer;
-
 extern queue_t g_core0_events_queue;
 extern queue_t g_core1_events_queue;
 
@@ -26,3 +23,5 @@ extern repeating_timer_t g_onboard_led_blink_timer;
 extern repeating_timer_t g_status_led_blink_timer;
 
 extern repeating_timer_t g_adc_voltmeter_timer;
+
+extern FunctionsQueue g_bt_functions_queue;

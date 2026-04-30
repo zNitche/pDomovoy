@@ -14,9 +14,6 @@ float g_battery_voltage = 0.0;
 bool g_detected_low_battery_voltage = false;
 bool g_sensor_error = false;
 
-FunctionsQueue g_bt_functions_queue;
-repeating_timer_t g_bt_functions_queue_timer;
-
 queue_t g_core0_events_queue;
 queue_t g_core1_events_queue;
 
@@ -24,3 +21,5 @@ repeating_timer_t g_onboard_led_blink_timer;
 repeating_timer_t g_status_led_blink_timer;
 
 repeating_timer_t g_adc_voltmeter_timer;
+
+FunctionsQueue g_bt_functions_queue = {};

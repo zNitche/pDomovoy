@@ -67,9 +67,7 @@ int main() {
 
     init_voltmeter();
 
-    pd_init_queue(&g_bt_functions_queue, 5);
-    pd_start_queue_timer(-5000, pd_bt_queue_timer_cb,
-                         &g_bt_functions_queue_timer);
+    pd_init_queue(&g_bt_functions_queue, 1);
 
     init_ble();
     turn_bluetooth_on();
