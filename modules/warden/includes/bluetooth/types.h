@@ -12,6 +12,13 @@ typedef struct {
     bool is_connected;
 } BleServiceContext;
 
+typedef struct {
+    gatt_client_characteristic_t target_char;
+    uint16_t char_uuid16;
+    uint8_t* value;
+    uint16_t value_length;
+} PdGattActionContext;
+
 enum GattClientStateEnum {
     PD_GATT_CLIENT_STATE_UNSET,
     PD_GATT_CLIENT_STATE_READY,
