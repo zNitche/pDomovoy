@@ -8,7 +8,6 @@
 typedef struct {
     hci_con_handle_t connection_handle;
     gatt_client_service_t service;
-    gatt_client_characteristic_t characteristic;
     bool is_connected;
 } BleServiceContext;
 
@@ -24,5 +23,5 @@ enum GattClientStateEnum {
     PD_GATT_CLIENT_STATE_READY,
     PD_GATT_CLIENT_STATE_PROCESSING,
     PD_GATT_CLIENT_STATE_GET_CHAR,
-    PD_GATT_CLIENT_STATE_READY_TO_WRITE_TO_CHAR,
+    PD_GATT_CLIENT_STATE_READY_TO_PROCESS_CHAR,
 };
