@@ -57,7 +57,7 @@ void _check_battery_level() {
         debug_print("[core_0] low battery\n");
 
         if (!g_detected_low_battery_voltage) {
-            blink_status_untill_start(2000,
+            blink_status_untill_start(-2000,
                                       blink_status_led_for_standby_callback,
                                       &g_status_led_blink_timer, true);
 
@@ -91,7 +91,7 @@ void _process_event(MulticoreEvent* event) {
 
         break;
     case PD_ADXL345_ERROR:
-        blink_status_untill_start(50, blink_status_led_for_standby_callback,
+        blink_status_untill_start(-50, blink_status_led_for_standby_callback,
                                   &g_status_led_blink_timer, true);
 
         g_sensor_error = false;
@@ -103,7 +103,7 @@ void _process_event(MulticoreEvent* event) {
 
         break;
     case PD_STANDBY_PREP:
-        blink_status_untill_start(100, blink_status_led_for_standby_callback,
+        blink_status_untill_start(-100, blink_status_led_for_standby_callback,
                                   &g_status_led_blink_timer, true);
 
         break;

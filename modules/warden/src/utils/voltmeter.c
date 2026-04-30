@@ -16,7 +16,7 @@ bool _voltmeter_cb(repeating_timer_t* t) {
 }
 
 void start_voltmeter_bg() {
-    add_repeating_timer_ms(1000, _voltmeter_cb, NULL, &g_adc_voltmeter_timer);
+    add_repeating_timer_ms(-1000, _voltmeter_cb, NULL, &g_adc_voltmeter_timer);
 }
 
 void stop_voltmeter_bg() { cancel_repeating_timer(&g_adc_voltmeter_timer); }
