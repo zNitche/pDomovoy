@@ -13,7 +13,7 @@ void __handle_gatt_event_service_query_result(uint8_t* packet) {
     gatt_event_service_query_result_get_service(packet,
                                                 &ble_service_context.service);
 
-    debug_print("[GATT_CLIENT] found service with uuid16: %d\n",
+    debug_print("[GATT_CLIENT] found service with uuid16: 0x%04x\n",
                 ble_service_context.service.uuid16);
 
     if (ble_service_context.service.uuid16 != PD_GATT_PRIMARY_SERVICE_UUID16) {
@@ -23,7 +23,7 @@ void __handle_gatt_event_service_query_result(uint8_t* packet) {
     update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
 
     debug_print(
-        "[GATT_CLIENT] storing service: uuid16 %d, start: %d, end: %d\n",
+        "[GATT_CLIENT] storing service: uuid16 0x%04x, start: %d, end: %d\n",
         ble_service_context.service.uuid16,
         ble_service_context.service.start_group_handle,
         ble_service_context.service.end_group_handle);
@@ -37,7 +37,7 @@ void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
 
         const uint16_t char_uuid16 = pd_gatt_action_context.target_char.uuid16;
 
-        debug_print("[GATT_CLIENT] storing characteristic: uuid16 %d\n",
+        debug_print("[GATT_CLIENT] storing characteristic: uuid16 0x%04x\n",
                     char_uuid16);
 
         update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY_TO_PROCESS_CHAR);
@@ -50,7 +50,7 @@ void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
                 pd_gatt_action_context.value_length,
                 pd_gatt_action_context.value);
 
-        debug_print("[GATT_CLIENT] sent '%s' to char '%d' with res: %u\n",
+        debug_print("[GATT_CLIENT] sent '%s' to char '0x%04x' with res: %u\n",
                     pd_gatt_action_context.value, char_uuid16, res);
 
         // handle error
