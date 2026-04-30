@@ -15,7 +15,7 @@ void __handle_btstack_event_state(uint8_t* packet) {
     if (btstack_event_state_get_state(packet) == HCI_STATE_WORKING) {
         gap_local_bd_addr(local_addr);
 
-        debug_print("[BTstack] up and running on %s.\n",
+        debug_print("[BT_HCI_EVENT] up and running on %s.\n",
                     bd_addr_to_str(local_addr));
 
         gap_set_scan_params(1, 0x0030, 0x0030, 0);
@@ -31,7 +31,7 @@ void __handle_gap_event_advertising_report(uint8_t* packet) {
     parse_mac_address(server_address, PD_SERVER_BT_MAC);
 
     if (memcmp(address, server_address, 6) == 0) {
-        debug_print("Target found! Connecting...\n");
+        debug_print("[BT_HCI_EVENT] target found, connecting...\n");
 
         gap_stop_scan();
 
@@ -50,7 +50,7 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
         ble_service_context.connection_handle =
             gap_subevent_le_connection_complete_get_connection_handle(packet);
 
-        debug_print("Connected!\n");
+        debug_print("[BT_HCI_EVENT] connected\n");
 
         gatt_client_discover_primary_services(
             __pd_handle_gatt_client_event, ble_service_context.connection_handle);
@@ -69,5 +69,5 @@ void __handle_hci_event_disconnection_complete(uint8_t* packet) {
 
     gap_start_scan();
 
-    debug_print("Disconnected\n");
+    debug_print("[BT_HCI_EVENT] disconnected\n");
 }
