@@ -74,7 +74,7 @@ int main() {
     init_ble();
     turn_bluetooth_on();
 
-    cyw34_blink_untill_start(10000, &g_onboard_led_blink_timer, true);
+    cyw34_blink_untill_start(1000, &g_onboard_led_blink_timer, true);
 
     // core_0 for device handling
     core_0();
