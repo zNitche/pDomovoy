@@ -13,7 +13,7 @@ void __handle_gatt_event_service_query_result(uint8_t* packet) {
     gatt_event_service_query_result_get_service(packet,
                                                 &ble_service_context.service);
 
-    debug_print("found service with uuid16: %d\n",
+    debug_print("[GATT_CLIENT] found service with uuid16: %d\n",
                 ble_service_context.service.uuid16);
 
     if (ble_service_context.service.uuid16 != PD_GATT_PRIMARY_SERVICE_UUID16) {
@@ -22,23 +22,36 @@ void __handle_gatt_event_service_query_result(uint8_t* packet) {
 
     update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
 
-    debug_print("storing service: uuid16 %d, start: %d, end: %d\n",
-                ble_service_context.service.uuid16,
-                ble_service_context.service.start_group_handle,
-                ble_service_context.service.end_group_handle);
+    debug_print(
+        "[GATT_CLIENT] storing service: uuid16 %d, start: %d, end: %d\n",
+        ble_service_context.service.uuid16,
+        ble_service_context.service.start_group_handle,
+        ble_service_context.service.end_group_handle);
 }
 
 void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
     switch (pd_gatt_client_state) {
     case PD_GATT_CLIENT_STATE_GET_CHAR:
-        update_pd_gatt_client_state(
-            PD_GATT_CLIENT_STATE_READY_TO_WRITE_TO_CHAR);
-
         gatt_event_characteristic_query_result_get_characteristic(
-            packet, &ble_service_context.characteristic);
+            packet, &pd_gatt_action_context.target_char);
 
-        debug_print("storing characteristic: uuid16 %d\n",
-                    ble_service_context.characteristic.uuid16);
+        const uint16_t char_uuid16 = pd_gatt_action_context.target_char.uuid16;
+
+        debug_print("[GATT_CLIENT] storing characteristic: uuid16 %d\n",
+                    char_uuid16);
+
+        update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY_TO_PROCESS_CHAR);
+
+        // proceed action to char
+        const uint8_t res =
+            gatt_client_write_value_of_characteristic_without_response(
+                ble_service_context.connection_handle,
+                pd_gatt_action_context.target_char.value_handle,
+                pd_gatt_action_context.value_length,
+                pd_gatt_action_context.value);
+
+        debug_print("[GATT_CLIENT] sent '%s' to char '%d' with res: %u\n",
+                    pd_gatt_action_context.value, char_uuid16, res);
 
         break;
     default:
@@ -48,22 +61,12 @@ void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
 
 void __handle_gatt_event_query_complete(uint8_t* packet) {
     switch (pd_gatt_client_state) {
-    case PD_GATT_CLIENT_STATE_READY_TO_WRITE_TO_CHAR:
+    case PD_GATT_CLIENT_STATE_READY_TO_PROCESS_CHAR:
         update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
-
-        const uint8_t res =
-            gatt_client_write_value_of_characteristic_without_response(
-                ble_service_context.connection_handle,
-                ble_service_context.characteristic.value_handle,
-                sizeof(WARDEN_VERSION), WARDEN_VERSION);
-
-        debug_print("sent warden version with res: %d\n", res);
 
         break;
 
     default:
         break;
     }
-
-    debug_print("query complete\n");
 }
