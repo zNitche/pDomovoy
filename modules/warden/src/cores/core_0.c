@@ -25,6 +25,7 @@ void _send_details_to_trumpet() {
         return;
     }
 
+    pd_enqueue(&g_bt_functions_queue, pd_bt_send_alarm_state);
     pd_enqueue(&g_bt_functions_queue, pd_bt_send_battery_voltage);
 }
 
@@ -164,9 +165,7 @@ void core_0() {
         }
 
         pd_bt_characteristics_discovery_loop();
-
         _send_details_to_trumpet();
-
         pd_bt_queue_processing_loop();
 
         sleep_ms(250);

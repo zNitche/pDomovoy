@@ -27,7 +27,6 @@ void init_peripherals() {
 
     // BUTTON
     init_button_irq(PD_ACTION_BUTTON_PIN, true);
-
     gpio_set_irq_callback(&gpio_irq_callback);
 
     // LED
