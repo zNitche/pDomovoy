@@ -122,6 +122,13 @@ static int __att_write_callback(hci_con_handle_t connection_handle,
 
         break;
 
+    case ATT_CHARACTERISTIC_00001103_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
+        int alarm_state;
+        memcpy(&alarm_state, buffer, sizeof(int));
+
+        debug_print("got warden's alarm_state: %d\n", alarm_state);
+        break;
+
     default:
         break;
     }
