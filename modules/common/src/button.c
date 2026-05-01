@@ -15,11 +15,17 @@ void init_button_irq(uint gpio, bool pull_down) {
         gpio_pull_up(gpio);
     }
 
-    gpio_set_irq_enabled(gpio, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true);
+    gpio_set_irq_enabled(
+        gpio, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL | GPIO_IRQ_LEVEL_HIGH,
+        true);
 }
 
 bool debounce_push_button(uint32_t event, int min_delay_between_clicks,
                           ButtonDebounceCtx* debounce_ctx) {
+    if (event == GPIO_IRQ_LEVEL_HIGH && debounce_ctx->is_pressed) {
+        return false;
+    }
+
     const uint32_t current_time = to_ms_since_boot(get_absolute_time());
 
     if (current_time - debounce_ctx->last_call <= min_delay_between_clicks) {
