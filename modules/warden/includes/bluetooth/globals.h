@@ -7,6 +7,11 @@
 extern BleServiceContext ble_service_context;
 extern btstack_packet_callback_registration_t hci_event_callback_registration;
 
+extern PdGattCharacteristicDiscoveryContext pd_characteristic_discovery_context;
+
+extern gatt_client_characteristic_t pd_gatt_warden_version_characteristic;
+extern gatt_client_characteristic_t pd_gatt_warden_battery_voltage_characteristic;
+
 extern PdGattActionContext pd_gatt_action_context;
 
 extern enum GattClientStateEnum pd_gatt_client_state;

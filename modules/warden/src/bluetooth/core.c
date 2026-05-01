@@ -10,6 +10,7 @@
 #include "pdomovoy_common/bluetooth.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/defines.h"
+#include "pdomovoy_common/helpers.h"
 #include "pdomovoy_common/version.h"
 #include "pico/btstack_cyw43.h"
 #include "pico/cyw43_arch.h"
@@ -17,7 +18,7 @@
 #include <stdio.h>
 
 int pd_bt_send_version_code() {
-    pd_gatt_action_context.char_uuid16 = PD_WARDEN_VERSION_GATT_VALUE_HANDLE;
+    pd_gatt_action_context.target_char = &pd_gatt_warden_version_characteristic;
     pd_gatt_action_context.value = WARDEN_VERSION;
     pd_gatt_action_context.value_length = sizeof(WARDEN_VERSION);
 
@@ -30,8 +31,8 @@ int pd_bt_send_battery_voltage() {
     static uint8_t voltage_buff[sizeof(float)];
     memcpy(voltage_buff, &g_battery_voltage, sizeof(float));
 
-    pd_gatt_action_context.char_uuid16 =
-        PD_WARDEN_BATTERY_VOLTAGE_GATT_VALUE_HANDLE;
+    pd_gatt_action_context.target_char =
+        &pd_gatt_warden_battery_voltage_characteristic;
     pd_gatt_action_context.value = voltage_buff;
     pd_gatt_action_context.value_length = sizeof(float);
 
@@ -40,12 +41,35 @@ int pd_bt_send_battery_voltage() {
     return 0;
 }
 
-void pd_start_gatt_action() {
-    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_GET_CHAR);
+void pd_gatt_get_characteristic(uint16_t uuid16,
+                                gatt_client_characteristic_t* characteristic) {
+    debug_print("[pd_gatt_get_characteristic] getting 0x%04x\n", uuid16);
+
+    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_CHARS_DISCOVERY);
+
+    pd_characteristic_discovery_context.char_uuid16 = uuid16;
+    pd_characteristic_discovery_context.target_char = characteristic;
 
     gatt_client_discover_characteristics_for_service_by_uuid16(
         __pd_handle_gatt_client_event, ble_service_context.connection_handle,
-        &ble_service_context.service, pd_gatt_action_context.char_uuid16);
+        &ble_service_context.service, uuid16);
+}
+
+void pd_start_gatt_action() {
+    // update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY_TO_PROCESS_CHAR);
+
+    const uint8_t res =
+        gatt_client_write_value_of_characteristic_without_response(
+            ble_service_context.connection_handle,
+            pd_gatt_action_context.target_char->value_handle,
+            pd_gatt_action_context.value_length, pd_gatt_action_context.value);
+
+    debug_print("[pd_start_gatt_action] sent '%d' bytes to char '0x%04x' with "
+                "res: %u\n",
+                pd_gatt_action_context.value_length,
+                pd_gatt_action_context.target_char->uuid16, res);
+
+    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
 }
 
 void init_ble() {
@@ -62,17 +86,53 @@ void init_ble() {
     hci_add_event_handler(&hci_event_callback_registration);
 }
 
+void pd_bt_characteristics_discovery_loop() {
+    static const uint32_t interval_ms = 1000;
+    static uint32_t next_runtime = 0;
+
+    if (!should_execute_repeating_function(&next_runtime, interval_ms)) {
+        return;
+    }
+
+    if (pd_gatt_client_state != PD_GATT_CLIENT_STATE_CHARS_DISCOVERY &&
+        pd_gatt_client_state != PD_GATT_CLIENT_STATE_CHAR_SET) {
+        // debug_print("[pd_bt_characteristics_discovery_loop] discovery "
+        //             "completed returning.\n");
+        return;
+    }
+
+    if (pd_gatt_warden_version_characteristic.uuid16 == 0) {
+        pd_gatt_get_characteristic(PD_WARDEN_VERSION_GATT_CHAR_UUID16,
+                                   &pd_gatt_warden_version_characteristic);
+
+        return;
+    }
+
+    if (pd_gatt_warden_battery_voltage_characteristic.uuid16 == 0) {
+        pd_gatt_get_characteristic(
+            PD_WARDEN_BATTERY_VOLTAGE_GATT_CHAR_UUID16,
+            &pd_gatt_warden_battery_voltage_characteristic);
+
+        return;
+    }
+
+    update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
+};
+
+// can be handle via repeating timers but let's do it this way
 void pd_bt_queue_processing_loop() {
     static const uint32_t interval_ms = 5000;
     static uint32_t next_runtime = 0;
 
-    const uint32_t current_time = to_ms_since_boot(get_absolute_time());
-
-    if (current_time < next_runtime) {
+    if (!should_execute_repeating_function(&next_runtime, interval_ms)) {
         return;
     }
 
-    next_runtime = current_time + interval_ms;
+    if (pd_gatt_client_state == PD_GATT_CLIENT_STATE_CHARS_DISCOVERY) {
+        debug_print("[pd_bt_queue_processing_loop] characteristics discovery "
+                    "in progress returning.\n");
+        return;
+    }
 
     if (pd_is_queue_empty(&g_bt_functions_queue)) {
         debug_print("[pd_bt_queue_processing_loop] queue empty\n");

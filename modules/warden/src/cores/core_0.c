@@ -151,6 +151,7 @@ void core_0() {
             disable_pwm_irq_on_pin(PD_BUZZER_PIN);
         }
 
+        pd_bt_characteristics_discovery_loop();
         pd_bt_queue_processing_loop();
 
         sleep_ms(250);

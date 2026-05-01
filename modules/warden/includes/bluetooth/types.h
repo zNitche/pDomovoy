@@ -12,16 +12,21 @@ typedef struct {
 } BleServiceContext;
 
 typedef struct {
-    gatt_client_characteristic_t target_char;
-    uint16_t char_uuid16;
+    gatt_client_characteristic_t* target_char;
     uint8_t* value;
     uint16_t value_length;
 } PdGattActionContext;
 
+typedef struct {
+    gatt_client_characteristic_t* target_char;
+    uint16_t char_uuid16;
+} PdGattCharacteristicDiscoveryContext;
+
 enum GattClientStateEnum {
     PD_GATT_CLIENT_STATE_UNSET,
+    PD_GATT_CLIENT_STATE_CHARS_DISCOVERY,
     PD_GATT_CLIENT_STATE_READY,
     PD_GATT_CLIENT_STATE_PROCESSING,
-    PD_GATT_CLIENT_STATE_GET_CHAR,
+    PD_GATT_CLIENT_STATE_CHAR_SET,
     PD_GATT_CLIENT_STATE_READY_TO_PROCESS_CHAR,
 };
