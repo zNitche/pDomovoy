@@ -8,3 +8,4 @@ void pd_start_gatt_action();
 void init_ble();
 
 void pd_bt_queue_processing_loop();
+int pd_bt_send_battery_voltage();

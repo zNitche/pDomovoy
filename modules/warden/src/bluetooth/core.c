@@ -14,11 +14,26 @@
 #include "pico/btstack_cyw43.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
+#include <stdio.h>
 
 int pd_bt_send_version_code() {
     pd_gatt_action_context.char_uuid16 = PD_WARDEN_VERSION_GATT_VALUE_HANDLE;
     pd_gatt_action_context.value = WARDEN_VERSION;
     pd_gatt_action_context.value_length = sizeof(WARDEN_VERSION);
+
+    pd_start_gatt_action();
+
+    return 0;
+}
+
+int pd_bt_send_battery_voltage() {
+    static uint8_t voltage_buff[sizeof(float)];
+    memcpy(voltage_buff, &g_battery_voltage, sizeof(float));
+
+    pd_gatt_action_context.char_uuid16 =
+        PD_WARDEN_BATTERY_VOLTAGE_GATT_VALUE_HANDLE;
+    pd_gatt_action_context.value = voltage_buff;
+    pd_gatt_action_context.value_length = sizeof(float);
 
     pd_start_gatt_action();
 

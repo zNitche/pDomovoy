@@ -34,9 +34,6 @@ int _is_battery_voltage_low() {
             voltages[i] = 0.0;
         }
 
-        // reset array
-        // memset(voltages, 0.0, sizeof(voltages));
-
         readings_mean = readings_mean / readings_count;
         readings_count = 0;
 
@@ -51,6 +48,7 @@ void _check_battery_level() {
 
     if (battery_status != 0) {
         pd_enqueue(&g_bt_functions_queue, pd_bt_send_version_code);
+        pd_enqueue(&g_bt_functions_queue, pd_bt_send_battery_voltage);
     }
 
     if (battery_status == 2) {

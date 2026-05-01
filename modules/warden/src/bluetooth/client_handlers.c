@@ -50,8 +50,9 @@ void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
                 pd_gatt_action_context.value_length,
                 pd_gatt_action_context.value);
 
-        debug_print("[GATT_CLIENT] sent '%s' to char '0x%04x' with res: %u\n",
-                    pd_gatt_action_context.value, char_uuid16, res);
+        debug_print(
+            "[GATT_CLIENT] sent '%d' bytes to char '0x%04x' with res: %u\n",
+            pd_gatt_action_context.value_length, char_uuid16, res);
 
         // handle error
         if (res != 0) {
