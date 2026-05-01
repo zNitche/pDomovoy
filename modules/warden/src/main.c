@@ -40,11 +40,6 @@ void init_mc_queues() {
     queue_init(&g_core1_events_queue, sizeof(MulticoreEvent), 2);
 }
 
-void init_voltmeter() {
-    init_adc_voltmeter(PD_VOLTMETER_ADC_PIN);
-    start_voltmeter_bg();
-}
-
 int main() {
     stdio_init_all();
 
@@ -65,7 +60,7 @@ int main() {
     init_peripherals();
     init_mc_queues();
 
-    init_voltmeter();
+    start_voltmeter_bg();
 
     pd_init_queue(&g_bt_functions_queue, 5);
 
