@@ -97,7 +97,7 @@ void _process_event(MulticoreEvent* event) {
 
         break;
     case PD_ACCELERATION_TRIGGER:
-        g_alarm_state = ALARM_STATE_TRIGGERED;
+        set_alarm_state(ALARM_STATE_TRIGGERED);
 
         break;
     case PD_STANDBY_PREP:
