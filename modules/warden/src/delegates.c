@@ -13,6 +13,7 @@ void set_alarm_state(enum AlarmState state) {
     g_alarm_state = state;
 
     pd_clear_queue(&g_bt_functions_queue);
+    pd_bt_send_alarm_state();
 }
 
 void init_alarm_standby() {
