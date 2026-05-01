@@ -16,6 +16,8 @@ typedef struct {
 void pd_init_queue(FunctionsQueue* queue, int max_items);
 void pd_deinit_queue(FunctionsQueue* queue);
 
+void pd_clear_queue(FunctionsQueue* queue);
+
 bool pd_is_queue_full(FunctionsQueue* queue);
 bool pd_is_queue_empty(FunctionsQueue* queue);
 

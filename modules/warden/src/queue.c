@@ -4,6 +4,7 @@
 #include "pico/stdlib.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 void pd_init_queue(FunctionsQueue* queue, int max_items) {
     queue->max_items = max_items;
@@ -15,7 +16,17 @@ void pd_init_queue(FunctionsQueue* queue, int max_items) {
     queue->tail = -1;
 };
 
-void pd_deinit_queue(FunctionsQueue* queue) { free(queue->items); }
+void pd_deinit_queue(FunctionsQueue* queue) { free(queue->items); };
+
+void pd_clear_queue(FunctionsQueue* queue) {
+    queue->head = 0;
+    queue->tail = -1;
+    queue->count = 0;
+
+    memset(queue->items, 0, sizeof(queue->items));
+
+    debug_print("[PD_QUEUE] cleared\n");
+};
 
 bool pd_is_queue_full(FunctionsQueue* queue) {
     return queue->count == queue->max_items;
