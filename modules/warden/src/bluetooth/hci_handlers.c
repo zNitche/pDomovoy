@@ -7,6 +7,7 @@
 #include "pd_common_config.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/defines.h"
+#include "pdomovoy_common/bluetooth.h"
 #include "pico/stdlib.h"
 
 void __handle_btstack_event_state(uint8_t* packet) {
