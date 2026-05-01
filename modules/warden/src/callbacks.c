@@ -21,10 +21,11 @@ void gpio_irq_callback(uint gpio, uint32_t event) {
 void _action_for_continous_clicks(int* clicks) {
     switch (*clicks) {
     case CONTINOUS_CLICKS_TO_DISABLE_ALARM:
-        disable_triggered_alarm();
         *clicks = 0;
+        disable_triggered_alarm();
 
         break;
+
     default:
         break;
     }
@@ -50,7 +51,9 @@ void action_button_callback(uint32_t event) {
                         MIN_TIME_BETWEEN_CLICKS_FOR_ACTION);
 
     if (g_alarm_state != ALARM_STATE_TRIGGERED) {
+        clicks_in_row = 0;
         init_alarm_standby();
+
     } else {
         _action_for_continous_clicks(&clicks_in_row);
     }

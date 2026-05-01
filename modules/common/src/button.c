@@ -22,6 +22,10 @@ bool debounce_push_button(uint32_t event, int min_delay_between_clicks,
                           ButtonDebounceCtx* debounce_ctx) {
     const uint32_t current_time = to_ms_since_boot(get_absolute_time());
 
+    if (current_time - debounce_ctx->last_call <= min_delay_between_clicks) {
+        return false;
+    }
+
     if (event == GPIO_IRQ_EDGE_FALL) {
         debounce_ctx->is_pressed = false;
         debounce_ctx->last_call = current_time;
@@ -29,11 +33,8 @@ bool debounce_push_button(uint32_t event, int min_delay_between_clicks,
         return false;
     }
 
-    if (current_time - debounce_ctx->last_call < min_delay_between_clicks) {
-        return false;
-    }
-
     if (event == GPIO_IRQ_EDGE_RISE && debounce_ctx->is_pressed) {
+        debounce_ctx->last_call = current_time;
         return false;
     }
 
