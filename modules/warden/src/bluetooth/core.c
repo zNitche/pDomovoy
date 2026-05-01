@@ -43,6 +43,22 @@ int pd_bt_send_battery_voltage() {
     return 0;
 }
 
+int pd_bt_send_alarm_state() {
+    static uint8_t alarm_state_buff[sizeof(int)];
+    int alarm_state = g_alarm_state;
+
+    memcpy(alarm_state_buff, &alarm_state, sizeof(alarm_state_buff));
+
+    pd_gatt_action_context.target_char =
+        &pd_gatt_warden_alarm_state_characteristic;
+    pd_gatt_action_context.value = alarm_state_buff;
+    pd_gatt_action_context.value_length = sizeof(alarm_state_buff);
+
+    pd_start_gatt_action();
+
+    return 0;
+}
+
 void pd_gatt_get_characteristic(uint16_t uuid16,
                                 gatt_client_characteristic_t* characteristic) {
     debug_print("[pd_gatt_get_characteristic] getting 0x%04x\n", uuid16);
@@ -127,6 +143,9 @@ void pd_bt_characteristics_discovery_loop() {
     }
 
     update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
+
+    pd_clear_queue(&g_bt_functions_queue);
+    pd_enqueue(&g_bt_functions_queue, pd_bt_send_version_code);
 };
 
 // can be handle via repeating timers but let's do it this way

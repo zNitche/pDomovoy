@@ -2,6 +2,7 @@
 
 #include "pdomovoy_common/types.h"
 
+void _send_details_to_trumpet();
 int _is_battery_voltage_low();
 void _check_battery_level();
 void _wait_for_alarm_standby();

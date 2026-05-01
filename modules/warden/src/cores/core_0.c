@@ -9,11 +9,24 @@
 #include "../../includes/delegates.h"
 #include "../../includes/globals.h"
 #include "../../includes/led_blink.h"
+#include "../../includes/queue.h"
 #include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/helpers.h"
 #include "pdomovoy_common/pwm.h"
 #include "pdomovoy_common/types.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
+
+void _send_details_to_trumpet() {
+    static const uint32_t interval_ms = 10000;
+    static uint32_t next_runtime = 0;
+
+    if (!should_execute_repeating_function(&next_runtime, interval_ms)) {
+        return;
+    }
+
+    pd_enqueue(&g_bt_functions_queue, pd_bt_send_battery_voltage);
+}
 
 int _is_battery_voltage_low() {
     // 0 - undefined
@@ -47,7 +60,6 @@ void _check_battery_level() {
     const int battery_status = _is_battery_voltage_low();
 
     if (battery_status != 0) {
-        pd_enqueue(&g_bt_functions_queue, pd_bt_send_version_code);
         pd_enqueue(&g_bt_functions_queue, pd_bt_send_battery_voltage);
     }
 
@@ -152,6 +164,9 @@ void core_0() {
         }
 
         pd_bt_characteristics_discovery_loop();
+
+        _send_details_to_trumpet();
+
         pd_bt_queue_processing_loop();
 
         sleep_ms(250);
