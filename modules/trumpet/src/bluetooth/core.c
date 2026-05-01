@@ -7,6 +7,7 @@
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "trumpet_core_gatt.h"
+#include <stdio.h>
 
 static btstack_packet_callback_registration_t hci_event_callback_registration;
 
@@ -68,19 +69,24 @@ static void __packet_handler(uint8_t packet_type, uint16_t channel,
             break;
         }
         break;
+
     case HCI_EVENT_CONNECTION_REQUEST:
         debug_print("conection request\n");
         break;
+
     case HCI_EVENT_CONNECTION_COMPLETE:
         debug_print("connected\n");
         break;
+
     case HCI_EVENT_DISCONNECTION_COMPLETE:
         gap_advertisements_enable(1);
+
+        g_warden_battery_voltage = 0.0;
+
         debug_print("disconnected\n");
         break;
-    default:
-        // debug_print("event type: %d\n", event_type);
 
+    default:
         break;
     }
 }
@@ -101,8 +107,24 @@ static int __att_write_callback(hci_con_handle_t connection_handle,
     UNUSED(offset);
     UNUSED(buffer_size);
 
-    debug_print("att write - handle - %d\n", att_handle);
-    debug_print("buff: %s\n", buffer);
+    switch (att_handle) {
+    case ATT_CHARACTERISTIC_00001101_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
+        debug_print("got warden's version: %s\n", buffer);
+        break;
+
+    case ATT_CHARACTERISTIC_00001102_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
+        float voltage_float;
+        memcpy(&voltage_float, buffer, sizeof(float));
+
+        debug_print("got warden's battery voltage: %.2f\n", voltage_float);
+
+        g_warden_battery_voltage = voltage_float;
+
+        break;
+
+    default:
+        break;
+    }
 
     return 0;
 }

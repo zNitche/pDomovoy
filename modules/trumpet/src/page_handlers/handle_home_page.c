@@ -59,15 +59,19 @@ void __handle_env_sensors(SSD1306_Frame* frame, float aht20_readings[2]) {
 
 void __handle_batteries(SSD1306_Frame* frame) {
     char trumpet_battery_voltage_str[8];
+    char warden_battery_voltage_str[8];
 
     snprintf(trumpet_battery_voltage_str, sizeof(trumpet_battery_voltage_str),
              "@T %.1fV", g_battery_voltage);
+
+    snprintf(warden_battery_voltage_str, sizeof(warden_battery_voltage_str),
+             "@W %.1fV", g_warden_battery_voltage);
 
     ssd1306_insert_bitmap(frame, 0, 34, &battery_icon);
     ssd1306_render_string(frame, 10, 34, trumpet_battery_voltage_str, 1, false);
 
     ssd1306_insert_bitmap(frame, 0, 46, &battery_icon);
-    ssd1306_render_string(frame, 10, 46, "@W 0.0V", 1, false);
+    ssd1306_render_string(frame, 10, 46, warden_battery_voltage_str, 1, false);
 }
 
 void handle_home_page(SSD1306_Frame* frame) {
