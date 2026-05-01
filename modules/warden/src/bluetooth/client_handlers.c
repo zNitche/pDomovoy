@@ -54,8 +54,6 @@ void __handle_gatt_event_characteristic_query_result(uint8_t* packet) {
         debug_print("[GATT_CLIENT] storing characteristic: uuid16 0x%04x\n",
                     char_uuid16);
 
-        // update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_CHAR_SET);
-
         break;
     default:
         break;

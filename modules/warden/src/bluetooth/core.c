@@ -94,8 +94,7 @@ void pd_bt_characteristics_discovery_loop() {
         return;
     }
 
-    if (pd_gatt_client_state != PD_GATT_CLIENT_STATE_CHARS_DISCOVERY &&
-        pd_gatt_client_state != PD_GATT_CLIENT_STATE_CHAR_SET) {
+    if (pd_gatt_client_state != PD_GATT_CLIENT_STATE_CHARS_DISCOVERY) {
         // debug_print("[pd_bt_characteristics_discovery_loop] discovery "
         //             "completed returning.\n");
         return;
