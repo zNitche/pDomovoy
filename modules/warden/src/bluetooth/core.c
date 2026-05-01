@@ -5,12 +5,14 @@
 #include "../../includes/bluetooth/helpers.h"
 #include "../../includes/bluetooth/types.h"
 #include "../../includes/globals.h"
+#include "../../includes/queue.h"
 #include "btstack.h"
 #include "pd_common_config.h"
 #include "pdomovoy_common/bluetooth.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/defines.h"
 #include "pdomovoy_common/helpers.h"
+#include "pdomovoy_common/types.h"
 #include "pdomovoy_common/version.h"
 #include "pico/btstack_cyw43.h"
 #include "pico/cyw43_arch.h"
@@ -56,7 +58,9 @@ void pd_gatt_get_characteristic(uint16_t uuid16,
 }
 
 void pd_start_gatt_action() {
-    // update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY_TO_PROCESS_CHAR);
+    if (pd_gatt_client_state != PD_GATT_CLIENT_STATE_PROCESSING) {
+        update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_PROCESSING);
+    }
 
     const uint8_t res =
         gatt_client_write_value_of_characteristic_without_response(
@@ -111,6 +115,13 @@ void pd_bt_characteristics_discovery_loop() {
         pd_gatt_get_characteristic(
             PD_WARDEN_BATTERY_VOLTAGE_GATT_CHAR_UUID16,
             &pd_gatt_warden_battery_voltage_characteristic);
+
+        return;
+    }
+
+    if (pd_gatt_warden_alarm_state_characteristic.uuid16 == 0) {
+        pd_gatt_get_characteristic(PD_WARDEN_ALARM_STATE_GATT_CHAR_UUID16,
+                                   &pd_gatt_warden_alarm_state_characteristic);
 
         return;
     }

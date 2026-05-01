@@ -11,6 +11,8 @@ extern PdGattCharacteristicDiscoveryContext pd_characteristic_discovery_context;
 
 extern gatt_client_characteristic_t pd_gatt_warden_version_characteristic;
 extern gatt_client_characteristic_t pd_gatt_warden_battery_voltage_characteristic;
+extern gatt_client_characteristic_t pd_gatt_warden_alarm_state_characteristic;
+
 
 extern PdGattActionContext pd_gatt_action_context;
 
