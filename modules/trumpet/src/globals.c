@@ -23,3 +23,6 @@ float g_battery_voltage = 0.0;
 repeating_timer_t g_adc_voltmeter_timer;
 
 float g_warden_battery_voltage = 0.0;
+char* g_warden_version;
+enum AlarmState g_trumpet_alarm_state;
+enum AlarmState g_warden_alarm_state;

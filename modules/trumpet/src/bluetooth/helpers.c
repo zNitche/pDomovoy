@@ -1,8 +1,9 @@
 #include "../../includes/bluetooth/helpers.h"
 
+#include "../../includes/globals.h"
 #include "btstack.h"
 #include "pico/stdlib.h"
-
+#include <string.h>
 
 void __pd_setup_gap_advertisements() {
     uint8_t adv_data[] = {0x02,
@@ -29,4 +30,10 @@ void __pd_setup_gap_advertisements() {
                                   null_addr, 0x07, 0x00);
     gap_advertisements_set_data(sizeof(adv_data), (uint8_t*)adv_data);
     gap_advertisements_enable(1);
+}
+
+void __pd_client_state_cleanup() {
+    g_warden_battery_voltage = 0;
+    g_warden_alarm_state = ALARM_STATE_NONE;
+    memset(g_warden_version, 0, 6);
 }

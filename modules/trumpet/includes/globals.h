@@ -1,11 +1,11 @@
 #pragma once
 
-#include "pico/util/queue.h"
-#include <stdbool.h>
 #include "pdomovoy_common/types.h"
+#include "pico/util/queue.h"
 #include "pico_aht20/aht20.h"
 #include "pico_aht20/defines.h"
 #include "pico_ssd1306/ssd1306.h"
+#include <stdbool.h>
 
 // should be accessed only from core_0
 
@@ -26,5 +26,8 @@ extern float g_battery_voltage;
 extern repeating_timer_t g_adc_voltmeter_timer;
 
 extern float g_warden_battery_voltage;
+extern char* g_warden_version;
+extern enum AlarmState g_trumpet_alarm_state;
+extern enum AlarmState g_warden_alarm_state;
 
 extern uint8_t const profile_data[];

@@ -50,7 +50,7 @@ void __pd_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
     case HCI_EVENT_DISCONNECTION_COMPLETE:
         gap_advertisements_enable(1);
 
-        g_warden_battery_voltage = 0.0;
+        __pd_client_state_cleanup();
 
         debug_print("[GATT_SERVER] disconnected\n");
         break;
@@ -79,6 +79,9 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
     switch (att_handle) {
     case ATT_CHARACTERISTIC_00001101_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
         debug_print("[GATT_SERVER] got warden's version: %s\n", buffer);
+
+        memcpy(&g_warden_version, buffer, sizeof(buffer));
+
         break;
 
     case ATT_CHARACTERISTIC_00001102_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
