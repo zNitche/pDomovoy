@@ -1,8 +1,8 @@
 #include "../includes/delegates.h"
 
+#include "../includes/bluetooth/core.h"
 #include "../includes/core_1.h"
 #include "../includes/globals.h"
-#include "../includes/bluetooth/core.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/types.h"
 #include "pico/multicore.h"
@@ -13,7 +13,7 @@ void set_alarm_state(enum AlarmState state) {
     g_alarm_state = state;
 
     pd_clear_queue(&g_bt_functions_queue);
-    pd_bt_send_alarm_state();
+    pd_enqueue(&g_bt_functions_queue, pd_bt_send_alarm_state);
 }
 
 void init_alarm_standby() {

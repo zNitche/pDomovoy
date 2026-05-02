@@ -166,6 +166,7 @@ void core_0() {
 
         pd_bt_characteristics_discovery_loop();
         _send_details_to_trumpet();
+
         pd_bt_queue_processing_loop();
 
         sleep_ms(250);
