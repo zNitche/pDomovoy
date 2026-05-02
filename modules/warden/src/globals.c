@@ -1,6 +1,6 @@
 #include "../includes/globals.h"
 
-#include "../includes/queue.h"
+#include "pdomovoy_common/queue.h"
 #include "pdomovoy_common/types.h"
 
 // should be accessed only from core_0

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../includes/queue.h"
+#include "pdomovoy_common/queue.h"
 #include "pdomovoy_common/types.h"
 #include "pico/util/queue.h"
 #include <stdbool.h>
