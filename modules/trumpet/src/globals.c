@@ -22,6 +22,8 @@ SSD1306_I2C g_ssd1306_i2c;
 float g_battery_voltage = 0.0;
 repeating_timer_t g_adc_voltmeter_timer;
 
+bool g_warden_connected = false;
+
 float g_warden_battery_voltage = 0.0;
 char* g_warden_version;
 enum AlarmState g_trumpet_alarm_state;

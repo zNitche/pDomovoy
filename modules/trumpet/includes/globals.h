@@ -25,6 +25,8 @@ extern SSD1306_I2C g_ssd1306_i2c;
 extern float g_battery_voltage;
 extern repeating_timer_t g_adc_voltmeter_timer;
 
+extern bool g_warden_connected;
+
 extern float g_warden_battery_voltage;
 extern char* g_warden_version;
 extern enum AlarmState g_trumpet_alarm_state;
