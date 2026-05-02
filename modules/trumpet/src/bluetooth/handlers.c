@@ -78,10 +78,11 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
 
     switch (att_handle) {
     case ATT_CHARACTERISTIC_00001101_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
-        debug_print("[GATT_SERVER] got warden's version: %s\n", buffer);
-
         g_warden_connected = true;
-        memcpy(&g_warden_version, buffer, sizeof(buffer));
+        memcpy(&g_warden_version, buffer, sizeof(g_warden_version));
+
+        debug_print("[GATT_SERVER] got warden's version: %s\n",
+                    g_warden_version);
 
         break;
 
@@ -89,7 +90,7 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
         float voltage_float;
         memcpy(&voltage_float, buffer, sizeof(float));
 
-        debug_print("[GATT_SERVER]got warden's battery voltage: %.2f\n",
+        debug_print("[GATT_SERVER] got warden's battery voltage: %.2f\n",
                     voltage_float);
 
         g_warden_battery_voltage = voltage_float;

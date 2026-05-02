@@ -37,5 +37,5 @@ void __pd_client_state_cleanup() {
 
     g_warden_battery_voltage = 0;
     g_warden_alarm_state = ALARM_STATE_NONE;
-    memset(g_warden_version, 0, 6);
+    memset(g_warden_version, 0, sizeof(g_warden_version));
 }
