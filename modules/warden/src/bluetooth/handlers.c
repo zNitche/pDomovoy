@@ -33,6 +33,15 @@ void __pd_handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
         break;
 
     case GATT_EVENT_QUERY_COMPLETE:
+        if (att_status != ATT_ERROR_SUCCESS) {
+            debug_print("[GATT_CLIENT] GATT_EVENT_QUERY_COMPLETE ATT error "
+                        "0x%02x , disconnecting.\n",
+                        att_status);
+
+            gap_disconnect(ble_service_context.connection_handle);
+            break;
+        }
+
         __handle_gatt_event_query_complete(packet);
         break;
 
