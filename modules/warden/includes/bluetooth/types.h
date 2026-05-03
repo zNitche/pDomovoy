@@ -8,7 +8,6 @@
 typedef struct {
     hci_con_handle_t connection_handle;
     gatt_client_service_t service;
-    bool is_connected;
 } BleServiceContext;
 
 typedef struct {

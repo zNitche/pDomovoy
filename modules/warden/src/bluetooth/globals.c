@@ -1,6 +1,7 @@
 #include "../../includes/bluetooth/globals.h"
 
-BleServiceContext ble_service_context = {.is_connected = false};
+BleServiceContext ble_service_context = {.connection_handle =
+                                             HCI_CON_HANDLE_INVALID};
 btstack_packet_callback_registration_t hci_event_callback_registration;
 
 PdGattCharacteristicDiscoveryContext pd_characteristic_discovery_context;
