@@ -1,11 +1,13 @@
 #include "../../includes/bluetooth/handlers.h"
 
+#include "../../includes/bluetooth/globals.h"
 #include "../../includes/bluetooth/helpers.h"
 #include "../../includes/globals.h"
 #include "btstack.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pico/stdlib.h"
 #include "trumpet_core_gatt.h"
+#include <stdio.h>
 
 void __pd_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
                          uint16_t size) {
@@ -50,9 +52,15 @@ void __pd_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
     case HCI_EVENT_DISCONNECTION_COMPLETE:
         gap_advertisements_enable(1);
 
+        ble_notification_enabled = 0;
         __pd_client_state_cleanup();
 
         debug_print("[GATT_SERVER] disconnected\n");
+        break;
+
+    case ATT_EVENT_CAN_SEND_NOW:
+        __pd_send_trumpets_alarm_state_notification();
+
         break;
 
     default:
@@ -64,6 +72,21 @@ uint16_t __pd_att_read_callback(hci_con_handle_t connection_handle,
                                 uint16_t att_handle, uint16_t offset,
                                 uint8_t* buffer, uint16_t buffer_size) {
     UNUSED(connection_handle);
+
+    switch (att_handle) {
+    case ATT_CHARACTERISTIC_00001104_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
+        static uint8_t alarm_state_buff[sizeof(int)];
+        int alarm_state = g_trumpet_alarm_state;
+
+        memcpy(alarm_state_buff, &alarm_state, sizeof(alarm_state_buff));
+
+        return att_read_callback_handle_blob(&alarm_state_buff,
+                                             sizeof(alarm_state_buff), offset,
+                                             buffer, buffer_size);
+
+    default:
+        break;
+    }
 
     return 0;
 }
@@ -101,13 +124,48 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
         int alarm_state;
         memcpy(&alarm_state, buffer, sizeof(int));
 
+        g_trumpet_alarm_state = alarm_state;
+
         debug_print("[GATT_SERVER] got warden's alarm_state: %d\n",
                     alarm_state);
         break;
 
+    case ATT_CHARACTERISTIC_00001104_0000_1000_8000_00805F9B34FB_01_CLIENT_CONFIGURATION_HANDLE:
+        ble_notification_enabled =
+            little_endian_read_16(buffer, 0) ==
+            GATT_CLIENT_CHARACTERISTICS_CONFIGURATION_NOTIFICATION;
+
+        ble_connection_handle = connection_handle;
+
+        if (ble_notification_enabled) {
+            att_server_request_can_send_now_event(ble_connection_handle);
+        }
+
+        debug_print("[GATT_SERVER] got trumpets's alarm_state client "
+                    "configuration handle\n");
+        break;
+
     default:
+        debug_print("[GATT_SERVER][att_write_callback] att_handle: 0x%04x\n",
+                    att_handle);
         break;
     }
 
     return 0;
+}
+
+void __pd_send_trumpets_alarm_state_notification() {
+    static uint8_t alarm_state_buff[sizeof(int)];
+    int alarm_state = g_trumpet_alarm_state;
+
+    memcpy(alarm_state_buff, &alarm_state, sizeof(alarm_state_buff));
+
+    att_server_notify(
+        ble_connection_handle,
+        ATT_CHARACTERISTIC_00001104_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE,
+        &alarm_state_buff, sizeof(alarm_state_buff));
+
+    debug_print(
+        "[GATT_SERVER] sent notification for trumpet's alarm state: %d\n",
+        alarm_state);
 }
