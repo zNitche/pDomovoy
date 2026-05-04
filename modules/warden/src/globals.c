@@ -23,3 +23,4 @@ repeating_timer_t g_status_led_blink_timer;
 repeating_timer_t g_adc_voltmeter_timer;
 
 FunctionsQueue g_bt_functions_queue = {};
+repeating_timer_t g_bt_functions_queue_timer;

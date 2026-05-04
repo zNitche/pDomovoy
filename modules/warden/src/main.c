@@ -39,6 +39,13 @@ void init_mc_queues() {
     queue_init(&g_core1_events_queue, sizeof(MulticoreEvent), 2);
 }
 
+void init_bluetooth() {
+    init_ble();
+    turn_bluetooth_on();
+
+    pd_start_bt_queue_processing_loop_bg(&g_bt_functions_queue_timer);
+}
+
 int main() {
     stdio_init_all();
 
@@ -63,10 +70,9 @@ int main() {
 
     pd_init_queue(&g_bt_functions_queue, 5);
 
-    init_ble();
-    turn_bluetooth_on();
+    init_bluetooth();
 
-    cyw34_blink_untill_start(1000, &g_onboard_led_blink_timer, true);
+    cyw34_blink_untill_start(-1000, &g_onboard_led_blink_timer, true);
 
     // core_0 for device handling
     core_0();

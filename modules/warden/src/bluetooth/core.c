@@ -197,23 +197,27 @@ bool pd_bt_queue_processing_loop(repeating_timer_t* timer) {
     if (pd_gatt_client_state == PD_GATT_CLIENT_STATE_CHARS_DISCOVERY) {
         debug_print("[pd_bt_queue_processing_loop] characteristics discovery "
                     "in progress returning.\n");
-        return;
+        return true;
     }
 
     if (pd_is_queue_empty(&g_bt_functions_queue)) {
         debug_print("[pd_bt_queue_processing_loop] queue empty\n");
-        return;
+        return true;
     }
 
     debug_print(
         "[pd_bt_queue_processing_loop] fired, pd_gatt_client_state: %d\n",
         pd_gatt_client_state);
 
-    if (pd_gatt_client_state == PD_GATT_CLIENT_STATE_READY) {
-        update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_PROCESSING);
+    pd_bt_process_queue();
 
-        debug_print("[pd_bt_queue_processing_loop] processing function\n");
-
-        pd_move_queue(&g_bt_functions_queue);
-    }
+    return true;
 };
+
+void pd_start_bt_queue_processing_loop_bg(repeating_timer_t* timer) {
+    add_repeating_timer_ms(-1500, pd_bt_queue_processing_loop, NULL, timer);
+}
+
+void pd_stop_bt_queue_processing_loop_bg(repeating_timer_t* timer) {
+    cancel_repeating_timer(timer);
+}
