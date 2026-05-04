@@ -1,5 +1,6 @@
 #include "../includes/callbacks.h"
 
+#include "../includes/bluetooth/helpers.h"
 #include "../includes/defines.h"
 #include "../includes/display.h"
 #include "../includes/globals.h"
@@ -62,8 +63,19 @@ void apply_button_callback(uint32_t event) {
 
     extend_screen_display_time();
 
-    // temporary
-    g_alarm_in_standby = !g_alarm_in_standby;
+    switch (g_trumpet_alarm_state) {
+    case (ALARM_STATE_NONE):
+        toggle_alarm_state(ALARM_STATE_STANDBY_INIT);
+        break;
+
+    case (ALARM_STATE_STANDBY):
+    case (ALARM_STATE_TRIGGERED):
+        toggle_alarm_state(ALARM_STATE_NONE);
+        break;
+
+    default:
+        break;
+    }
 
     debug_print("apply button click\n");
 }

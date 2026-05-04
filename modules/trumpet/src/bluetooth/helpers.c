@@ -1,7 +1,10 @@
 #include "../../includes/bluetooth/helpers.h"
 
+#include "../../includes/bluetooth/globals.h"
 #include "../../includes/globals.h"
 #include "btstack.h"
+#include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/types.h"
 #include "pico/stdlib.h"
 #include <string.h>
 
@@ -30,6 +33,8 @@ void __pd_setup_gap_advertisements() {
                                   null_addr, 0x07, 0x00);
     gap_advertisements_set_data(sizeof(adv_data), (uint8_t*)adv_data);
     gap_advertisements_enable(1);
+
+    debug_print("[GATT_SERVER] ble advertisement active\n");
 }
 
 void __pd_client_state_cleanup() {
@@ -38,4 +43,18 @@ void __pd_client_state_cleanup() {
     g_warden_battery_voltage = 0;
     g_warden_alarm_state = ALARM_STATE_NONE;
     memset(g_warden_version, 0, sizeof(g_warden_version));
+}
+
+void toggle_alarm_state(enum AlarmState state) {
+    g_trumpet_alarm_state = state;
+
+    debug_print("[GATT_SERVER] setting alarm state to: %d\n", state);
+
+    if (ble_notification_enabled) {
+        att_server_request_can_send_now_event(ble_connection_handle);
+
+        debug_print(
+            "[GATT_SERVER] triggered ble notification for alarm state: %d\n",
+            state);
+    }
 }

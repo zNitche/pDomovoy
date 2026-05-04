@@ -10,7 +10,6 @@
 // should be accessed only from core_0
 
 extern bool g_navigation_blocked;
-extern bool g_alarm_in_standby;
 extern bool g_display_off;
 
 extern uint32_t g_screen_enabled_time;

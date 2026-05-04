@@ -6,7 +6,6 @@
 
 // should be accessed only from core_0
 
-bool g_alarm_in_standby = false;
 bool g_navigation_blocked = false;
 bool g_display_off = false;
 
@@ -26,5 +25,5 @@ bool g_warden_connected = false;
 
 float g_warden_battery_voltage = 0.0;
 char g_warden_version[6] = {0};
-enum AlarmState g_trumpet_alarm_state;
-enum AlarmState g_warden_alarm_state;
+enum AlarmState g_trumpet_alarm_state = ALARM_STATE_NONE;
+enum AlarmState g_warden_alarm_state = ALARM_STATE_NONE;

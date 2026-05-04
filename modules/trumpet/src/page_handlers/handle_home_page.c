@@ -87,7 +87,9 @@ void handle_home_page(SSD1306_Frame* frame) {
     __handle_env_sensors(frame, aht20_readings);
     __handle_batteries(frame);
 
-    if (g_alarm_in_standby) {
+    if (g_trumpet_alarm_state == ALARM_STATE_STANDBY ||
+        g_trumpet_alarm_state == ALARM_STATE_STANDBY_INIT ||
+        g_trumpet_alarm_state == ALARM_STATE_TRIGGERED) {
         ssd1306_insert_bitmap(frame, 88, 20, &bell_icon);
     }
 }
