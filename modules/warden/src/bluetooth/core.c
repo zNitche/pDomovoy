@@ -92,6 +92,26 @@ void pd_start_gatt_action() {
     update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
 }
 
+void pd_bt_sub_for_characteristics_notifications(
+    gatt_client_characteristic_t* characteristic) {
+    ble_service_context.is_notification_listener_active = true;
+
+    gatt_client_listen_for_characteristic_value_updates(
+        &ble_service_context.notification_listener,
+        __pd_handle_gatt_client_event, ble_service_context.connection_handle,
+        characteristic);
+
+    const uint8_t response =
+        gatt_client_write_client_characteristic_configuration(
+            __pd_handle_gatt_client_event,
+            ble_service_context.connection_handle, characteristic,
+            GATT_CLIENT_CHARACTERISTICS_CONFIGURATION_NOTIFICATION);
+
+    debug_print("[pd_bt_sub_for_characteristics_notifications] sent for char: "
+                "0x%04x, status: %d \n",
+                characteristic->uuid16, response);
+}
+
 void init_ble() {
     l2cap_init();
 
@@ -142,7 +162,17 @@ void pd_bt_characteristics_discovery_loop() {
         return;
     }
 
+    if (pd_gatt_trumpet_alarm_state_characteristic.uuid16 == 0) {
+        pd_gatt_get_characteristic(PD_TRUMPET_ALARM_STATE_GATT_CHAR_UUID16,
+                                   &pd_gatt_trumpet_alarm_state_characteristic);
+
+        return;
+    }
+
     update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_READY);
+
+    pd_bt_sub_for_characteristics_notifications(
+        &pd_gatt_trumpet_alarm_state_characteristic);
 
     pd_clear_queue(&g_bt_functions_queue);
     pd_enqueue(&g_bt_functions_queue, pd_bt_send_version_code);

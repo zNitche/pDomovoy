@@ -8,6 +8,8 @@
 typedef struct {
     hci_con_handle_t connection_handle;
     gatt_client_service_t service;
+    bool is_notification_listener_active;
+    gatt_client_notification_t notification_listener;
 } BleServiceContext;
 
 typedef struct {

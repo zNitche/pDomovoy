@@ -1,13 +1,13 @@
 #include "../../includes/bluetooth/hci_handlers.h"
 
-#include "../../includes/bluetooth/handlers.h"
 #include "../../includes/bluetooth/globals.h"
+#include "../../includes/bluetooth/handlers.h"
 #include "../../includes/bluetooth/helpers.h"
 #include "btstack.h"
 #include "pd_common_config.h"
+#include "pdomovoy_common/bluetooth.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/defines.h"
-#include "pdomovoy_common/bluetooth.h"
 #include "pico/stdlib.h"
 
 void __handle_btstack_event_state(uint8_t* packet) {
@@ -53,7 +53,8 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
         debug_print("[BT_HCI_EVENT] connected\n");
 
         gatt_client_discover_primary_services(
-            __pd_handle_gatt_client_event, ble_service_context.connection_handle);
+            __pd_handle_gatt_client_event,
+            ble_service_context.connection_handle);
 
         break;
 
@@ -64,6 +65,13 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
 
 void __handle_hci_event_disconnection_complete(uint8_t* packet) {
     ble_service_context.connection_handle = HCI_CON_HANDLE_INVALID;
+
+    if (ble_service_context.is_notification_listener_active) {
+        ble_service_context.is_notification_listener_active = false;
+        gatt_client_stop_listening_for_characteristic_value_updates(
+            &ble_service_context.notification_listener);
+    }
+
     update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_UNSET);
 
     gap_start_scan();

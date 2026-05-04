@@ -1,7 +1,8 @@
 #include "../../includes/bluetooth/globals.h"
 
 BleServiceContext ble_service_context = {.connection_handle =
-                                             HCI_CON_HANDLE_INVALID};
+                                             HCI_CON_HANDLE_INVALID,
+                                         .is_notification_listener_active = 0};
 btstack_packet_callback_registration_t hci_event_callback_registration;
 
 PdGattCharacteristicDiscoveryContext pd_characteristic_discovery_context;
@@ -13,6 +14,10 @@ gatt_client_characteristic_t pd_gatt_warden_battery_voltage_characteristic = {
 ;
 
 gatt_client_characteristic_t pd_gatt_warden_alarm_state_characteristic = {
+    .uuid16 = 0};
+;
+
+gatt_client_characteristic_t pd_gatt_trumpet_alarm_state_characteristic = {
     .uuid16 = 0};
 ;
 
