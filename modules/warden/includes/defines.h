@@ -4,6 +4,8 @@
 #define DEBUG 0
 #endif
 
+#define PD_WAIT_FOR_ALARM_ARM 10
+
 // pins
 #define PD_ADXL345_SDA_PIN 0
 #define PD_ADXL345_SCL_PIN 1

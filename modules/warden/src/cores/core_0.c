@@ -84,8 +84,8 @@ void _wait_for_alarm_standby() {
     debug_print("[core_0] alarm standby init...\n");
 
     // wait 30s
-    blink_blocking(PD_STATUS_LED_PIN, 30, 1000);
-    enable_alarm_standby();
+    blink_blocking(PD_STATUS_LED_PIN, PD_WAIT_FOR_ALARM_ARM, 1000);
+    arm_alarm();
 
     g_btn_blocked = false;
 }
