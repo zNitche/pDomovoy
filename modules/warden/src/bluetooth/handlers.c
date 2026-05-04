@@ -45,6 +45,34 @@ void __pd_handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
         __handle_gatt_event_query_complete(packet);
         break;
 
+    case GATT_EVENT_NOTIFICATION:
+        hci_con_handle_t value_handle =
+            gatt_event_notification_get_handle(packet);
+
+        uint16_t value_length =
+            gatt_event_notification_get_value_length(packet);
+        const uint8_t* value = gatt_event_notification_get_value(packet);
+
+        debug_print("[GATT_CLIENT] GATT_EVENT_NOTIFICATION %u\n",
+                    value_handle);
+
+        int alarm_state;
+        memcpy(&alarm_state, value, sizeof(int));
+
+        debug_print("[GATT_CLIENT] GATT_EVENT_NOTIFICATION : alarm state %d\n",
+                    alarm_state);
+
+        g_alarm_state = alarm_state;
+
+        // this doesn't match, fix
+        // if (value_handle ==
+        //     pd_gatt_trumpet_alarm_state_characteristic.value_handle) {
+        //     debug_print("[GATT_CLIENT] GATT_EVENT_NOTIFICATION for trumpet's "
+        //                 "alarm state\n");
+        // }
+
+        break;
+
     default:
         break;
     }
