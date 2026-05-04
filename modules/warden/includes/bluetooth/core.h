@@ -18,5 +18,7 @@ void pd_start_gatt_action();
 
 void init_ble();
 
-void pd_bt_queue_processing_loop();
+void pd_bt_process_queue_prio_func(QueueFunction function);
+void pd_bt_process_queue();
+bool pd_bt_queue_processing_loop(repeating_timer_t* timer);
 void pd_bt_characteristics_discovery_loop();

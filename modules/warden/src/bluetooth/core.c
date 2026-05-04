@@ -174,19 +174,26 @@ void pd_bt_characteristics_discovery_loop() {
     pd_bt_sub_for_characteristics_notifications(
         &pd_gatt_trumpet_alarm_state_characteristic);
 
-    pd_clear_queue(&g_bt_functions_queue);
-    pd_enqueue(&g_bt_functions_queue, pd_bt_send_version_code);
+    pd_bt_process_queue_prio_func(pd_bt_send_version_code);
 };
 
-// can be handle via repeating timers but let's do it this way
-void pd_bt_queue_processing_loop() {
-    static const uint32_t interval_ms = 5000;
-    static uint32_t next_runtime = 0;
+void pd_bt_process_queue_prio_func(QueueFunction function) {
+    pd_clear_queue(&g_bt_functions_queue);
+    pd_enqueue(&g_bt_functions_queue, function);
 
-    if (!should_execute_repeating_function(&next_runtime, interval_ms)) {
-        return;
+    pd_bt_process_queue();
+}
+
+void pd_bt_process_queue() {
+    if (pd_gatt_client_state == PD_GATT_CLIENT_STATE_READY) {
+        debug_print("[pd_bt_process_queue] running function\n");
+
+        update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_PROCESSING);
+        pd_move_queue(&g_bt_functions_queue);
     }
+}
 
+bool pd_bt_queue_processing_loop(repeating_timer_t* timer) {
     if (pd_gatt_client_state == PD_GATT_CLIENT_STATE_CHARS_DISCOVERY) {
         debug_print("[pd_bt_queue_processing_loop] characteristics discovery "
                     "in progress returning.\n");
