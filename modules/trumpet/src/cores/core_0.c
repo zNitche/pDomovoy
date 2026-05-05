@@ -39,7 +39,7 @@ void core_0() {
             ssd1306_render(g_ssd1306_i2c, &frame);
         }
 
-        sleep_ms(250);
+        sleep_ms(500);
     }
 
     return;

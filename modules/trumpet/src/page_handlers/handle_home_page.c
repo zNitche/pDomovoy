@@ -7,6 +7,7 @@
 #include "../../includes/bitmaps/thermometer_icon.h"
 #include "../../includes/globals.h"
 #include "../../includes/types.h"
+#include "pdomovoy_common/helpers.h"
 #include "pico/stdlib.h"
 #include "pico_ssd1306/ssd1306.h"
 #include <stdio.h>
@@ -104,10 +105,21 @@ void __handle_alarm_bell(SSD1306_Frame* frame) {
     ssd1306_render_string(frame, 80, 50, alarm_state_str, 1, false);
 }
 
+void __get_aht20_readings(float output[2]) {
+    static const uint32_t interval_ms = 1000;
+    static uint32_t next_runtime = 0;
+
+    if (!should_execute_repeating_function(&next_runtime, interval_ms)) {
+        return;
+    }
+
+    aht20_get_measurements(g_aht20_i2c, output);
+}
+
 void handle_home_page(SSD1306_Frame* frame) {
     static float aht20_readings[2] = {0.0};
 
-    aht20_get_measurements(g_aht20_i2c, aht20_readings);
+    __get_aht20_readings(aht20_readings);
 
     __load_bitmaps();
 
