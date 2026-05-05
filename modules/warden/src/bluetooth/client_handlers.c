@@ -3,6 +3,7 @@
 #include "../../includes/bluetooth/core.h"
 #include "../../includes/bluetooth/globals.h"
 #include "../../includes/bluetooth/helpers.h"
+#include "../../includes/globals.h"
 #include "btstack.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/defines.h"
@@ -73,4 +74,36 @@ void __handle_gatt_event_query_complete(uint8_t* packet) {
             pd_gatt_client_state);
         break;
     }
+}
+
+void __handle_gatt_notification_event(uint8_t* packet) {
+    uint16_t value_handle = gatt_event_notification_get_value_handle(packet);
+
+    debug_print("[GATT_CLIENT] GATT_EVENT_NOTIFICATION 0x%04X\n", value_handle);
+
+    switch (value_handle) {
+    case PD_TRUMPET_ALARM_STATE_GATT_NOTIFICATION_HANDLE:
+        __handle_alarm_state_gatt_notification(packet);
+        break;
+    default:
+        break;
+    }
+}
+
+void __handle_alarm_state_gatt_notification(uint8_t* packet) {
+    uint16_t value_length = gatt_event_notification_get_value_length(packet);
+    const uint8_t* value = gatt_event_notification_get_value(packet);
+
+    int alarm_state;
+    memcpy(&alarm_state, value, sizeof(int));
+
+    if (g_alarm_state == ALARM_STATE_STANDBY &&
+        alarm_state == ALARM_STATE_NONE) {
+        g_alarm_disarm_requested = true;
+    } else {
+        g_alarm_state = alarm_state;
+    }
+
+    debug_print("[GATT_CLIENT] GATT_EVENT_NOTIFICATION : alarm state %d\n",
+                alarm_state);
 }
