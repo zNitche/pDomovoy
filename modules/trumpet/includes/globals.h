@@ -28,7 +28,6 @@ extern bool g_warden_connected;
 
 extern float g_warden_battery_voltage;
 extern char g_warden_version[6];
-extern enum AlarmState g_trumpet_alarm_state;
-extern enum AlarmState g_warden_alarm_state;
+extern enum AlarmState g_alarm_state;
 
 extern uint8_t const profile_data[];

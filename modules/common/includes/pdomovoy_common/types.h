@@ -23,9 +23,9 @@ typedef struct {
 
 enum AlarmState {
     ALARM_STATE_NONE,
-    ALARM_STATE_TRIGGERED,
     ALARM_STATE_STANDBY,
     ALARM_STATE_STANDBY_INIT,
+    ALARM_STATE_TRIGGERED,
 };
 
 typedef struct {

@@ -25,5 +25,5 @@ bool g_warden_connected = false;
 
 float g_warden_battery_voltage = 0.0;
 char g_warden_version[6] = {0};
-enum AlarmState g_trumpet_alarm_state = ALARM_STATE_NONE;
-enum AlarmState g_warden_alarm_state = ALARM_STATE_NONE;
+
+enum AlarmState g_alarm_state = ALARM_STATE_NONE;

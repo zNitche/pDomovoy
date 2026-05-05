@@ -41,12 +41,12 @@ void __pd_client_state_cleanup() {
     g_warden_connected = false;
 
     g_warden_battery_voltage = 0;
-    g_warden_alarm_state = ALARM_STATE_NONE;
+    g_alarm_state = ALARM_STATE_NONE;
     memset(g_warden_version, 0, sizeof(g_warden_version));
 }
 
 void toggle_alarm_state(enum AlarmState state) {
-    g_trumpet_alarm_state = state;
+    g_alarm_state = state;
 
     debug_print("[GATT_SERVER] setting alarm state to: %d\n", state);
 

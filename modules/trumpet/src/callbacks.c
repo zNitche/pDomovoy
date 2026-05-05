@@ -63,18 +63,20 @@ void apply_button_callback(uint32_t event) {
 
     extend_screen_display_time();
 
-    switch (g_trumpet_alarm_state) {
-    case (ALARM_STATE_NONE):
-        toggle_alarm_state(ALARM_STATE_STANDBY_INIT);
-        break;
+    if (g_warden_connected) {
+        switch (g_alarm_state) {
+        case (ALARM_STATE_NONE):
+            toggle_alarm_state(ALARM_STATE_STANDBY_INIT);
+            break;
 
-    case (ALARM_STATE_STANDBY):
-    case (ALARM_STATE_TRIGGERED):
-        toggle_alarm_state(ALARM_STATE_NONE);
-        break;
+        case (ALARM_STATE_STANDBY):
+        case (ALARM_STATE_TRIGGERED):
+            toggle_alarm_state(ALARM_STATE_NONE);
+            break;
 
-    default:
-        break;
+        default:
+            break;
+        }
     }
 
     debug_print("apply button click\n");

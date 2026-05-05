@@ -76,7 +76,7 @@ uint16_t __pd_att_read_callback(hci_con_handle_t connection_handle,
     switch (att_handle) {
     case ATT_CHARACTERISTIC_00001104_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
         static uint8_t alarm_state_buff[sizeof(int)];
-        int alarm_state = g_trumpet_alarm_state;
+        int alarm_state = g_alarm_state;
 
         memcpy(alarm_state_buff, &alarm_state, sizeof(alarm_state_buff));
 
@@ -101,8 +101,8 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
 
     switch (att_handle) {
     case ATT_CHARACTERISTIC_00001101_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
-        g_warden_connected = true;
         memcpy(&g_warden_version, buffer, sizeof(g_warden_version));
+        g_warden_connected = true;
 
         debug_print("[GATT_SERVER] got warden's version: %s\n",
                     g_warden_version);
@@ -124,7 +124,7 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
         int alarm_state;
         memcpy(&alarm_state, buffer, sizeof(int));
 
-        g_trumpet_alarm_state = alarm_state;
+        g_alarm_state = alarm_state;
 
         debug_print("[GATT_SERVER] got warden's alarm_state: %d\n",
                     alarm_state);
@@ -156,7 +156,7 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
 
 void __pd_send_trumpets_alarm_state_notification() {
     static uint8_t alarm_state_buff[sizeof(int)];
-    int alarm_state = g_trumpet_alarm_state;
+    int alarm_state = g_alarm_state;
 
     memcpy(alarm_state_buff, &alarm_state, sizeof(alarm_state_buff));
 
