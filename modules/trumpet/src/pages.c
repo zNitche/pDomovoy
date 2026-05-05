@@ -15,8 +15,7 @@ const PageData pages[] = {home_page, versions_page};
 
 PageData* get_current_page() { return &pages[g_current_page_id]; };
 
-// PageSwitchDirection
-void switch_page(int direction) {
+void switch_page(enum PageSwitchDirection direction) {
     const int pages_count = count_of(pages);
     const int max_page_id = pages_count - 1;
 

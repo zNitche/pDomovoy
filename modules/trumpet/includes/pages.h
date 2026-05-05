@@ -6,4 +6,4 @@
 extern const PageData pages[];
 
 PageData* get_current_page();
-void switch_page(int direction);
+void switch_page(enum PageSwitchDirection direction);
