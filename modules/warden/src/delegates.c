@@ -38,6 +38,9 @@ void disarm_alarm() {
     g_detected_low_battery_voltage = false;
     multicore_reset_core1();
 
+    queue_free(&g_core0_events_queue);
+    queue_free(&g_core1_events_queue);
+
     set_alarm_state(ALARM_STATE_NONE);
 
     debug_print("[AlarmState] disabled triggered alarm\n");
