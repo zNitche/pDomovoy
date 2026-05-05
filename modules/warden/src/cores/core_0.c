@@ -83,7 +83,6 @@ void _wait_for_alarm_standby() {
 
     debug_print("[core_0] alarm standby init...\n");
 
-    // wait 30s
     blink_blocking(PD_STATUS_LED_PIN, PD_WAIT_FOR_ALARM_ARM, 1000);
     arm_alarm();
 
@@ -139,6 +138,14 @@ void core_0() {
             continue;
         }
 
+        // handle disarm via trumpet
+        if (g_alarm_disarm_requested) {
+            debug_print("[core_0] alarm disarm requested\n");
+
+            g_alarm_disarm_requested = false;
+            disarm_alarm();
+        }
+
         if (g_alarm_state == ALARM_STATE_STANDBY_INIT) {
             _wait_for_alarm_standby();
             continue;
@@ -154,7 +161,7 @@ void core_0() {
             enable_pwm_irq_on_pin(PD_BUZZER_PIN);
 
             while (g_alarm_state == ALARM_STATE_TRIGGERED) {
-                sleep_ms(250);
+                sleep_ms(500);
             }
 
             disable_pwm_irq_on_pin(PD_BUZZER_PIN);

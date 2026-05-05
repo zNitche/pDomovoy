@@ -22,7 +22,7 @@ void _action_for_continous_clicks(int* clicks) {
     switch (*clicks) {
     case CONTINOUS_CLICKS_TO_DISABLE_ALARM:
         *clicks = 0;
-        disable_triggered_alarm();
+        disarm_alarm();
 
         break;
 

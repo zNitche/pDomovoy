@@ -215,7 +215,7 @@ bool pd_bt_queue_processing_loop(repeating_timer_t* timer) {
 };
 
 void pd_start_bt_queue_processing_loop_bg(repeating_timer_t* timer) {
-    add_repeating_timer_ms(-1500, pd_bt_queue_processing_loop, NULL, timer);
+    add_repeating_timer_ms(-3000, pd_bt_queue_processing_loop, NULL, timer);
 }
 
 void pd_stop_bt_queue_processing_loop_bg(repeating_timer_t* timer) {

@@ -6,6 +6,7 @@
 // should be accessed only from core_0
 
 enum AlarmState g_alarm_state = ALARM_STATE_NONE;
+bool g_alarm_disarm_requested = false;
 
 bool g_btn_blocked = false;
 
