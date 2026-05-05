@@ -5,7 +5,7 @@
 #endif
 
 // display
-#define PD_SCREEN_SAVER_AFTER 10000
+#define PD_SCREEN_SAVER_AFTER 20000
 
 // pins
 #define PD_PREVIOUS_BUTTON_PIN 15
