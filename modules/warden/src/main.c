@@ -62,11 +62,10 @@ int main() {
     debug_print("[pD - WARDEN] %s\n", WARDEN_VERSION);
 
     adc_init();
+    start_voltmeter_bg();
 
     init_peripherals();
     init_mc_queues();
-
-    start_voltmeter_bg();
 
     pd_init_queue(&g_bt_functions_queue, 5);
 

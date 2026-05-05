@@ -6,6 +6,6 @@ void _send_details_to_trumpet();
 int _is_battery_voltage_low();
 void _check_battery_level();
 void _wait_for_alarm_standby();
-void _process_event(MulticoreEvent* event);
-
+void _process_mc_event(MulticoreEvent* event);
+void _handle_alarm_state();
 void core_0();

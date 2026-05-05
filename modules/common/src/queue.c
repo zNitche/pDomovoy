@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// probably redundant pico-sdk has it's own queue.h
 void pd_init_queue(FunctionsQueue* queue, int max_items) {
     queue->max_items = max_items;
     queue->count = 0;

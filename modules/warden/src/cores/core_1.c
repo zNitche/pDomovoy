@@ -21,7 +21,7 @@ void _send_event_to_core_0(enum DeviceStatus status) {
 
 void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c,
                              AccelerometerReading* output) {
-    const size_t readings_count = 10;
+    const size_t readings_count = 15;
     AccelerometerReading total_accel[readings_count] = {};
 
     get_bunch_of_accel_readings(adxl345_i2c, total_accel, readings_count, 200);
@@ -44,7 +44,7 @@ bool _check_for_trigger_for_axis(float initial_mean, float mean,
 bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
                               AccelerometerReading* initial_accel_mean) {
     const size_t readings_count = 10;
-    const float trigger_factor = 0.2;
+    const float trigger_factor = 0.1;
 
     AccelerometerReading total_accel[readings_count];
 
@@ -114,9 +114,8 @@ void core_1() {
         }
     }
 
-    debug_print("[core_1] exiting...\n");
-
     adxl345_stop_measurements(adxl345_i2c);
+    debug_print("[core_1] exiting...\n");
 
     return;
 }

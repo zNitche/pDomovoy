@@ -89,7 +89,7 @@ void _wait_for_alarm_standby() {
     g_btn_blocked = false;
 }
 
-void _process_event(MulticoreEvent* event) {
+void _process_mc_event(MulticoreEvent* event) {
     switch (event->status) {
     case PD_ADXL345_OK:
         blink_status_untill_stop(&g_status_led_blink_timer);
@@ -124,6 +124,36 @@ void _process_event(MulticoreEvent* event) {
     event->status = 0;
 }
 
+void _handle_alarm_state() {
+    // handle disarm via trumpet
+    if (g_alarm_disarm_requested) {
+        debug_print("[core_0] alarm disarm requested\n");
+
+        g_alarm_disarm_requested = false;
+        disarm_alarm();
+    }
+
+    if (g_alarm_state == ALARM_STATE_STANDBY_INIT) {
+        _wait_for_alarm_standby();
+    }
+
+    if (g_alarm_state == ALARM_STATE_NONE) {
+        _check_battery_level();
+    }
+
+    if (g_alarm_state == ALARM_STATE_TRIGGERED) {
+        debug_print("[core_0] alarm triggered\n");
+
+        enable_pwm_irq_on_pin(PD_BUZZER_PIN);
+
+        while (g_alarm_state == ALARM_STATE_TRIGGERED) {
+            sleep_ms(500);
+        }
+
+        disable_pwm_irq_on_pin(PD_BUZZER_PIN);
+    }
+}
+
 void core_0() {
     MulticoreEvent event_item;
 
@@ -134,38 +164,11 @@ void core_0() {
             queue_try_remove(&g_core0_events_queue, &event_item);
 
         if (got_event) {
-            _process_event(&event_item);
+            _process_mc_event(&event_item);
             continue;
         }
 
-        // handle disarm via trumpet
-        if (g_alarm_disarm_requested) {
-            debug_print("[core_0] alarm disarm requested\n");
-
-            g_alarm_disarm_requested = false;
-            disarm_alarm();
-        }
-
-        if (g_alarm_state == ALARM_STATE_STANDBY_INIT) {
-            _wait_for_alarm_standby();
-            continue;
-        }
-
-        if (g_alarm_state == ALARM_STATE_NONE) {
-            _check_battery_level();
-        }
-
-        if (g_alarm_state == ALARM_STATE_TRIGGERED) {
-            debug_print("[core_0] alarm triggered\n");
-
-            enable_pwm_irq_on_pin(PD_BUZZER_PIN);
-
-            while (g_alarm_state == ALARM_STATE_TRIGGERED) {
-                sleep_ms(500);
-            }
-
-            disable_pwm_irq_on_pin(PD_BUZZER_PIN);
-        }
+        _handle_alarm_state();
 
         pd_bt_characteristics_discovery_loop();
         _send_details_to_trumpet();
