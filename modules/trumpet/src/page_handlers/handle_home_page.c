@@ -10,6 +10,7 @@
 #include "pico/stdlib.h"
 #include "pico_ssd1306/ssd1306.h"
 #include <stdio.h>
+#include <string.h>
 
 SSD1306_Bitmap thermometer_icon = {.width = 8, .height = 8, .data = NULL};
 SSD1306_Bitmap humidity_icon = {.width = 8, .height = 8, .data = NULL};
@@ -77,6 +78,32 @@ void __handle_batteries(SSD1306_Frame* frame) {
     }
 }
 
+void __handle_alarm_bell(SSD1306_Frame* frame) {
+    if (g_alarm_state != ALARM_STATE_STANDBY &&
+        g_alarm_state != ALARM_STATE_STANDBY_INIT &&
+        g_alarm_state != ALARM_STATE_TRIGGERED) {
+        return;
+    }
+
+    char alarm_state_str[6];
+
+    ssd1306_insert_bitmap(frame, 88, 15, &bell_icon);
+
+    if (g_alarm_state == ALARM_STATE_STANDBY_INIT) {
+        strcpy(alarm_state_str, "SBY_I");
+    }
+
+    if (g_alarm_state == ALARM_STATE_STANDBY) {
+        strcpy(alarm_state_str, "STDBY");
+    }
+
+    if (g_alarm_state == ALARM_STATE_TRIGGERED) {
+        strcpy(alarm_state_str, "TRIGG");
+    }
+
+    ssd1306_render_string(frame, 80, 50, alarm_state_str, 1, false);
+}
+
 void handle_home_page(SSD1306_Frame* frame) {
     static float aht20_readings[2] = {0.0};
 
@@ -86,10 +113,5 @@ void handle_home_page(SSD1306_Frame* frame) {
 
     __handle_env_sensors(frame, aht20_readings);
     __handle_batteries(frame);
-
-    if (g_trumpet_alarm_state == ALARM_STATE_STANDBY ||
-        g_trumpet_alarm_state == ALARM_STATE_STANDBY_INIT ||
-        g_trumpet_alarm_state == ALARM_STATE_TRIGGERED) {
-        ssd1306_insert_bitmap(frame, 88, 20, &bell_icon);
-    }
+    __handle_alarm_bell(frame);
 }
