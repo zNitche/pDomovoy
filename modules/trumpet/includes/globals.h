@@ -29,6 +29,8 @@ extern uint32_t g_warden_connected_timestamp;
 
 extern float g_warden_battery_voltage;
 extern char g_warden_version[6];
+
 extern enum AlarmState g_alarm_state;
+extern uint32_t g_alarm_armed_timestamp;
 
 extern uint8_t const profile_data[];

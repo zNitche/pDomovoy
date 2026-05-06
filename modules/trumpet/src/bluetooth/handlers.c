@@ -129,6 +129,17 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
 
         g_alarm_state = alarm_state;
 
+        if (g_alarm_state == ALARM_STATE_NONE) {
+            g_alarm_armed_timestamp = 0;
+        }
+
+        if (g_alarm_state == ALARM_STATE_STANDBY_INIT ||
+            g_alarm_state == ALARM_STATE_STANDBY) {
+            if (g_alarm_armed_timestamp == 0) {
+                g_alarm_armed_timestamp = to_ms_since_boot(get_absolute_time());
+            }
+        }
+
         debug_print("[GATT_SERVER] got warden's alarm_state: %d\n",
                     alarm_state);
         break;
