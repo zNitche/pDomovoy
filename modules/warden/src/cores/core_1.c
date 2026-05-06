@@ -31,20 +31,14 @@ void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c,
 
 bool _check_for_trigger_for_axis(float initial_mean, float mean,
                                  float trigger_factor) {
-    const bool are_axis_different =
-        (initial_mean < 0 && mean > 0) || (initial_mean > 0 && mean < 0);
 
-    if (are_axis_different) {
-        return true;
-    }
-
-    return fabs(fabs(initial_mean) - fabs(mean)) > trigger_factor;
+    return fabs(initial_mean - mean) > trigger_factor;
 }
 
 bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
                               AccelerometerReading* initial_accel_mean) {
-    const size_t readings_count = 20;
-    const float trigger_factor = 0.3;
+    const size_t readings_count = 15;
+    const float trigger_factor = 0.2;
 
     AccelerometerReading total_accel[readings_count];
 
