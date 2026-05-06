@@ -6,6 +6,7 @@
 #include "btstack.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pico/stdlib.h"
+#include "pico/time.h"
 #include "trumpet_core_gatt.h"
 #include <stdio.h>
 
@@ -102,7 +103,9 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
     switch (att_handle) {
     case ATT_CHARACTERISTIC_00001101_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
         memcpy(&g_warden_version, buffer, sizeof(g_warden_version));
+
         g_warden_connected = true;
+        g_warden_connected_timestamp = to_ms_since_boot(get_absolute_time());
 
         debug_print("[GATT_SERVER] got warden's version: %s\n",
                     g_warden_version);

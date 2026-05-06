@@ -22,6 +22,7 @@ float g_battery_voltage = 0.0;
 repeating_timer_t g_adc_voltmeter_timer;
 
 bool g_warden_connected = false;
+uint32_t g_warden_connected_timestamp = 0;
 
 float g_warden_battery_voltage = 0.0;
 char g_warden_version[6] = {0};

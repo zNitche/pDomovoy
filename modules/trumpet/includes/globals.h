@@ -25,6 +25,7 @@ extern float g_battery_voltage;
 extern repeating_timer_t g_adc_voltmeter_timer;
 
 extern bool g_warden_connected;
+extern uint32_t g_warden_connected_timestamp;
 
 extern float g_warden_battery_voltage;
 extern char g_warden_version[6];
