@@ -8,8 +8,8 @@
 #include <stdio.h>
 
 void handle_versions_page(SSD1306_Frame* frame) {
-    char trumpet_version_str[10];
-    char warden_version_str[10];
+    static char trumpet_version_str[10];
+    static char warden_version_str[10];
 
     snprintf(trumpet_version_str, sizeof(trumpet_version_str), "@T %s",
              TRUMPET_VERSION);
