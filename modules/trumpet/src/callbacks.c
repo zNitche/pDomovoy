@@ -48,6 +48,9 @@ void previous_button_callback(uint32_t event) {
 }
 
 void apply_button_callback(uint32_t event) {
+    static PageData current_page;
+    current_page = *get_current_page();
+
     static ButtonDebounceCtx button_debounce_ctx = {.is_pressed = false,
                                                     .last_call = 0};
 
@@ -64,18 +67,20 @@ void apply_button_callback(uint32_t event) {
     extend_screen_display_time();
 
     if (g_warden_connected) {
-        switch (g_alarm_state) {
-        case (ALARM_STATE_NONE):
-            toggle_alarm_state(ALARM_STATE_STANDBY_INIT);
-            break;
+        if (current_page.id == 0) {
+            switch (g_alarm_state) {
+            case (ALARM_STATE_NONE):
+                toggle_alarm_state(ALARM_STATE_STANDBY_INIT);
+                break;
 
-        case (ALARM_STATE_STANDBY):
-        case (ALARM_STATE_TRIGGERED):
-            toggle_alarm_state(ALARM_STATE_NONE);
-            break;
+            case (ALARM_STATE_STANDBY):
+            case (ALARM_STATE_TRIGGERED):
+                toggle_alarm_state(ALARM_STATE_NONE);
+                break;
 
-        default:
-            break;
+            default:
+                break;
+            }
         }
     }
 
