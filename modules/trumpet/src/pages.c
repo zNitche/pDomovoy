@@ -4,6 +4,7 @@
 #include "../includes/types.h"
 
 #include "../includes/page_handlers/handle_home_page.h"
+#include "../includes/page_handlers/handle_time_stats_page.h"
 #include "../includes/page_handlers/handle_versions_page.h"
 
 const PageData home_page = {.title = "pDomovoy", .handler = handle_home_page};
@@ -11,7 +12,10 @@ const PageData home_page = {.title = "pDomovoy", .handler = handle_home_page};
 const PageData versions_page = {.title = "versions",
                                 .handler = handle_versions_page};
 
-const PageData pages[] = {home_page, versions_page};
+const PageData time_stats_page = {.title = "time stats",
+                                  .handler = handle_time_stats_page};
+
+const PageData pages[] = {home_page, time_stats_page, versions_page};
 
 PageData* get_current_page() { return &pages[g_current_page_id]; };
 
