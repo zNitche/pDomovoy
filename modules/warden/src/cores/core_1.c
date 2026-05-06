@@ -43,7 +43,7 @@ bool _check_for_trigger_for_axis(float initial_mean, float mean,
 
 bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
                               AccelerometerReading* initial_accel_mean) {
-    const size_t readings_count = 10;
+    const size_t readings_count = 20;
     const float trigger_factor = 0.3;
 
     AccelerometerReading total_accel[readings_count];
@@ -52,19 +52,26 @@ bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
     AccelerometerReading accel_mean =
         get_accel_readings_mean(total_accel, readings_count);
 
-    const bool is_x_triggered = _check_for_trigger_for_axis(
-        initial_accel_mean->x, accel_mean.x, trigger_factor);
+    bool is_triggered = false;
 
-    const bool is_y_triggered = _check_for_trigger_for_axis(
-        initial_accel_mean->y, accel_mean.y, trigger_factor);
+    is_triggered = _check_for_trigger_for_axis(initial_accel_mean->x,
+                                               accel_mean.x, trigger_factor);
 
-    const bool is_z_triggered = _check_for_trigger_for_axis(
-        initial_accel_mean->z, accel_mean.z, trigger_factor);
+    if (is_triggered) {
+        return true;
+    }
 
-    if (is_x_triggered || is_y_triggered || is_z_triggered) {
-        debug_print("trigger accel mean = x:%f y:%f z:%f\n", accel_mean.x,
-                    accel_mean.y, accel_mean.z);
+    is_triggered = _check_for_trigger_for_axis(initial_accel_mean->y,
+                                               accel_mean.y, trigger_factor);
 
+    if (is_triggered) {
+        return true;
+    }
+
+    is_triggered = _check_for_trigger_for_axis(initial_accel_mean->z,
+                                               accel_mean.z, trigger_factor);
+
+    if (is_triggered) {
         return true;
     }
 
@@ -107,8 +114,8 @@ void core_1() {
 
     while (true) {
         if (_check_for_alarm_trigger(&adxl345_i2c, &initial_accel_mean)) {
-            debug_print("[core_1] alarm trigger\n");
             _send_event_to_core_0(PD_ACCELERATION_TRIGGER);
+            debug_print("[core_1] alarm trigger\n");
 
             break;
         }
