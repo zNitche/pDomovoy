@@ -26,16 +26,14 @@ void arm_alarm() {
     if (g_alarm_state != ALARM_STATE_STANDBY) {
         multicore_launch_core1(core_1);
 
-        g_alarm_disarm_requested = false;
+        g_alarm_armed = true;
         set_alarm_state(ALARM_STATE_STANDBY);
 
-        debug_print("[AlarmState] enabled alarm standby\n");
+        debug_print("[AlarmState] armed alarm\n");
     }
 }
 
 void disarm_alarm() {
-    // reset on disarm
-    g_detected_low_battery_voltage = false;
     multicore_reset_core1();
 
     queue_free(&g_core0_events_queue);
@@ -43,5 +41,8 @@ void disarm_alarm() {
 
     set_alarm_state(ALARM_STATE_NONE);
 
-    debug_print("[AlarmState] disabled triggered alarm\n");
+    g_detected_low_battery_voltage = false;
+    g_alarm_armed = false;
+
+    debug_print("[AlarmState] disarmed alarm\n");
 }

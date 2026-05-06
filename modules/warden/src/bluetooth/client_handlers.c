@@ -97,13 +97,8 @@ void __handle_alarm_state_gatt_notification(uint8_t* packet) {
     int alarm_state;
     memcpy(&alarm_state, value, sizeof(int));
 
-    if (g_alarm_state == ALARM_STATE_STANDBY &&
-        alarm_state == ALARM_STATE_NONE) {
-        g_alarm_disarm_requested = true;
-    } else {
-        g_alarm_state = alarm_state;
-    }
+    g_alarm_state = alarm_state;
 
     debug_print("[GATT_CLIENT] GATT_EVENT_NOTIFICATION : alarm state %d\n",
-                alarm_state);
+                g_alarm_state);
 }

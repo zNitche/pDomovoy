@@ -125,20 +125,17 @@ void _process_mc_event(MulticoreEvent* event) {
 }
 
 void _handle_alarm_state() {
-    // handle disarm via trumpet
-    if (g_alarm_disarm_requested) {
-        debug_print("[core_0] alarm disarm requested\n");
+    if (g_alarm_state == ALARM_STATE_NONE) {
+        // ALARM_STATE_NONE set via ble callback
+        if (g_alarm_armed) {
+            disarm_alarm();
+        }
 
-        g_alarm_disarm_requested = false;
-        disarm_alarm();
+        _check_battery_level();
     }
 
     if (g_alarm_state == ALARM_STATE_STANDBY_INIT) {
         _wait_for_alarm_standby();
-    }
-
-    if (g_alarm_state == ALARM_STATE_NONE) {
-        _check_battery_level();
     }
 
     if (g_alarm_state == ALARM_STATE_TRIGGERED) {
@@ -150,6 +147,7 @@ void _handle_alarm_state() {
             sleep_ms(500);
         }
 
+        disarm_alarm();
         disable_pwm_irq_on_pin(PD_BUZZER_PIN);
     }
 }

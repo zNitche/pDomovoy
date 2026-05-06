@@ -8,7 +8,7 @@
 // should be accessed only from core_0
 
 extern enum AlarmState g_alarm_state;
-extern bool g_alarm_disarm_requested;
+extern bool g_alarm_armed;
 
 extern bool g_btn_blocked;
 
