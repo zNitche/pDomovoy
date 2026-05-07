@@ -31,7 +31,7 @@ void __handle_gap_event_advertising_report(uint8_t* packet) {
     bd_addr_t server_address;
     parse_mac_address(server_address, PD_SERVER_BT_MAC);
 
-    if (memcmp(address, server_address, 6) == 0) {
+    if (are_mac_adresses_the_same(address, server_address)) {
         debug_print("[BT_HCI_EVENT] target found, connecting...\n");
 
         gap_stop_scan();
