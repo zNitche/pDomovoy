@@ -12,11 +12,13 @@
 
 void init_ble() {
     l2cap_init();
-    sm_init();
 
-    gatt_client_set_required_security_level(LEVEL_2);
-    sm_set_authentication_requirements(SM_AUTHREQ_BONDING |
-                                       SM_AUTHREQ_SECURE_CONNECTION);
+    sm_init();
+    sm_set_io_capabilities(IO_CAPABILITY_NO_INPUT_NO_OUTPUT);
+    sm_set_authentication_requirements(SM_AUTHREQ_SECURE_CONNECTION |
+                                       SM_AUTHREQ_BONDING);
+
+    gatt_client_set_required_security_level(LEVEL_4);
 
     att_server_init(profile_data, __pd_att_read_callback,
                     __pd_att_write_callback);
