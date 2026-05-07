@@ -55,8 +55,8 @@ void __handle_env_sensors(SSD1306_Frame* frame, float aht20_readings[2]) {
     ssd1306_render_string(frame, 10, 12, temp_str, 2, false);
     ssd1306_insert_bitmap(frame, 31, 12, &celcius_degree_icon);
 
-    ssd1306_insert_bitmap(frame, 0, 22, &humidity_icon);
-    ssd1306_render_string(frame, 10, 22, humidity_str, 2, false);
+    ssd1306_insert_bitmap(frame, 0, 24, &humidity_icon);
+    ssd1306_render_string(frame, 10, 24, humidity_str, 2, false);
 }
 
 void __handle_batteries(SSD1306_Frame* frame) {
@@ -66,15 +66,15 @@ void __handle_batteries(SSD1306_Frame* frame) {
     snprintf(trumpet_battery_voltage_str, sizeof(trumpet_battery_voltage_str),
              "@T %.1fV", g_battery_voltage);
 
-    ssd1306_insert_bitmap(frame, 0, 34, &battery_icon);
-    ssd1306_render_string(frame, 10, 34, trumpet_battery_voltage_str, 1, false);
+    ssd1306_insert_bitmap(frame, 0, 36, &battery_icon);
+    ssd1306_render_string(frame, 10, 36, trumpet_battery_voltage_str, 1, false);
 
     if (g_warden_connected) {
         snprintf(warden_battery_voltage_str, sizeof(warden_battery_voltage_str),
                  "@W %.1fV", g_warden_battery_voltage);
 
-        ssd1306_insert_bitmap(frame, 0, 46, &battery_icon);
-        ssd1306_render_string(frame, 10, 46, warden_battery_voltage_str, 1,
+        ssd1306_insert_bitmap(frame, 0, 48, &battery_icon);
+        ssd1306_render_string(frame, 10, 48, warden_battery_voltage_str, 1,
                               false);
     }
 }

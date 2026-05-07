@@ -20,6 +20,6 @@ void handle_versions_page(SSD1306_Frame* frame) {
         snprintf(warden_version_str, sizeof(warden_version_str), "@W %s",
                  g_warden_version);
 
-        ssd1306_render_string(frame, 0, 26, warden_version_str, 1, false);
+        ssd1306_render_string(frame, 0, 34, warden_version_str, 1, false);
     }
 }
