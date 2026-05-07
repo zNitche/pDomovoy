@@ -4,6 +4,8 @@
 #include "../../includes/bluetooth/helpers.h"
 #include "../../includes/globals.h"
 #include "btstack.h"
+#include "pd_common_config.h"
+#include "pdomovoy_common/bluetooth.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pico/stdlib.h"
 #include "pico/time.h"
@@ -36,6 +38,25 @@ void __pd_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
     case HCI_EVENT_LE_META:
         switch (hci_event_le_meta_get_subevent_code(packet)) {
         case HCI_SUBEVENT_LE_CONNECTION_COMPLETE:
+            bd_addr_t remote_addr;
+            gap_subevent_le_connection_complete_get_peer_address(packet,
+                                                                 remote_addr);
+
+            bd_addr_t warden_address;
+            parse_mac_address(warden_address, PD_CLIENT_BT_MAC);
+
+            if (memcmp(remote_addr, warden_address, 6) != 0) {
+                hci_con_handle_t connection_handle =
+                    gap_subevent_le_connection_complete_get_connection_handle(
+                        packet);
+
+                gap_disconnect(connection_handle);
+
+                debug_print(
+                    "[GATT_SERVER] client's MAC mismatch, disconnecting\n");
+                return;
+            }
+
             gap_advertisements_enable(0);
             debug_print("[GATT_SERVER] client connected \n");
             break;
