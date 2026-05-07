@@ -65,10 +65,6 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
 }
 
 void __handle_hci_event_disconnection_complete(uint8_t* packet) {
-    if (g_alarm_armed) {
-        g_alarm_state = ALARM_STATE_TRIGGERED;
-    }
-
     ble_service_context.connection_handle = HCI_CON_HANDLE_INVALID;
 
     if (ble_service_context.is_notification_listener_active) {
@@ -79,7 +75,11 @@ void __handle_hci_event_disconnection_complete(uint8_t* packet) {
 
     update_pd_gatt_client_state(PD_GATT_CLIENT_STATE_UNSET);
 
-    gap_start_scan();
+    if (g_alarm_armed) {
+        g_alarm_state = ALARM_STATE_TRIGGERED;
+    } else {
+        gap_start_scan();
+    }
 
     debug_print("[BT_HCI_EVENT] disconnected\n");
 }
