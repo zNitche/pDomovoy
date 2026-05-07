@@ -3,6 +3,7 @@
 #include "../../includes/bluetooth/globals.h"
 #include "../../includes/bluetooth/handlers.h"
 #include "../../includes/bluetooth/helpers.h"
+#include "../../includes/globals.h"
 #include "btstack.h"
 #include "pd_common_config.h"
 #include "pdomovoy_common/bluetooth.h"
@@ -64,6 +65,10 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
 }
 
 void __handle_hci_event_disconnection_complete(uint8_t* packet) {
+    if (g_alarm_armed) {
+        g_alarm_state = ALARM_STATE_TRIGGERED;
+    }
+
     ble_service_context.connection_handle = HCI_CON_HANDLE_INVALID;
 
     if (ble_service_context.is_notification_listener_active) {
