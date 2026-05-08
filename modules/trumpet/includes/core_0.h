@@ -5,3 +5,4 @@
 
 void core_0();
 void process_current_page(SSD1306_Frame* frame);
+void handle_alarm_buzzer();

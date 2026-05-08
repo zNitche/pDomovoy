@@ -7,6 +7,7 @@
 #include "../../includes/pages.h"
 #include "../../includes/types.h"
 #include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/pwm.h"
 #include <stdio.h>
 
 void process_current_page(SSD1306_Frame* frame) {
@@ -21,6 +22,20 @@ void process_current_page(SSD1306_Frame* frame) {
     }
 }
 
+void handle_alarm_buzzer() {
+    if (g_alarm_state == ALARM_STATE_TRIGGERED) {
+        if (!g_alarm_buzzer_on) {
+            enable_pwm_irq_on_pin(PD_BUZZER_PIN);
+            g_alarm_buzzer_on = true;
+        }
+    } else {
+        if (g_alarm_buzzer_on) {
+            disable_pwm_irq_on_pin(PD_BUZZER_PIN);
+            g_alarm_buzzer_on = false;
+        }
+    }
+}
+
 void core_0() {
     debug_print("[core_0] started, waiting\n");
 
@@ -32,6 +47,9 @@ void core_0() {
     SSD1306_Frame frame;
 
     while (true) {
+        handle_alarm_buzzer();
+
+        // handle display
         if (!g_display_off) {
             ssd1306_prepare_frame(&frame);
 

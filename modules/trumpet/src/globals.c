@@ -27,5 +27,7 @@ uint32_t g_warden_connected_timestamp = 0;
 float g_warden_battery_voltage = 0.0;
 char g_warden_version[6] = {0};
 
+bool g_alarm_buzzer_on = false;
+
 enum AlarmState g_alarm_state = ALARM_STATE_NONE;
 uint32_t g_alarm_armed_timestamp = 0;
