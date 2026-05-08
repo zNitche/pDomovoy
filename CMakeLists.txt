@@ -45,8 +45,8 @@ pico_enable_stdio_uart(trumpet 0)
 target_compile_definitions(warden PUBLIC DEBUG="${DEBUG}")
 target_compile_definitions(trumpet PUBLIC DEBUG="${DEBUG}")
 
-string(REPLACE ";" "," PD_CLIENT_BT_MAC_STRING "${PD_CLIENT_BT_MAC}")
-string(REPLACE ";" "," PD_SERVER_BT_MAC_STRING "${PD_SERVER_BT_MAC}")
+string(REPLACE ";" "," PD_WARDEN_BT_MAC_STRING "${PD_WARDEN_BT_MAC}")
+string(REPLACE ";" "," PD_TRUMPET_BT_MAC_STRING "${PD_TRUMPET_BT_MAC}")
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/configuration_files/pd_common_config.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/generated/pd_common_config.h

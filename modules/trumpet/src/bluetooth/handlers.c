@@ -43,7 +43,7 @@ void __pd_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
                                                                  remote_addr);
 
             bd_addr_t warden_address;
-            parse_mac_address(warden_address, PD_CLIENT_BT_MAC);
+            parse_mac_address(warden_address, PD_WARDEN_BT_MAC);
 
             if (!are_mac_adresses_the_same(remote_addr, warden_address)) {
                 hci_con_handle_t connection_handle =
