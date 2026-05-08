@@ -1,2 +1,3 @@
+static const unsigned int PD_WARDEN_BT_MODE_ENABLED = @PD_WARDEN_BT_MODE_ENABLED@;
 static const unsigned int PD_CLIENT_BT_MAC[] = {@PD_CLIENT_BT_MAC_STRING@};
 static const unsigned int PD_SERVER_BT_MAC[] = {@PD_SERVER_BT_MAC_STRING@};
