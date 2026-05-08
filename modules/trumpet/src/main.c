@@ -17,6 +17,9 @@
 #include "pico/stdlib.h"
 
 void init_gpio_peripherals() {
+     // BUZZER
+    set_pwm_irq_callback(PD_BUZZER_PIN, alarm_buzzer_irq_callback);
+
     // NAVIGATION BUTTONS
     init_button_irq(PD_PREVIOUS_BUTTON_PIN, true);
     init_button_irq(PD_APPLY_BUTTON_PIN, true);

@@ -13,9 +13,9 @@
 #define PD_NEXT_BUTTON_PIN 14
 #define PD_VOLTMETER_ADC_PIN 28
 #define PD_VOLTMETER_ADC_ID 2
+#define PD_BUZZER_PIN 16
 
 // i2c
-
 #define PD_AHT20_I2C i2c1
 #define PD_AHT20_SDA_PIN 18
 #define PD_AHT20_SCL_PIN 19

@@ -7,6 +7,7 @@
 #include "../includes/pages.h"
 #include "pdomovoy_common/button.h"
 #include "pdomovoy_common/debug_print.h"
+#include "pdomovoy_common/pwm.h"
 #include "pdomovoy_common/types.h"
 
 void gpio_irq_callback(uint gpio, uint32_t event) {
@@ -104,4 +105,31 @@ void next_button_callback(uint32_t event) {
 
     switch_page(PAGE_SWITCH_NEXT);
     debug_print("next button click\n");
+}
+
+void alarm_buzzer_irq_callback() {
+    static uint val = 0;
+    static bool going_up = true;
+
+    // keep it quiet for testing
+    if (DEBUG) {
+        post_pwm_irq(PD_BUZZER_PIN, 1000);
+        return;
+    }
+
+    if (going_up) {
+        val += 1;
+    } else {
+        val -= 5;
+    }
+
+    post_pwm_irq(PD_BUZZER_PIN, val * val);
+
+    if (val <= 0) {
+        going_up = true;
+    }
+
+    if (val >= 250) {
+        going_up = false;
+    }
 }
