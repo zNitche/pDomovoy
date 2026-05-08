@@ -9,6 +9,7 @@
 #include "../includes/led_blink.h"
 #include "../includes/voltmeter.h"
 #include "hardware/adc.h"
+#include "pd_common_config.h"
 #include "pdomovoy_common/bluetooth.h"
 #include "pdomovoy_common/button.h"
 #include "pdomovoy_common/debug_print.h"
@@ -67,9 +68,12 @@ int main() {
     init_peripherals();
     init_mc_queues();
 
-    pd_init_queue(&g_bt_functions_queue, 5);
+    if (PD_WARDEN_BT_MODE_ENABLED) {
+        debug_print("Warden BT mode enabled %s\n");
 
-    init_bluetooth();
+        pd_init_queue(&g_bt_functions_queue, 5);
+        init_bluetooth();
+    }
 
     cyw34_blink_untill_start(-1000, &g_onboard_led_blink_timer, true);
 

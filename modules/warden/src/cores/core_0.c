@@ -9,6 +9,7 @@
 #include "../../includes/delegates.h"
 #include "../../includes/globals.h"
 #include "../../includes/led_blink.h"
+#include "pd_common_config.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/helpers.h"
 #include "pdomovoy_common/pwm.h"
@@ -168,8 +169,10 @@ void core_0() {
 
         _handle_alarm_state();
 
-        pd_bt_characteristics_discovery_loop();
-        _send_details_to_trumpet();
+        if (PD_WARDEN_BT_MODE_ENABLED) {
+            pd_bt_characteristics_discovery_loop();
+            _send_details_to_trumpet();
+        }
 
         sleep_ms(250);
     }

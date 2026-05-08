@@ -3,6 +3,7 @@
 #include "../includes/bluetooth/core.h"
 #include "../includes/core_1.h"
 #include "../includes/globals.h"
+#include "pd_common_config.h"
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/types.h"
 #include "pico/multicore.h"
@@ -12,7 +13,9 @@ void set_alarm_state(enum AlarmState state) {
 
     g_alarm_state = state;
 
-    pd_bt_process_queue_prio_func(pd_bt_send_alarm_state);
+    if (PD_WARDEN_BT_MODE_ENABLED) {
+        pd_bt_process_queue_prio_func(pd_bt_send_alarm_state);
+    }
 }
 
 void init_alarm_standby() {
