@@ -67,15 +67,16 @@ void __pd_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
         debug_print("[GATT_SERVER] conection request\n");
         break;
 
-    case HCI_EVENT_CONNECTION_COMPLETE:
-        debug_print("[GATT_SERVER] connected\n");
-        break;
-
     case HCI_EVENT_DISCONNECTION_COMPLETE:
-        gap_advertisements_enable(1);
-
         ble_notification_enabled = 0;
-        __pd_client_state_cleanup();
+
+        __pd_client_state_cleanup(false);
+
+        if (g_alarm_state != ALARM_STATE_NONE) {
+            g_alarm_state = ALARM_STATE_TRIGGERED;
+        }
+
+        gap_advertisements_enable(1);
 
         debug_print("[GATT_SERVER] disconnected\n");
         break;
