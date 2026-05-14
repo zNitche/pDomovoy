@@ -111,12 +111,8 @@ git submodule update --init
 cp config.cmake.template config.cmake
 ```
 
-###### fill it's content
-```
-cp config.cmake.template config.cmake
-```
+###### fill it's content (if using warden & trumpet)
 
-###### if using warden & trumpet
     - set PD_WARDEN_BT_MODE_ENABLED to true
     - set PD_WARDEN_BT_MAC to warden's MAC address
     - set PD_TRUMPET_BT_MAC to warden's MAC address
