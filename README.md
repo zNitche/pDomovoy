@@ -14,11 +14,11 @@ So let's build 2 devices system connected via BLE using C and `pico-sdk`.
 #### Warden
 
 ##### Description
-Heavy lifting device, after initialization (by button push) placed against the door, if device's position / orientation changes, the alarm will be activated.
+Heavy lifting device, after initialization (by button push or `Trumpet`) placed against the door, if device's position / orientation changes (or if paired with `trumpet` and connection is lost), the alarm will be activated.
 
 Triggered alarm can by disabled by:
 - pushing button 5 times
-- using Trumpet's control panel
+- using `Trumpet's` control panel
 
 ##### Assembly
 Setup is quite simple, but due to lack of my PCB production capacities, everything had to be assembled using prototype boards + point to point wiring, anyway it looks like this:
@@ -42,7 +42,47 @@ Setup is quite simple, but due to lack of my PCB production capacities, everythi
 ![warden_case_closed_1](resources/media/placeholder)
 
 #### Trumped
-TODO
+##### Description
+Remote panel for whole system with buttons controls and oled display
+
+###### Features
+- secure communication with `warden` over BLE with MAC addresses filtering
+- `warden's` alarm state management & data preview (battery voltage & alarm state)
+- AHT20 humidity & temperature readings
+- built in buzzer for alarm
+- integrated with SSD1306 screen for data presentation
+
+###### Display pages
+1. home page
+
+- aht20 based temperature & humidity
+- `trumpet's` & `warden's` battery voltage
+- alarm state
+
+2. time stats page
+
+- time since boot
+- time since `warden` has been connected
+- time since alarm has been armed
+
+3. versions page
+
+shows `trumpet's` & `warden's` version (if `warden` is connected)
+
+###### trumpet's alarm
+`trumpet` is equiped with built in buzzer serving as alarm (the same 5v powered buzzer as in `warden`), it will be activated in below cases:
+
+- `warden's` alarm is triggered
+- `warden's` alarm in in standby mode and it's connection with `trumpet` has been lost
+
+##### Assembly
+the same situation as in `warden's` case, good old prototype boards + point to point wiring, setup looks like this:
+
+ToDo
+
+##### Photos
+![trumpet_case_assembled_1](resources/media/placeholder)
+![trumpet_case_closed_1](resources/media/placeholder)
 
 ### Setup
 
@@ -64,8 +104,25 @@ git submodule update --init
 git submodule update --init
 ```
 
-4. open project in devcontainer
-5. setup project
+4. config setup
+
+###### create config.cmake
+```
+cp config.cmake.template config.cmake
+```
+
+###### fill it's content
+```
+cp config.cmake.template config.cmake
+```
+
+###### if using warden & trumpet
+    - set PD_WARDEN_BT_MODE_ENABLED to true
+    - set PD_WARDEN_BT_MAC to warden's MAC address
+    - set PD_TRUMPET_BT_MAC to warden's MAC address
+
+5. open project in devcontainer
+6. setup project
 
 ```
 cmake -S . -B build
@@ -77,13 +134,13 @@ or for debug mode
 cmake -DDEBUG=1 -S . -B build
 ```
 
-6. build
+7. build
 ```
 cd build
 make
 ```
 
-7. flash device with generated `.uf2` file (`trumpet` / `warden`)
+8. flash device with generated `.uf2` file (`trumpet` / `warden`)
 
 ### Extra
 
