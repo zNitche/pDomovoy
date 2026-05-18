@@ -29,3 +29,11 @@
 #define CLICK_DEBOUNCE_TIME 1000
 
 #define MIN_TIME_BETWEEN_CLICKS_FOR_ACTION 1500
+
+// alarm buzzer
+// tweaked to my buzzers, might need additional tweaks for different ones
+#define PD_ALARM_BUZZER_UP_STEP 1
+#define PD_ALARM_BUZZER_DOWN_STEP 16
+// intended to be placed next to bed, keep it quiet (min buzzer is sligtly
+// quieter, therefore a higher threshold)
+#define PD_ALARM_BUZZER_THRESHOLD 128

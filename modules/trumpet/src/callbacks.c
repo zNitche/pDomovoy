@@ -118,9 +118,9 @@ void alarm_buzzer_irq_callback() {
     }
 
     if (going_up) {
-        val += 1;
+        val += PD_ALARM_BUZZER_UP_STEP;
     } else {
-        val -= 5;
+        val -= PD_ALARM_BUZZER_DOWN_STEP;
     }
 
     post_pwm_irq(PD_BUZZER_PIN, val * val);
@@ -129,7 +129,7 @@ void alarm_buzzer_irq_callback() {
         going_up = true;
     }
 
-    if (val >= 250) {
+    if (val >= PD_ALARM_BUZZER_THRESHOLD) {
         going_up = false;
     }
 }
