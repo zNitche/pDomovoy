@@ -24,3 +24,9 @@
 // battery stats
 #define BATTER_VOLTAGE_READINGS 30
 #define MIN_BATTERY_VOLTAGE 3.3
+
+// alarm buzzer
+// tweaked to my buzzers, might need additional tweaks for different ones
+#define PD_ALARM_BUZZER_UP_STEP 1
+#define PD_ALARM_BUZZER_DOWN_STEP 8
+#define PD_ALARM_BUZZER_THRESHOLD 32
