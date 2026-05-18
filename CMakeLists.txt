@@ -6,6 +6,7 @@ if (DEBUG)
     set(CMAKE_BUILD_TYPE "Debug")
 else()
     set(CMAKE_BUILD_TYPE "Release")
+    set(DEBUG 0)
 endif()
 
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
@@ -42,8 +43,8 @@ target_include_directories(trumpet PRIVATE
 pico_enable_stdio_uart(warden 0)
 pico_enable_stdio_uart(trumpet 0)
 
-target_compile_definitions(warden PUBLIC DEBUG="${DEBUG}")
-target_compile_definitions(trumpet PUBLIC DEBUG="${DEBUG}")
+target_compile_definitions(warden PRIVATE DEBUG=${DEBUG})
+target_compile_definitions(trumpet PRIVATE DEBUG=${DEBUG})
 
 string(REPLACE ";" "," PD_WARDEN_BT_MAC_STRING "${PD_WARDEN_BT_MAC}")
 string(REPLACE ";" "," PD_TRUMPET_BT_MAC_STRING "${PD_TRUMPET_BT_MAC}")
