@@ -9,6 +9,8 @@ Then this idea came to my mind, dedicated devices, with long lasting battery lif
 
 So let's build 2 devices system connected via BLE using C and `pico-sdk`.
 
+![both](resources/media/both.jpg)
+
 ### Modules breakdown
 
 #### Warden
@@ -38,8 +40,7 @@ Setup is quite simple, but due to lack of my PCB production capacities, everythi
 - 2x 2mm screws for case closing
 
 ##### Photos
-![warden_case_assembled_1](resources/media/placeholder)
-![warden_case_closed_1](resources/media/placeholder)
+![warden_open](resources/media/warden_open.jpg)
 
 #### Trumped
 ##### Description
@@ -78,7 +79,7 @@ shows `trumpet's` & `warden's` version (if `warden` is connected)
 ##### Assembly
 the same situation as in `warden's` case, good old prototype boards + point to point wiring, setup looks like this:
 
-- 1x 60x70 mm prototype 2-side boards, some wires, socket for glass tube fuse and cell holder for 18650 battery
+- 1x 60x80 mm + 1x 20x80 mm prototype 2-side boards, some wires, socket for glass tube fuse and cell holder for 18650 battery
 
 - TP4056 (with DW01a for cell protection) for 18650 LI-ION charging (connected via 1A fuse)
 - Alarm buzzer connected via BC337 transistor for 5V supply and 3.3V control line, connected via 330R resistor to MCU
@@ -88,11 +89,10 @@ the same situation as in `warden's` case, good old prototype boards + point to p
 - 1k + 3k3 resistors as voltage divider (with ratio 0.75) connected to battery and MCU ADC as voltmeter used for checking battery level
 - MCU powered via 5V step-up DC converter
 - 220uF capacitors added to Pico's 5V input & step-up converter's input
-- 3D printed case
+- 3D printed case, circuit boards mounted using 10x 2mm and 2x 3mm screws
 
 ##### Photos
-![trumpet_case_assembled_1](resources/media/placeholder)
-![trumpet_case_closed_1](resources/media/placeholder)
+![trumpet_open](resources/media/trumpet_open.jpg)
 
 ### Setup
 
@@ -123,9 +123,9 @@ cp config.cmake.template config.cmake
 
 ###### fill it's content (if using warden & trumpet)
 
-    - set PD_WARDEN_BT_MODE_ENABLED to true
-    - set PD_WARDEN_BT_MAC to warden's MAC address
-    - set PD_TRUMPET_BT_MAC to warden's MAC address
+- set PD_WARDEN_BT_MODE_ENABLED to true
+- set PD_WARDEN_BT_MAC to warden's MAC address
+- set PD_TRUMPET_BT_MAC to warden's MAC address
 
 5. open project in devcontainer
 6. setup project
