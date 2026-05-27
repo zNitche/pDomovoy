@@ -24,7 +24,7 @@
 
 void init_peripherals() {
     // BUZZER
-    set_pwm_irq_callback(PD_BUZZER_PIN, alarm_buzzer_irq_callback);
+    setup_alarm_pwm_irq_callback(PD_BUZZER_PIN, alarm_buzzer_irq_callback);
 
     // BUTTON
     init_button_irq(PD_ACTION_BUTTON_PIN, true);

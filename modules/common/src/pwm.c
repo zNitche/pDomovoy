@@ -8,7 +8,7 @@ void post_pwm_irq(uint gpio_pin, uint16_t pwm_level) {
     pwm_set_gpio_level(gpio_pin, pwm_level);
 }
 
-void set_pwm_irq_callback(uint gpio_pin, buzzer_callback irq_cb) {
+void setup_alarm_pwm_irq_callback(uint gpio_pin, buzzer_callback irq_cb) {    
     gpio_set_function(gpio_pin, GPIO_FUNC_PWM);
     uint slice_num = pwm_gpio_to_slice_num(gpio_pin);
 
