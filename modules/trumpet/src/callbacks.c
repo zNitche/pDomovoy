@@ -9,6 +9,7 @@
 #include "pdomovoy_common/debug_print.h"
 #include "pdomovoy_common/pwm.h"
 #include "pdomovoy_common/types.h"
+#include "pico/time.h"
 
 void gpio_irq_callback(uint gpio, uint32_t event) {
     switch (gpio) {
@@ -108,28 +109,22 @@ void next_button_callback(uint32_t event) {
 }
 
 void alarm_buzzer_irq_callback() {
-    static uint val = 0;
-    static bool going_up = true;
+    static bool alarm_on = false;
+    static absolute_time_t next_alarm_time;
 
-    // keep it quiet for testing
-    if (DEBUG) {
-        post_pwm_irq(PD_BUZZER_PIN, 1000);
+    const uint16_t HIGH_PWM_VALUE =
+        DEBUG ? PD_ALARM_BUZZER_HIGH_VALUE_DEBUG : PD_ALARM_BUZZER_HIGH_VALUE;
+
+    if (absolute_time_diff_us(get_absolute_time(), next_alarm_time) > 0) {
+        post_pwm_irq(PD_BUZZER_PIN, alarm_on ? HIGH_PWM_VALUE : 0);
         return;
     }
 
-    if (going_up) {
-        val += PD_ALARM_BUZZER_UP_STEP;
+    if (!alarm_on) {
+        next_alarm_time = make_timeout_time_ms(PD_ALARM_BUZZER_ACTIVE_TIME_MS);
+        alarm_on = true;
     } else {
-        val -= PD_ALARM_BUZZER_DOWN_STEP;
-    }
-
-    post_pwm_irq(PD_BUZZER_PIN, val * val);
-
-    if (val <= 0) {
-        going_up = true;
-    }
-
-    if (val >= PD_ALARM_BUZZER_THRESHOLD) {
-        going_up = false;
+        next_alarm_time = make_timeout_time_ms(PD_ALARM_BUZZER_DELAY_MS);
+        alarm_on = false;
     }
 }

@@ -31,9 +31,10 @@
 #define MIN_TIME_BETWEEN_CLICKS_FOR_ACTION 1500
 
 // alarm buzzer
-// tweaked to my buzzers, might need additional tweaks for different ones
-#define PD_ALARM_BUZZER_UP_STEP 1
-#define PD_ALARM_BUZZER_DOWN_STEP 16
+#define PD_ALARM_BUZZER_DELAY_MS 600
+#define PD_ALARM_BUZZER_ACTIVE_TIME_MS 300
+
 // intended to be placed next to bed, keep it quiet (I used 10uF capacitor
-// instead of 1uF), therefore a higher threshold
-#define PD_ALARM_BUZZER_THRESHOLD 128
+// instead of 1uF), therefore a higher value
+#define PD_ALARM_BUZZER_HIGH_VALUE 8500
+#define PD_ALARM_BUZZER_HIGH_VALUE_DEBUG 2000
