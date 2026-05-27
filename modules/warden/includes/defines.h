@@ -27,6 +27,7 @@
 
 // alarm buzzer
 // tweaked to my buzzers, might need additional tweaks for different ones
-#define PD_ALARM_BUZZER_UP_STEP 1
-#define PD_ALARM_BUZZER_DOWN_STEP 8
-#define PD_ALARM_BUZZER_THRESHOLD 32
+#define PD_ALARM_BUZZER_DELAY_MS 300
+#define PD_ALARM_BUZZER_ACTIVE_TIME_MS 100
+#define PD_ALARM_BUZZER_HIGH_VALUE 2500
+#define PD_ALARM_BUZZER_HIGH_VALUE_DEBUG 1000
