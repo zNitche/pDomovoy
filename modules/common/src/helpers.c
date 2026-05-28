@@ -1,6 +1,7 @@
 #include "pdomovoy_common/helpers.h"
 
 #include "pico/stdlib.h"
+#include "pico/time.h"
 #include <stdbool.h>
 
 bool should_execute_repeating_function(uint32_t* next_runtime,
