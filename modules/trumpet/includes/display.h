@@ -5,6 +5,4 @@
 
 void extend_screen_display_time();
 void toggle_screen(bool state);
-bool _screen_saver_cb(repeating_timer_t* t);
-void start_screen_save_timer();
-void stop_screen_save_timer();
+void screen_saver_check();

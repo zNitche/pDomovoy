@@ -42,8 +42,6 @@ void core_0() {
     g_aht20_i2c = init_aht20();
     g_ssd1306_i2c = init_ssd1306();
 
-    start_screen_save_timer();
-
     SSD1306_Frame frame;
 
     while (true) {
@@ -55,6 +53,8 @@ void core_0() {
 
             process_current_page(&frame);
             ssd1306_render(g_ssd1306_i2c, &frame);
+
+            screen_saver_check();
         }
 
         sleep_ms(500);

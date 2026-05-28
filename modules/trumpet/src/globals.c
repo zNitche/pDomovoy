@@ -13,7 +13,6 @@ uint32_t g_screen_enabled_time = 0;
 int g_current_page_id = 0;
 
 repeating_timer_t g_onboard_led_blink_timer;
-repeating_timer_t g_screen_saver_timer;
 
 AHT20_I2C g_aht20_i2c;
 SSD1306_I2C g_ssd1306_i2c;
