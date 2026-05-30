@@ -169,7 +169,7 @@ void core_0() {
 
         _handle_alarm_state();
 
-        if (PD_WARDEN_BT_MODE_ENABLED) {
+        if (PD_WARDEN_BT_MODE_ENABLED && g_bt_trumpet_connected) {
             pd_bt_characteristics_discovery_loop();
             _send_details_to_trumpet();
         }

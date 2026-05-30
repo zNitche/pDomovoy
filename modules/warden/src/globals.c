@@ -1,5 +1,7 @@
 #include "../includes/globals.h"
 
+#include "stdbool.h"
+
 #include "pdomovoy_common/queue.h"
 #include "pdomovoy_common/types.h"
 
@@ -22,6 +24,8 @@ repeating_timer_t g_onboard_led_blink_timer;
 repeating_timer_t g_status_led_blink_timer;
 
 repeating_timer_t g_adc_voltmeter_timer;
+
+bool g_bt_trumpet_connected = false;
 
 FunctionsQueue g_bt_functions_queue = {};
 repeating_timer_t g_bt_functions_queue_timer;

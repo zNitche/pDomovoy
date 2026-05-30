@@ -25,5 +25,7 @@ extern repeating_timer_t g_status_led_blink_timer;
 
 extern repeating_timer_t g_adc_voltmeter_timer;
 
+extern bool g_bt_trumpet_connected;
+
 extern FunctionsQueue g_bt_functions_queue;
 extern repeating_timer_t g_bt_functions_queue_timer;

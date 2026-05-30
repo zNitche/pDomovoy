@@ -53,6 +53,8 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
 
         debug_print("[BT_HCI_EVENT] connected\n");
 
+        g_bt_trumpet_connected = true;
+
         gatt_client_discover_primary_services(
             __pd_handle_gatt_client_event,
             ble_service_context.connection_handle);
@@ -66,6 +68,8 @@ void __handle_hci_event_le_meta(uint8_t* packet) {
 
 void __handle_hci_event_disconnection_complete(uint8_t* packet) {
     ble_service_context.connection_handle = HCI_CON_HANDLE_INVALID;
+
+    g_bt_trumpet_connected = false;
 
     if (ble_service_context.is_notification_listener_active) {
         ble_service_context.is_notification_listener_active = false;

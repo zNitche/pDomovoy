@@ -14,7 +14,6 @@ extern gatt_client_characteristic_t pd_gatt_warden_battery_voltage_characteristi
 extern gatt_client_characteristic_t pd_gatt_warden_alarm_state_characteristic;
 extern gatt_client_characteristic_t pd_gatt_trumpet_alarm_state_characteristic;
 
-
 extern PdGattActionContext pd_gatt_action_context;
 
 extern enum GattClientStateEnum pd_gatt_client_state;
