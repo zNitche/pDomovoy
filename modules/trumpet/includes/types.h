@@ -11,6 +11,11 @@ typedef struct {
     page_handler handler;
 } PageData;
 
+typedef struct {
+    uint32_t minutes;
+    uint32_t hours;
+} SimpleTimeData;
+
 enum PageSwitchDirection {
     PAGE_SWITCH_NEXT,
     PAGE_SWITCH_PREVIOUS,
