@@ -1,2 +1,2 @@
-#define WARDEN_VERSION "1.0.0"
+#define WARDEN_VERSION "1.0.1"
 #define TRUMPET_VERSION "1.0.0"
