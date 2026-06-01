@@ -5,9 +5,11 @@
 #include "../../includes/bitmaps/celcius_degree_icon.h"
 #include "../../includes/bitmaps/humidity_icon.h"
 #include "../../includes/bitmaps/thermometer_icon.h"
+#include "../../includes/defines.h"
 #include "../../includes/globals.h"
 #include "../../includes/types.h"
 #include "pdomovoy_common/helpers.h"
+#include "pdomovoy_common/math.h"
 #include "pico/stdlib.h"
 #include "pico_ssd1306/ssd1306.h"
 #include <stdio.h>
@@ -59,23 +61,27 @@ void __handle_env_sensors(SSD1306_Frame* frame, float aht20_readings[2]) {
     ssd1306_render_string(frame, 10, 24, humidity_str, 2, false);
 }
 
+void __render_battery_details_row(SSD1306_Frame* frame, uint8_t y, char* label,
+                                  float voltage) {
+    char battery_voltage_str[5];
+
+    ssd1306_insert_bitmap(frame, 0, y, &battery_icon);
+    ssd1306_render_string(frame, 10, y, label, 1, false);
+
+    snprintf(battery_voltage_str, sizeof(battery_voltage_str), "%.1fV",
+             voltage);
+    ssd1306_render_string(frame, 30, y, battery_voltage_str, 1, false);
+}
+
 void __handle_batteries(SSD1306_Frame* frame) {
     char trumpet_battery_voltage_str[8];
     char warden_battery_voltage_str[8];
 
-    snprintf(trumpet_battery_voltage_str, sizeof(trumpet_battery_voltage_str),
-             "@T %.1fV", g_battery_voltage);
+    __render_battery_details_row(frame, 36, "@T", g_battery_voltage);
 
-    ssd1306_insert_bitmap(frame, 0, 36, &battery_icon);
-    ssd1306_render_string(frame, 10, 36, trumpet_battery_voltage_str, 1, false);
-
-    if (g_warden_connected) {
-        snprintf(warden_battery_voltage_str, sizeof(warden_battery_voltage_str),
-                 "@W %.1fV", g_warden_battery_voltage);
-
-        ssd1306_insert_bitmap(frame, 0, 48, &battery_icon);
-        ssd1306_render_string(frame, 10, 48, warden_battery_voltage_str, 1,
-                              false);
+    if (g_warden_remote_data.connected) {
+        __render_battery_details_row(frame, 48, "@W",
+                                     g_warden_remote_data.battery_voltage);
     }
 }
 
