@@ -38,12 +38,14 @@ void __pd_setup_gap_advertisements() {
 }
 
 void __pd_client_state_cleanup(bool reset_alarm_state) {
-    g_warden_connected = false;
-    g_warden_connected_timestamp = 0;
+    g_warden_remote_data.connected = false;
+    g_warden_remote_data.connected_timestamp = 0;
+
     g_alarm_armed_timestamp = 0;
 
-    g_warden_battery_voltage = 0;
-    memset(g_warden_version, 0, sizeof(g_warden_version));
+    g_warden_remote_data.battery_voltage = 0;
+    memset(g_warden_remote_data.software_version, 0,
+           sizeof(g_warden_remote_data.software_version));
 
     if (reset_alarm_state) {
         g_alarm_state = ALARM_STATE_NONE;

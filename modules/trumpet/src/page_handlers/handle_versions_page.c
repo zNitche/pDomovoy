@@ -16,9 +16,9 @@ void handle_versions_page(SSD1306_Frame* frame) {
 
     ssd1306_render_string(frame, 0, 16, trumpet_version_str, 1, false);
 
-    if (g_warden_connected) {
+    if (g_warden_remote_data.connected) {
         snprintf(warden_version_str, sizeof(warden_version_str), "@W %s",
-                 g_warden_version);
+                 g_warden_remote_data.software_version);
 
         ssd1306_render_string(frame, 0, 28, warden_version_str, 1, false);
     }

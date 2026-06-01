@@ -68,7 +68,7 @@ void apply_button_callback(uint32_t event) {
 
     extend_screen_display_time();
 
-    if (g_warden_connected) {
+    if (g_warden_remote_data.connected) {
         if (current_page.id == 0) {
             switch (g_alarm_state) {
             case (ALARM_STATE_NONE):

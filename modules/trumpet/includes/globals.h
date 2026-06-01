@@ -1,5 +1,6 @@
 #pragma once
 
+#include "types.h"
 #include "pdomovoy_common/types.h"
 #include "pico/util/queue.h"
 #include "pico_aht20/aht20.h"
@@ -23,11 +24,7 @@ extern SSD1306_I2C g_ssd1306_i2c;
 extern float g_battery_voltage;
 extern repeating_timer_t g_adc_voltmeter_timer;
 
-extern bool g_warden_connected;
-extern uint32_t g_warden_connected_timestamp;
-
-extern float g_warden_battery_voltage;
-extern char g_warden_version[6];
+extern WardenRemoteData g_warden_remote_data;
 
 extern bool g_alarm_buzzer_on;
 

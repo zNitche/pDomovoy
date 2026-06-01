@@ -38,8 +38,8 @@ void __get_warden_connection_time_data(SimpleTimeData* time_data) {
         return;
     }
 
-    const uint32_t timestamp =
-        to_ms_since_boot(get_absolute_time()) - g_warden_connected_timestamp;
+    const uint32_t timestamp = to_ms_since_boot(get_absolute_time()) -
+                               g_warden_remote_data.connected_timestamp;
 
     __timestamp_to_hhmm(timestamp, time_data);
 }
@@ -83,7 +83,7 @@ void handle_time_stats_page(SSD1306_Frame* frame) {
 
     __render_row(frame, 16, "T booted", &time_data_since_boot);
 
-    if (g_warden_connected) {
+    if (g_warden_remote_data.connected) {
         __render_row(frame, 28, "W conn", &time_data_since_warden_connected);
 
         if (g_alarm_armed_timestamp != 0) {

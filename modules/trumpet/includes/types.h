@@ -16,6 +16,13 @@ typedef struct {
     uint32_t hours;
 } SimpleTimeData;
 
+typedef struct {
+    bool connected;
+    uint32_t connected_timestamp;
+    float battery_voltage;
+    char software_version[6];
+} WardenRemoteData;
+
 enum PageSwitchDirection {
     PAGE_SWITCH_NEXT,
     PAGE_SWITCH_PREVIOUS,

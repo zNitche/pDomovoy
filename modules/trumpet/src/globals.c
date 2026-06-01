@@ -1,4 +1,5 @@
 #include "../includes/globals.h"
+#include "../includes/types.h"
 #include "pdomovoy_common/types.h"
 #include "pico_aht20/aht20.h"
 #include "pico_aht20/defines.h"
@@ -20,11 +21,10 @@ SSD1306_I2C g_ssd1306_i2c;
 float g_battery_voltage = 0.0;
 repeating_timer_t g_adc_voltmeter_timer;
 
-bool g_warden_connected = false;
-uint32_t g_warden_connected_timestamp = 0;
-
-float g_warden_battery_voltage = 0.0;
-char g_warden_version[6] = {0};
+WardenRemoteData g_warden_remote_data = {.connected = false,
+                                         .connected_timestamp = 0,
+                                         .battery_voltage = 0.0,
+                                         .software_version = {0}};
 
 bool g_alarm_buzzer_on = false;
 

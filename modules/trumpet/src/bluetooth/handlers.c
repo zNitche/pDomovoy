@@ -124,13 +124,15 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
 
     switch (att_handle) {
     case ATT_CHARACTERISTIC_00001101_0000_1000_8000_00805F9B34FB_01_VALUE_HANDLE:
-        memcpy(&g_warden_version, buffer, sizeof(g_warden_version));
+        memcpy(&g_warden_remote_data.software_version, buffer,
+               sizeof(g_warden_remote_data.software_version));
 
-        g_warden_connected = true;
-        g_warden_connected_timestamp = to_ms_since_boot(get_absolute_time());
+        g_warden_remote_data.connected = true;
+        g_warden_remote_data.connected_timestamp =
+            to_ms_since_boot(get_absolute_time());
 
         debug_print("[GATT_SERVER] got warden's version: %s\n",
-                    g_warden_version);
+                    g_warden_remote_data.software_version);
 
         break;
 
@@ -141,7 +143,7 @@ int __pd_att_write_callback(hci_con_handle_t connection_handle,
         debug_print("[GATT_SERVER] got warden's battery voltage: %.2f\n",
                     voltage_float);
 
-        g_warden_battery_voltage = voltage_float;
+        g_warden_remote_data.battery_voltage = voltage_float;
 
         break;
 
