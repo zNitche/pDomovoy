@@ -43,13 +43,13 @@ void __pd_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
                                                                  remote_addr);
 
             bd_addr_t warden_address;
+            hci_con_handle_t connection_handle =
+                gap_subevent_le_connection_complete_get_connection_handle(
+                    packet);
+
             parse_mac_address(warden_address, PD_WARDEN_BT_MAC);
 
             if (!are_mac_adresses_the_same(remote_addr, warden_address)) {
-                hci_con_handle_t connection_handle =
-                    gap_subevent_le_connection_complete_get_connection_handle(
-                        packet);
-
                 gap_disconnect(connection_handle);
 
                 debug_print(
@@ -58,6 +58,9 @@ void __pd_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
             }
 
             gap_advertisements_enable(0);
+
+            gap_update_connection_parameters(connection_handle, 80, 80, 0, 5000);
+
             debug_print("[GATT_SERVER] client connected \n");
             break;
         }
