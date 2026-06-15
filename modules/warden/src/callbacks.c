@@ -72,13 +72,9 @@ void alarm_buzzer_irq_callback() {
         return;
     }
 
-    if (!alarm_on) {
-        next_alarm_time = make_timeout_time_ms(PD_ALARM_BUZZER_ACTIVE_TIME_MS);
-        alarm_on = true;
-    } else {
-        next_alarm_time = make_timeout_time_ms(PD_ALARM_BUZZER_DELAY_MS);
-        alarm_on = false;
-    }
+    next_alarm_time = make_timeout_time_ms(
+        !alarm_on ? PD_ALARM_BUZZER_ACTIVE_TIME_MS : PD_ALARM_BUZZER_DELAY_MS);
+    alarm_on = !alarm_on;
 }
 
 bool blink_status_led_for_standby_callback(struct repeating_timer* t) {
