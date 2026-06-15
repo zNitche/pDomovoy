@@ -19,14 +19,13 @@
 #include "pico/util/queue.h"
 
 void _send_details_to_trumpet() {
-    static const uint32_t interval_ms = 10000;
+    static const uint32_t interval_ms = 20000;
     static uint32_t next_runtime = 0;
 
     if (!should_execute_repeating_function(&next_runtime, interval_ms)) {
         return;
     }
 
-    pd_enqueue(&g_bt_functions_queue, pd_bt_send_alarm_state);
     pd_enqueue(&g_bt_functions_queue, pd_bt_send_battery_voltage);
 }
 
