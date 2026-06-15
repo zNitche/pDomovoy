@@ -21,10 +21,11 @@ void _send_event_to_core_0(enum DeviceStatus status) {
 
 void _get_initial_accel_mean(ADXL345I2C* adxl345_i2c,
                              AccelerometerReading* output) {
-    const size_t readings_count = 15;
+    const size_t readings_count = PD_ACCELERATION_INITIAL_READINGS_COUNT;
     AccelerometerReading total_accel[readings_count] = {};
 
-    get_bunch_of_accel_readings(adxl345_i2c, total_accel, readings_count, 200);
+    get_bunch_of_accel_readings(adxl345_i2c, total_accel, readings_count,
+                                PD_ACCELERATION_INITIAL_READINGS_DELAY);
 
     *output = get_accel_readings_mean(total_accel, readings_count);
 }
@@ -37,12 +38,13 @@ bool _check_for_trigger_for_axis(float initial_mean, float mean,
 
 bool _check_for_alarm_trigger(ADXL345I2C* adxl345_i2c,
                               AccelerometerReading* initial_accel_mean) {
-    const size_t readings_count = 15;
-    const float trigger_factor = 0.2;
+    const size_t readings_count = PD_ACCELERATION_READINGS_COUNT;
+    const float trigger_factor = PD_ACCELERATION_CHANGE_TRIGGER_FACTOR;
 
     AccelerometerReading total_accel[readings_count];
 
-    get_bunch_of_accel_readings(adxl345_i2c, total_accel, readings_count, 100);
+    get_bunch_of_accel_readings(adxl345_i2c, total_accel, readings_count,
+                                PD_ACCELERATION_READINGS_DELAY);
     AccelerometerReading accel_mean =
         get_accel_readings_mean(total_accel, readings_count);
 
